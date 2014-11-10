@@ -16,6 +16,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 
 
 public class LoginActivity extends Activity implements View.OnClickListener {
@@ -55,7 +56,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 
 				Log.d(TAG, "email: " + emailString);
 				Log.d(TAG, "password: " + passwordString);
-
+/*
 				if (! isValidEmail(emailString)) {
 					Log.d(TAG, "invalid email");
 					createWarningAlert(getResources().getString(R.string.warning_error),
@@ -73,7 +74,8 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 
 					sendLoginRequest(emailString, passwordString);
 				}
-
+*/
+				startActivity(new Intent(LoginActivity.this, ProfileActivity.class));
 				break;
 
 			case R.id.buttonLoginCreateAccount:

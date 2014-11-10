@@ -7,11 +7,8 @@
     <string name="login_login">Login</string>
     <string name="login_create_account">Create new account</string>
     <string name="title_activity_create_account">Create new account</string>
-
     <string name="login_hint_email">email</string>
     <string name="login_hint_password">password</string>
-
-
     <string name="create_account_title">Create new Share that Bill account</string>
     <string name="create_account_email">Your email:</string>
     <string name="create_account_password">Password (minimum of 6 characters):</string>
@@ -21,13 +18,23 @@
     <string name="create_account_hint_password">password</string>
     <string name="create_account_hint_confirm_password">confirm password</string>
     <string name="create_account_warning_short_password">Password must have at least 6 characters</string>
-    <string name="create_account_warning_passwords_not_match">Passwords do not match</string>
+    <string name="create_account_warning_passwords_not_match">Passwords do not match!</string>
     <string name="create_account_warning_account_created">Your account was created successfully!</string>
-
     <string name="warning_error">Error</string>
     <string name="warning_success">Success</string>
     <string name="warning_password_empty">password</string>
-    <string name="warning_invalid_email">Invalid email format</string>
+    <string name="warning_invalid_email">Invalid email format!</string>
     <string name="warning_loading">Loading</string>
-
+    <string name="warning_group_name_invalid">Group name invalid!</string>
+    <string name="title_activity_profile">ProfileActivity</string>
+    <string name="profile_title">Your groups:</string>
+    <string name="profile_no_groups">You don\'t have any group.</string>
+    <string name="title_activity_create_group">CreateGroupActivity</string>
+    <string name="create_group_title">Create new group</string>
+    <string name="create_group_group_name">Group name:</string>
+    <string name="create_group_invite_members">Invite members:</string>
+    <string name="create_group_edit_email">Edit email</string>
+    <string name="create_group_email_hint">yourfriend@provider.net</string>
+    <string name="create_group_create">Create group</string>
+    <string name="create_group_warning_email_already_added">Email already on invite list!</string>
 </resources>
