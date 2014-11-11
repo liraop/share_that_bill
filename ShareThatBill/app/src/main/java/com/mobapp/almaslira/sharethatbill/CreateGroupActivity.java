@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -44,9 +45,6 @@ public class CreateGroupActivity extends Activity implements View.OnClickListene
 
 		setContentView(R.layout.activity_create_group);
 
-		ImageButton addButton = (ImageButton) findViewById(R.id.imageButtonCreateGroupAdd);
-		addButton.setOnClickListener(this);
-
 		membersListView = (ListView) findViewById(R.id.listViewCreateGroupMembers);
 		membersListView.setOnItemClickListener(this);
 
@@ -62,6 +60,9 @@ public class CreateGroupActivity extends Activity implements View.OnClickListene
 
 		Button createButton = (Button) findViewById(R.id.buttonCreateGroupCreate);
 		createButton.setOnClickListener(this);
+
+		ImageButton addButton = (ImageButton) findViewById(R.id.imageButtonCreateGroupAdd);
+		addButton.setOnClickListener(this);
 	}
 
 	@Override
@@ -104,6 +105,10 @@ public class CreateGroupActivity extends Activity implements View.OnClickListene
 
 				if (groupNameString .length() != 0) {
 					Log.d(TAG, "group name: " + groupNameString + ", group size: " + this.membersListStrings.size());
+
+					Intent i = new Intent(getApplicationContext(), GroupActivity.class);
+					i.putExtra("group_name", groupNameString);
+					startActivity(i);
 				}
 				else {
 					createWarningAlert(getResources().getString(R.string.warning_error),

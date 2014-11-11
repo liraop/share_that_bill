@@ -1,6 +1,7 @@
 package com.mobapp.almaslira.sharethatbill;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -24,6 +25,11 @@ public class ProfileActivity extends Activity implements View.OnClickListener, A
 
 	private ListView groupsList;
 	private TextView noGroupsText;
+	private ArrayAdapter<String> arrayAdapter;
+	private List<String> groupNamesList;
+	private String userName;
+
+	ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,27 +44,28 @@ public class ProfileActivity extends Activity implements View.OnClickListener, A
 		this.groupsList = (ListView) findViewById(R.id.listViewProfileGroups);
 		noGroupsText = (TextView) findViewById(R.id.textViewProfileNoGroups);
 
-		List<String> groupNamesList = new ArrayList<String>();
-
-		groupNamesList.add("Create a new group...");
-		for (int i=1; i<=20; i++) {
-			groupNamesList.add("Group " + i);
-		}
-		
-		if (groupNamesList.size() == 0) {
-			noGroupsText.setVisibility(View.VISIBLE);
-		}
-		else {
-			noGroupsText.setVisibility(View.GONE);
+		Bundle extras = getIntent().getExtras();
+		if (extras != null) {
+			userName = extras.getString("user_name");
+			groupNamesList = extras.getStringArrayList("user_groups");
 		}
 
-		ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
+		groupNamesList.add(0, getResources().getString(R.string.profile_create_new_group));
+
+		arrayAdapter = new ArrayAdapter<String>(
 				this,
 				android.R.layout.simple_list_item_1,
-				groupNamesList );
+				groupNamesList);
 
 		groupsList.setAdapter(arrayAdapter);
 
+		if (groupNamesList.size() == 0) {
+			noGroupsText.setVisibility(View.VISIBLE);
+		} else {
+			noGroupsText.setVisibility(View.GONE);
+		}
+
+		arrayAdapter.notifyDataSetChanged();
 		groupsList.setOnItemClickListener(this);
     }
 

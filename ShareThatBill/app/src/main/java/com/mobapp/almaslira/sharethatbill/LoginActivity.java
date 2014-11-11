@@ -18,6 +18,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class LoginActivity extends Activity implements View.OnClickListener {
 	static final String TAG = "LoginActivity";
@@ -56,6 +59,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 
 				Log.d(TAG, "email: " + emailString);
 				Log.d(TAG, "password: " + passwordString);
+				//TODO
 /*
 				if (! isValidEmail(emailString)) {
 					Log.d(TAG, "invalid email");
@@ -69,13 +73,12 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 							getResources().getString(R.string.warning_password_empty));
 				}
 				else
-				{
+				{*/
 					Log.d(TAG, "logging in");
 
 					sendLoginRequest(emailString, passwordString);
-				}
-*/
-				startActivity(new Intent(LoginActivity.this, ProfileActivity.class));
+//				}
+
 				break;
 
 			case R.id.buttonLoginCreateAccount:
@@ -87,7 +90,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 		}
 	}
 
-	public void sendLoginRequest(String email, String password) {
+	public void sendLoginRequest(final String email, final String password) {
 		Log.d(TAG, "sendCreateRequest");
 
 		final ProgressDialog pd = new ProgressDialog(LoginActivity.this);
@@ -97,16 +100,27 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 		new Thread() {
 			public void run() {
 				Log.d(TAG, "in thread");
-				Log.d(TAG, "sleeping");
 
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException ex) {
+				boolean login = true;//FakeDataBase.checkLogin(email, password); //TODO
+
+				if (login)
+				{
+					Log.d(TAG, "login successful");
+
+					ArrayList<String> userGroups = FakeDataBase.getUserGroups("user1@us.er");//email); //TODO
+
+					Intent i = new Intent(LoginActivity.this, ProfileActivity.class);
+					i.putExtra("user_name", email);
+					i.putExtra("user_groups", userGroups);
+					startActivity(i);
+
+					pd.dismiss();
+				}
+				else {
+					Log.d(TAG, "login unsuccessful");
 				}
 
-				pd.dismiss();
 
-				startActivity(new Intent(LoginActivity.this, CreateAccountActivity.class));
 			}
 		}.start();
 	}
