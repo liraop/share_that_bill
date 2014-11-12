@@ -26,15 +26,17 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 	static final String TAG = "LoginActivity";
 
 	@Override
-    protected void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState) {
 		Log.d(TAG, "onCreate");
 
-        super.onCreate(savedInstanceState);
+		super.onCreate(savedInstanceState);
 
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        setContentView(R.layout.activity_login);
+		setContentView(R.layout.activity_login);
+
+		FakeDataBase.initialize();
 
 		Button loginButton = (Button) findViewById(R.id.buttonLoginLogin);
 		loginButton.setOnClickListener(this);
@@ -57,26 +59,26 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 				final String emailString = email.getText().toString();
 				final String passwordString = password.getText().toString();
 
-				Log.d(TAG, "email: " + emailString);
-				Log.d(TAG, "password: " + passwordString);
+				Log.d(TAG, "userEmail: " + emailString);
+				Log.d(TAG, "userPassword: " + passwordString);
 				//TODO
 /*
 				if (! isValidEmail(emailString)) {
-					Log.d(TAG, "invalid email");
+					Log.d(TAG, "invalid userEmail");
 					createWarningAlert(getResources().getString(R.string.warning_error),
 							getResources().getString(R.string.warning_invalid_email));
 				}
 				else if (! (passwordString.length() > 0))
 				{
-					Log.d(TAG, "empty password");
+					Log.d(TAG, "empty userPassword");
 					createWarningAlert(getResources().getString(R.string.warning_error),
 							getResources().getString(R.string.warning_password_empty));
 				}
 				else
 				{*/
-					Log.d(TAG, "logging in");
+				Log.d(TAG, "logging in");
 
-					sendLoginRequest(emailString, passwordString);
+				sendLoginRequest(emailString, passwordString);
 //				}
 
 				break;
@@ -101,17 +103,17 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 			public void run() {
 				Log.d(TAG, "in thread");
 
-				boolean login = true;//FakeDataBase.checkLogin(email, password); //TODO
+				boolean login = true;//FakeDataBase.checkLogin(userEmail, userPassword); //TODO
 
 				if (login)
 				{
 					Log.d(TAG, "login successful");
 
-					ArrayList<String> userGroups = FakeDataBase.getUserGroups("user1@us.er");//email); //TODO
+					ArrayList<String> userGroups = FakeDataBase.getUserGroups("user1@us.er");//userEmail); //TODO
 
 					Intent i = new Intent(LoginActivity.this, ProfileActivity.class);
-					i.putExtra("user_name", email);
-					i.putExtra("user_groups", userGroups);
+					i.putExtra("user_name", "user1@us.er");//userEmail); //TODO
+					//i.putExtra("user_groups", userGroups);
 					startActivity(i);
 
 					pd.dismiss();
@@ -144,22 +146,22 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 		alertDialog.show();
 	}
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.login, menu);
-        return true;
-    }
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.login, menu);
+		return true;
+	}
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// Handle action bar item clicks here. The action bar will
+		// automatically handle clicks on the Home/Up button, so long
+		// as you specify a parent activity in AndroidManifest.xml.
+		int id = item.getItemId();
+		if (id == R.id.action_settings) {
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
 }

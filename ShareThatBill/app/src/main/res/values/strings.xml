@@ -39,5 +39,6 @@
     <string name="create_group_create">Create group</string>
     <string name="create_group_warning_email_already_added">Email already on invite list!</string>
     <string name="title_activity_group">GroupActivity</string>
+    <string name="profile_create_group">Create new group:</string>
 
 </resources>

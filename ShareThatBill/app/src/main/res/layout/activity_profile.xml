@@ -21,19 +21,45 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/listViewProfileGroups"
-        android:layout_below="@+id/textViewProfileNoGroups"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/textViewAddGroup"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="20dp"/>
+        android:layout_alignParentStart="true"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/profile_create_group"
+        android:id="@+id/textViewAddGroup"
+        android:layout_marginTop="19dp"
+        android:layout_below="@+id/textViewProfileTitle"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"/>
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageButtonProfileCreateGroup"
+        android:scaleType="fitCenter"
+        android:src="@drawable/add_button"
+        android:maxHeight="20dp"
+        android:layout_toEndOf="@+id/textViewProfileTitle"
+        android:layout_above="@+id/listViewProfileGroups"
+        android:layout_toRightOf="@+id/textViewProfileTitle"
+        android:layout_alignTop="@+id/textViewAddGroup"
+        android:layout_marginTop="-10dp"
+        android:layout_marginBottom="-10dp"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="@string/profile_no_groups"
-        android:id="@+id/textViewProfileNoGroups"
-        android:layout_below="@+id/textViewProfileTitle"
+        android:id="@+id/textView"
+        android:layout_toStartOf="@+id/imageButtonProfileCreateGroup"
+        android:layout_below="@+id/imageButtonProfileCreateGroup"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="30dp"/>
+        android:layout_marginTop="20dp"/>
 </RelativeLayout>

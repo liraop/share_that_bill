@@ -98,13 +98,13 @@ public class CreateGroupActivity extends Activity implements View.OnClickListene
 
 				break;
 			case R.id.buttonCreateGroupCreate:
-				Log.d(TAG, "create group");
+				Log.d(TAG, "create groupName");
 
 				EditText groupName = (EditText) findViewById(R.id.editTextCreateGroupName);
 				final String groupNameString = groupName.getText().toString();
 
 				if (groupNameString .length() != 0) {
-					Log.d(TAG, "group name: " + groupNameString + ", group size: " + this.membersListStrings.size());
+					Log.d(TAG, "groupName billName: " + groupNameString + ", groupName size: " + this.membersListStrings.size());
 
 					Intent i = new Intent(getApplicationContext(), GroupActivity.class);
 					i.putExtra("group_name", groupNameString);
@@ -145,7 +145,7 @@ public class CreateGroupActivity extends Activity implements View.OnClickListene
 	}
 
 	/**
-	 * Pops a dialog with the option to edit the clicked email or remove it.
+	 * Pops a dialog with the option to edit the clicked userEmail or remove it.
 	 * @param index: item clicked
 	 */
 	void createUpdateEmailDialog (int index) {
@@ -153,7 +153,7 @@ public class CreateGroupActivity extends Activity implements View.OnClickListene
 
 		AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
-		alert.setTitle("Edit email");
+		alert.setTitle("Edit userEmail");
 
 		final EditText newEmail = new EditText(this);
 		newEmail.setText(this.membersListStrings.get(index));
@@ -175,7 +175,7 @@ public class CreateGroupActivity extends Activity implements View.OnClickListene
 			public void onClick(DialogInterface dialog, int whichButton) {
 				String value1 = newEmail.getText().toString();
 
-				Log.d(TAG, "remove email: " + value1);
+				Log.d(TAG, "remove userEmail: " + value1);
 
 				membersListStrings.remove(indexf);
 				arrayAdapter.notifyDataSetChanged();

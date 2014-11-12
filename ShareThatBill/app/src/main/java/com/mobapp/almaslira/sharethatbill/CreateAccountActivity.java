@@ -76,16 +76,16 @@ public class CreateAccountActivity extends Activity implements View.OnClickListe
 
 		switch (view.getId()) {
 			case R.id.buttonCreateAccountCreate:
-				// Check if email and password are valid
+				// Check if userEmail and userPassword are valid
 
 				EditText email = (EditText) findViewById(R.id.editTextCreateAccountEmail);
 				EditText password = (EditText) findViewById(R.id.editTextCreateAccountPassword);
 				EditText confirmPassword = (EditText) findViewById(R.id.editTextCreateAccountConfirmPassword);
 
 /*
-				final String emailString = new String("email");
-				final String passwordString = new String("password");
-				final String confirmPasswordString = new String("password");
+				final String emailString = new String("userEmail");
+				final String passwordString = new String("userPassword");
+				final String confirmPasswordString = new String("userPassword");
 */
 
 				final String emailString = email.getText().toString();
@@ -93,13 +93,13 @@ public class CreateAccountActivity extends Activity implements View.OnClickListe
 
 
 				if (! isValidEmail(emailString)) {
-					Log.d(TAG, "invalid email");
+					Log.d(TAG, "invalid userEmail");
 					createWarningAlert(getResources().getString(R.string.warning_error),
 							getResources().getString(R.string.warning_invalid_email));
 
 				}
 				else if (! (passwordString.length() >= 6)) {
-					Log.d(TAG, "password is too short");
+					Log.d(TAG, "userPassword is too short");
 					createWarningAlert(getResources().getString(R.string.warning_error),
 							getResources().getString(R.string.create_account_warning_short_password));
 				}
