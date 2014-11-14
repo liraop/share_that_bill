@@ -25,6 +25,9 @@ import java.util.List;
 public class LoginActivity extends Activity implements View.OnClickListener {
 	static final String TAG = "LoginActivity";
 
+    ProgressDialog progressDialog;
+
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		Log.d(TAG, "onCreate");
@@ -36,13 +39,15 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 
 		setContentView(R.layout.activity_login);
 
-		FakeDataBase.initialize();
-
 		Button loginButton = (Button) findViewById(R.id.buttonLoginLogin);
 		loginButton.setOnClickListener(this);
 
 		Button createAccountButton = (Button) findViewById(R.id.buttonLoginCreateAccount);
 		createAccountButton.setOnClickListener(this);
+
+        progressDialog = new ProgressDialog(LoginActivity.this);
+        progressDialog.setMessage(getResources().getString(R.string.warning_loading));
+        progressDialog.setCancelable(false);
 	}
 
 	@Override
@@ -61,7 +66,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 
 				Log.d(TAG, "userEmail: " + emailString);
 				Log.d(TAG, "userPassword: " + passwordString);
-				//TODO
+                //TODO
 /*
 				if (! isValidEmail(emailString)) {
 					Log.d(TAG, "invalid userEmail");
@@ -75,12 +80,13 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 							getResources().getString(R.string.warning_password_empty));
 				}
 				else
-				{*/
-				Log.d(TAG, "logging in");
+				{
+					Log.d(TAG, "logging in");
 
-				sendLoginRequest(emailString, passwordString);
-//				}
-
+					sendLoginRequest(emailString, passwordString);
+				}
+*/
+                sendLoginRequest("user1@us.er", "1234");
 				break;
 
 			case R.id.buttonLoginCreateAccount:
@@ -92,37 +98,33 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 		}
 	}
 
-	public void sendLoginRequest(final String email, final String password) {
+	public void sendLoginRequest(final String userEmail, final String userPassword) {
 		Log.d(TAG, "sendCreateRequest");
 
-		final ProgressDialog pd = new ProgressDialog(LoginActivity.this);
-		pd.setMessage(getResources().getString(R.string.warning_loading));
-		pd.show();
+        progressDialog.show();
 
 		new Thread() {
 			public void run() {
 				Log.d(TAG, "in thread");
 
-				boolean login = true;//FakeDataBase.checkLogin(userEmail, userPassword); //TODO
+
+				boolean login = true;//TODO: ((ShareThatBillApp) getApplication()).dataBase.checkLogin(userEmail, userPassword);
 
 				if (login)
 				{
 					Log.d(TAG, "login successful");
 
-					ArrayList<String> userGroups = FakeDataBase.getUserGroups("user1@us.er");//userEmail); //TODO
+					ArrayList<String> userGroups = ((ShareThatBillApp) getApplication()).dataBase.getUserGroups(userEmail);
 
-					Intent i = new Intent(LoginActivity.this, ProfileActivity.class);
-					i.putExtra("user_name", "user1@us.er");//userEmail); //TODO
-					//i.putExtra("user_groups", userGroups);
-					startActivity(i);
-
-					pd.dismiss();
+					Intent intent = new Intent(LoginActivity.this, ProfileActivity.class);
+					intent.putExtra("user_name", "user1@us.er");//userEmail);
+					startActivity(intent);
 				}
 				else {
 					Log.d(TAG, "login unsuccessful");
 				}
 
-
+                progressDialog.dismiss();
 			}
 		}.start();
 	}

@@ -26,6 +26,11 @@
     <string name="warning_invalid_email">Invalid email format!</string>
     <string name="warning_loading">Loading</string>
     <string name="warning_group_name_invalid">Group name invalid!</string>
+    <string name="warning_creating_account">Creating account</string>
+    <string name="warning_creating_account_success">Account created successfully!</string>
+    <string name="warning_creating_account_fail">Account creation failed</string>
+    <string name="warning_creating_group_success">Group created successfully!</string>
+    <string name="warning_creating_group_fail">Group creation failed</string>
     <string name="title_activity_profile">ProfileActivity</string>
     <string name="profile_title">Your groups:</string>
     <string name="profile_no_groups">You don\'t have any group.</string>
@@ -40,5 +45,10 @@
     <string name="create_group_warning_email_already_added">Email already on invite list!</string>
     <string name="title_activity_group">GroupActivity</string>
     <string name="profile_create_group">Create new group:</string>
+    <string name="tabs_add_text">Add: </string>
+    <string name="tabs_members_add">Add new member: </string>
+    <string name="tabs_bills_add">Add new bill: </string>
+    <string name="members_tab_you">(you)</string>
+
 
 </resources>

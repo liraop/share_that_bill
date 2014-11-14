@@ -23,6 +23,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +35,7 @@ public class CreateGroupActivity extends Activity implements View.OnClickListene
 	ListView membersListView;
 	List<String> membersListStrings;
 	ArrayAdapter<String> arrayAdapter;
+    String userName;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +46,11 @@ public class CreateGroupActivity extends Activity implements View.OnClickListene
 		this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
 		setContentView(R.layout.activity_create_group);
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            userName = extras.getString("user_name");
+        }
 
 		membersListView = (ListView) findViewById(R.id.listViewCreateGroupMembers);
 		membersListView.setOnItemClickListener(this);
@@ -97,6 +104,7 @@ public class CreateGroupActivity extends Activity implements View.OnClickListene
 				}
 
 				break;
+
 			case R.id.buttonCreateGroupCreate:
 				Log.d(TAG, "create groupName");
 
@@ -106,9 +114,7 @@ public class CreateGroupActivity extends Activity implements View.OnClickListene
 				if (groupNameString .length() != 0) {
 					Log.d(TAG, "groupName billName: " + groupNameString + ", groupName size: " + this.membersListStrings.size());
 
-					Intent i = new Intent(getApplicationContext(), GroupActivity.class);
-					i.putExtra("group_name", groupNameString);
-					startActivity(i);
+                    registerGroup(groupNameString);
 				}
 				else {
 					createWarningAlert(getResources().getString(R.string.warning_error),
@@ -117,6 +123,40 @@ public class CreateGroupActivity extends Activity implements View.OnClickListene
 				break;
 		}
 	}
+
+    private void registerGroup(final String groupNameString) {
+
+        new Thread() {
+            public void run() {
+                Log.d(TAG, "in thread");
+
+                if ( ((ShareThatBillApp) getApplication()).dataBase.createGroup(groupNameString) ) {
+
+                    membersListStrings.add(userName);
+
+                    for (String m : membersListStrings) {
+                        ((ShareThatBillApp) getApplication()).dataBase.addUserToGroup(m, groupNameString);
+                    }
+
+                    Intent intent = new Intent(getApplicationContext(), GroupActivity.class);
+                    intent.putExtra("user_name", userName);
+                    intent.putExtra("group_name", groupNameString);
+                    startActivity(intent);
+
+                    finish();
+                }
+                else {
+                    CreateGroupActivity.this.runOnUiThread(new Runnable() {
+                        public void run() {
+                            Log.d("TAG", "on the UI thread");
+                            createWarningAlert(getResources().getString(R.string.warning_error),
+                                    getResources().getString(R.string.warning_creating_group_fail));
+                        }
+                    });
+                }
+            }
+        }.start();
+    }
 
 	private void createWarningAlert (String title, String warning) {
 		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(CreateGroupActivity.this);

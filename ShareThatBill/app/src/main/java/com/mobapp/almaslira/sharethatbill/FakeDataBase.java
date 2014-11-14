@@ -1,107 +1,123 @@
 package com.mobapp.almaslira.sharethatbill;
 
+
+
 import java.util.ArrayList;
 
 /**
  * Created by José Ernesto on 11/10/2014.
  */
 public class FakeDataBase {
+	int delayMin = 1000;
+	int delayDelta = 500;
 
-	private static class User {
-		public String userEmail;
-		public String userPassword;
+	private class User {
+		String userEmail;
+		String userPassword;
 	}
 
-	private static class Group {
+	private class Group {
 		String groupName;
 	}
 
-	private static class Bill {
+	private class Bill {
 		String billName;
 		float billValue;
 		String groupName;
 		//TODO complete
 	}
 
-	private static class UserBillRelation {
+	private class UserBillRelation {
 		String userEmail;
 		String billName;
 		float value;
 	}
 
-	private static class UserGroupRelation {
+	private class UserGroupRelation {
 		String userEmail;
 		String groupName;
 	}
 
-	private static ArrayList<User> users;
-	private static ArrayList<Group> groups;
-	private static ArrayList<Bill> bills;
-	private static ArrayList<UserBillRelation> userBillRelations;
-	private static ArrayList<UserGroupRelation> userGroupRelations;
+	private ArrayList<User> users;
+	private ArrayList<Group> groups;
+	private ArrayList<Bill> bills;
+	private ArrayList<UserBillRelation> userBillRelations;
+	private ArrayList<UserGroupRelation> userGroupRelations;
 
-	public static void initialize() {
+	public void initialize() {
 		/* USERS */
 		users = new ArrayList<User>();
-		User user = new User();
+		User user;
 
+		user = new User();
 		user.userEmail = new String("user1@us.er");
 		user.userPassword = new String("1234");
 		users.add(user);
 
+		user = new User();
 		user.userEmail = new String("user2@us.er");
 		user.userPassword = new String("1234");
 		users.add(user);
 
+
 		/* GROUPS */
 		groups = new ArrayList<Group>();
-		Group group = new Group();
+		Group group;
 
+		group = new Group();
 		group.groupName = new String("group1");
 		groups.add(group);
 
+
 		/* BILLS */
 		bills = new ArrayList<Bill>();
-		Bill bill = new Bill();
+		Bill bill;
 
+		bill = new Bill();
 		bill.billName = new String("bgroup11");
 		bill.groupName = new String("group1");
 		bill.billValue = 50.0f;
 		bills.add(bill);
 
+
 		/* USERS AND BILLS */
 		userBillRelations = new ArrayList<UserBillRelation>();
-		UserBillRelation userBillRelation = new UserBillRelation();
+		UserBillRelation userBillRelation;
 
+		userBillRelation = new UserBillRelation();
 		userBillRelation.billName = new String("bgroup11");
 		userBillRelation.userEmail = new String("user1");
 		userBillRelation.value = 50.0f;
 		userBillRelations.add(userBillRelation);
 
+		userBillRelation = new UserBillRelation();
 		userBillRelation.billName = new String("bgroup11");
 		userBillRelation.userEmail = new String("user2");
 		userBillRelation.value = -50.0f;
 		userBillRelations.add(userBillRelation);
 
-		/* USERS AND GROUPS */
-		userGroupRelations = new ArrayList<UserGroupRelation>();
-		UserGroupRelation userGroupRelation = new UserGroupRelation();
 
+		/* USERS AND GROUPS */
+		this.userGroupRelations = new ArrayList<UserGroupRelation>();
+		UserGroupRelation userGroupRelation;
+
+		userGroupRelation = new UserGroupRelation();
 		userGroupRelation.userEmail = new String("user1@us.er");
 		userGroupRelation.groupName = new String("group1");
-		userGroupRelations.add(userGroupRelation);
+		this.userGroupRelations.add(userGroupRelation);
 
+		userGroupRelation = new UserGroupRelation();
 		userGroupRelation.userEmail = new String("user2@us.er");
 		userGroupRelation.groupName = new String("group1");
-		userGroupRelations.add(userGroupRelation);
+		this.userGroupRelations.add(userGroupRelation);
 	}
 
 	/**
 	 * Returns if userEmail and userPassword match an existing profile.
 	 */
-	public static boolean checkLogin (String email, String password) {
+	public boolean checkLogin (String email, String password) {
 		try {
-			Thread.sleep((int) (Math.random() * 3000.0 + 1000));
+			Thread.sleep((int) (Math.random() * delayDelta + delayMin));
 		} catch (InterruptedException ex) {
 		}
 
@@ -114,42 +130,100 @@ public class FakeDataBase {
 			}
 		}
 
-		/*
-		if (email.compareTo("user1@us.er") == 0 && password.compareTo("1234") == 0)
-			return true;
-		else if (email.compareTo("user2@us.er") == 0 && password.compareTo("1234") == 0)
-			return true;
-*/
 		return false;
 	}
 
-	public static ArrayList<String> getUserGroups (String email) {
+	public ArrayList<String> getUserGroups (String email) {
 		try {
-			Thread.sleep((int) (Math.random() * 3000.0 + 1000));
+			Thread.sleep((int) (Math.random() * delayDelta + delayMin));
 		} catch (InterruptedException ex) {
 		}
-
 		ArrayList<String> result = new ArrayList<String>();
 
-		for (UserGroupRelation ugr : userGroupRelations) {
+		for (UserGroupRelation ugr : this.userGroupRelations) {
 			if (ugr.userEmail.compareTo(email) == 0)
 				result.add(ugr.groupName);
 		}
 
 		return result;
-		/*
-		if (email.compareTo("user1@us.er") == 0) {
-			ArrayList<String> list = new ArrayList<String>();
-			list.add("group1");
-			return list;
-		}
-		else if (email.compareTo("user2@us.er") == 0) {
-			ArrayList<String> list = new ArrayList<String>();
-			list.add("group1");
-			return list;
-		}
-		else
-			return null;
-			*/
 	}
+
+    public ArrayList<String> getGroupUsers (String groupName) {
+        try {
+            Thread.sleep((int) (Math.random() * delayDelta + delayMin));
+        } catch (InterruptedException ex) {
+        }
+        ArrayList<String> result = new ArrayList<String>();
+
+        for (UserGroupRelation ugr : this.userGroupRelations) {
+            if (ugr.groupName.compareTo(groupName) == 0)
+                result.add(ugr.userEmail);
+        }
+
+        return result;
+    }
+
+    public ArrayList<String> getGroupBills (String groupName) {
+        try {
+            Thread.sleep((int) (Math.random() * delayDelta + delayMin));
+        } catch (InterruptedException ex) {
+        }
+        ArrayList<String> result = new ArrayList<String>();
+
+        for (Bill bill : this.bills) {
+            if (bill.groupName.compareTo(groupName) == 0)
+                result.add(bill.billName);
+        }
+
+        return result;
+    }
+
+    public void addUserToGroup (String user, String group) {
+        try {
+            Thread.sleep((int) (Math.random() * delayDelta + delayMin));
+        } catch (InterruptedException ex) {
+        }
+
+        UserGroupRelation userGroupRelation = new UserGroupRelation();
+        userGroupRelation.userEmail = new String(user);
+        userGroupRelation.groupName = new String(group);
+        this.userGroupRelations.add(userGroupRelation);
+    }
+
+    public boolean createGroup (String groupName) {
+        try {
+            Thread.sleep((int) (Math.random() * delayDelta + delayMin));
+        } catch (InterruptedException ex) {
+        }
+
+        for(Group g : groups)
+            if (g.groupName.compareTo(groupName) == 0)
+                return false;
+
+        Group group = new Group();
+        group.groupName = new String(groupName);
+        groups.add(group);
+
+        return true;
+    }
+
+	public boolean createAccount (String email, String password) {
+		try {
+			Thread.sleep((int) (Math.random() * delayDelta + delayMin));
+		} catch (InterruptedException ex) {
+		}
+
+		for(User u : users)
+			if (u.userEmail.compareTo(email) == 0)
+				return false;
+
+		User user = new User();
+		user.userEmail = new String(email);
+		user.userPassword = new String(password);
+		users.add(user);
+
+		return true;
+	}
+
+
 }

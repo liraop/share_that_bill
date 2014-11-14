@@ -1,6 +1,5 @@
 package com.mobapp.almaslira.sharethatbill;
 
-import android.app.Activity;
 import android.app.TabActivity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,8 +8,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TextView;
 
@@ -22,6 +19,7 @@ import java.util.List;
 public class GroupActivity extends TabActivity {
 	static final String TAG = "GroupActivity";
 
+    String thisUserName;
 	String thisGroupName;
 	TabHost tabHost;
 
@@ -37,37 +35,32 @@ public class GroupActivity extends TabActivity {
 
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
+            thisUserName = extras.getString("user_name");
 			thisGroupName = extras.getString("group_name");
 		}
 
 		TextView title = (TextView) findViewById(R.id.textViewGroupTitle);
 
-		if (title != null) {
-			if (thisGroupName != null)
-				title.setText(thisGroupName);
-			else
-				title.setText("sdds");
-		}
-		else
-			Log.d(TAG, "title missing");
+		title.setText(thisGroupName);
 
 		tabHost = (TabHost) findViewById(android.R.id.tabhost);
-
-
 
 		TabHost.TabSpec billsTabSpec = tabHost.newTabSpec("First");
 		billsTabSpec.setIndicator("Bills", null);
 		Intent billsIntent = new Intent(this, BillsTab.class);
+        billsIntent.putExtra("user_name", thisUserName);
+        billsIntent.putExtra("group_name", thisGroupName);
 		billsTabSpec.setContent(billsIntent);
 
 		TabHost.TabSpec membersTabSpec = tabHost.newTabSpec("Second");
 		membersTabSpec.setIndicator("Members", null);
 		Intent membersIntent = new Intent(this, MembersTab.class);
+        membersIntent.putExtra("user_name", thisUserName);
+        membersIntent.putExtra("group_name", thisGroupName);
 		membersTabSpec.setContent(membersIntent);
 
 		tabHost.addTab(billsTabSpec);
 		tabHost.addTab(membersTabSpec);
-
 	}
 
 

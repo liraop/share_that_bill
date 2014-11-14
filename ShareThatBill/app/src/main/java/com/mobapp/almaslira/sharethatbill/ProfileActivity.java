@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
@@ -33,8 +34,6 @@ public class ProfileActivity extends Activity implements View.OnClickListener, A
 	private List<String> groupsNamesList;
 	private String userName;
 
-	boolean readyToUpdate;
-
 	ProgressDialog progressDialog;
 
 	@Override
@@ -47,16 +46,18 @@ public class ProfileActivity extends Activity implements View.OnClickListener, A
 
 		setContentView(R.layout.activity_profile);
 
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            userName = extras.getString("user_name");
+        }
+
+        Log.d(TAG, "user: " + userName);
+
 		this.groupsList = (ListView) findViewById(R.id.listViewProfileGroups);
 		noGroupsText = (TextView) findViewById(R.id.textViewProfileNoGroups);
 
 		ImageButton createGroupButton = (ImageButton) findViewById(R.id.imageButtonProfileCreateGroup);
 		createGroupButton.setOnClickListener(this);
-
-		Bundle extras = getIntent().getExtras();
-		if (extras != null) {
-			userName = extras.getString("user_name");
-		}
 
 		groupsNamesList = new ArrayList<String>();
 
@@ -70,89 +71,54 @@ public class ProfileActivity extends Activity implements View.OnClickListener, A
 		arrayAdapter.notifyDataSetChanged();
 		groupsList.setOnItemClickListener(this);
 
-		readyToUpdate = false;
-
 		progressDialog = new ProgressDialog(ProfileActivity.this);
 		progressDialog.setMessage(getResources().getString(R.string.warning_loading));
 
-		final Handler handler = new Handler();
-		Timer timer = new Timer();
-		TimerTask doAsynchronousTask = new TimerTask() {
-			@Override
-			public void run() {
-				handler.post(new Runnable() {
-					public void run() {
-						try {
-							updateNoGroupsText();
-						} catch (Exception e) {
-						}
-					}
-				});
-			}
-		};
-		timer.schedule(doAsynchronousTask, 0, 200);
+		updateGroups();
+	}
+
+	@Override
+	protected void onResume() {
+		Log.d(TAG, "onResume");
+
+		super.onResume();
 
 		progressDialog.show();
 		updateGroups();
 	}
 
 	void updateGroups() {
+        progressDialog.show();
+
 		new Thread() {
 			public void run() {
-				Log.d(TAG, "in thread");
+				Log.d(TAG, "in thread updateGroups");
 
-				groupsNamesList = FakeDataBase.getUserGroups(userName);
+				groupsNamesList = ((ShareThatBillApp) getApplication()).dataBase.getUserGroups(userName);
+
 				if (groupsNamesList != null) {
-					groupsNamesList.add(0, getResources().getString(R.string.profile_create_new_group));
-					Log.d(TAG, "list not null");
 
+					Log.d(TAG, "user " + userName + "'s groups:");
 					for (String s : groupsNamesList)
 						Log.d(TAG, "group: " + s);
 				}
 				else
 					Log.d(TAG, "list null");
 
+
 				progressDialog.dismiss();
-				readyToUpdate = true;
+
+                runOnUiThread(new Runnable(){
+                    public void run() {
+                        updateNoGroupsText();
+                    }
+                });
 			}
 		}.start();
-
 	}
 
 	void updateNoGroupsText() {
-		if (groupsNamesList.size() == 0) {
-			noGroupsText.setVisibility(View.VISIBLE);
-		} else {
-			noGroupsText.setVisibility(View.GONE);
-		}
-
-		if (readyToUpdate) {
-			Log.d(TAG, "readyToUpdate");
-			readyToUpdate = false;
-			arrayAdapter.notifyDataSetChanged();
-			progressDialog.dismiss();
-		}
-	}
-/*
-    protected void onCreate(Bundle savedInstanceState) {
-        Log.d(TAG, "onCreate");
-        super.onCreate(savedInstanceState);
-
-        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
-        setContentView(R.layout.activity_profile);
-
-        this.groupsList = (ListView) findViewById(R.id.listViewProfileGroups);
-        noGroupsText = (TextView) findViewById(R.id.textViewProfileNoGroups);
-
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            userName = extras.getString("user_name");
-            groupsNamesList = extras.getStringArrayList("user_groups");
-        }
-
-        groupsNamesList.add(0, getResources().getString(R.string.profile_create_new_group));
+        Log.d(TAG, "updating");
 
         arrayAdapter = new ArrayAdapter<String>(
                 this,
@@ -160,17 +126,16 @@ public class ProfileActivity extends Activity implements View.OnClickListener, A
                 groupsNamesList);
 
         groupsList.setAdapter(arrayAdapter);
+        arrayAdapter.notifyDataSetChanged();
+
+        progressDialog.dismiss();
 
         if (groupsNamesList.size() == 0) {
-            noGroupsText.setVisibility(View.VISIBLE);
+            this.noGroupsText.setVisibility(View.VISIBLE);
         } else {
-            noGroupsText.setVisibility(View.GONE);
+            this.noGroupsText.setVisibility(View.INVISIBLE);
         }
-
-        arrayAdapter.notifyDataSetChanged();
-        groupsList.setOnItemClickListener(this);
-    }
-*/
+	}
 
 	@Override
 	public void onClick(View view) {
@@ -178,7 +143,9 @@ public class ProfileActivity extends Activity implements View.OnClickListener, A
 
 		switch (view.getId()) {
 			case R.id.imageButtonProfileCreateGroup:
-				startActivity(new Intent(ProfileActivity.this, CreateGroupActivity.class));
+                Intent intent = new Intent(ProfileActivity.this, CreateGroupActivity.class);
+                intent.putExtra("user_name", userName);
+                startActivity(intent);
 				break;
 		}
 	}
@@ -191,9 +158,10 @@ public class ProfileActivity extends Activity implements View.OnClickListener, A
 			public void run() {
 				Log.d(TAG, "in thread: fetch groupName information");
 
-				Intent intent = new Intent(ProfileActivity.this, GroupActivity.class);
-				intent.putExtra("group_name", groupsNamesList.get(i));
-				startActivity(intent);
+                Intent intent = new Intent(ProfileActivity.this, GroupActivity.class);
+                intent.putExtra("user_name", userName);
+                intent.putExtra("group_name", groupsNamesList.get(i));
+                startActivity(intent);
 			}
 		}.start();
 	}
