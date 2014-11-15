@@ -3,14 +3,11 @@ package com.mobapp.almaslira.sharethatbill;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
@@ -21,14 +18,12 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 
 public class ProfileActivity extends Activity implements View.OnClickListener, AdapterView.OnItemClickListener {
 	static final String TAG = "ProfileActivity";
 
-	private ListView groupsList;
+	private ListView groupsListView;
 	private TextView noGroupsText;
 	private ArrayAdapter<String> arrayAdapter;
 	private List<String> groupsNamesList;
@@ -53,7 +48,7 @@ public class ProfileActivity extends Activity implements View.OnClickListener, A
 
         Log.d(TAG, "user: " + userName);
 
-		this.groupsList = (ListView) findViewById(R.id.listViewProfileGroups);
+		this.groupsListView = (ListView) findViewById(R.id.listViewProfileGroups);
 		noGroupsText = (TextView) findViewById(R.id.textViewProfileNoGroups);
 
 		ImageButton createGroupButton = (ImageButton) findViewById(R.id.imageButtonProfileCreateGroup);
@@ -66,13 +61,14 @@ public class ProfileActivity extends Activity implements View.OnClickListener, A
 				android.R.layout.simple_list_item_1,
 				groupsNamesList);
 
-		groupsList.setAdapter(arrayAdapter);
+		groupsListView.setAdapter(arrayAdapter);
 
 		arrayAdapter.notifyDataSetChanged();
-		groupsList.setOnItemClickListener(this);
+		groupsListView.setOnItemClickListener(this);
 
 		progressDialog = new ProgressDialog(ProfileActivity.this);
 		progressDialog.setMessage(getResources().getString(R.string.warning_loading));
+        progressDialog.setCancelable(false);
 
 		updateGroups();
 	}
@@ -125,7 +121,7 @@ public class ProfileActivity extends Activity implements View.OnClickListener, A
                 android.R.layout.simple_list_item_1,
                 groupsNamesList);
 
-        groupsList.setAdapter(arrayAdapter);
+        groupsListView.setAdapter(arrayAdapter);
         arrayAdapter.notifyDataSetChanged();
 
         progressDialog.dismiss();

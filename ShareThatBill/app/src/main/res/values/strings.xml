@@ -49,6 +49,15 @@
     <string name="tabs_members_add">Add new member: </string>
     <string name="tabs_bills_add">Add new bill: </string>
     <string name="members_tab_you">(you)</string>
+    <string name="title_activity_view_bill">ViewBillActivity</string>
+    <string name="view_bill_bill">Bill:</string>
+    <string name="view_bill_total">Total: $</string>
+    <string name="view_bill_date">Date: </string>
+    <string name="view_bill_location">Location:</string>
+    <string name="view_bill_picture">Picture:</string>
+    <string name="view_bill_who_paid">Who paid:</string>
+    <string name="view_bill_who_owns">Who owns:</string>
+
 
 
 </resources>

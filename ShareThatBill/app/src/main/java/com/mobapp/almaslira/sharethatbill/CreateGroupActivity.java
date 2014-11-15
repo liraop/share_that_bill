@@ -3,6 +3,7 @@ package com.mobapp.almaslira.sharethatbill;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -37,6 +38,8 @@ public class CreateGroupActivity extends Activity implements View.OnClickListene
 	ArrayAdapter<String> arrayAdapter;
     String userName;
 
+    ProgressDialog progressDialog;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		Log.d(TAG, "onCreate");
@@ -70,6 +73,10 @@ public class CreateGroupActivity extends Activity implements View.OnClickListene
 
 		ImageButton addButton = (ImageButton) findViewById(R.id.imageButtonCreateGroupAdd);
 		addButton.setOnClickListener(this);
+
+        progressDialog = new ProgressDialog(CreateGroupActivity.this);
+        progressDialog.setMessage(getResources().getString(R.string.warning_loading));
+        progressDialog.setCancelable(false);
 	}
 
 	@Override
@@ -82,7 +89,6 @@ public class CreateGroupActivity extends Activity implements View.OnClickListene
 
 				EditText email = (EditText) findViewById(R.id.editTextCreateGroupAddEmail);
 
-				//TODO: test in real device
 				InputMethodManager imm = (InputMethodManager)getSystemService(
 						Context.INPUT_METHOD_SERVICE);
 				imm.hideSoftInputFromWindow(email.getWindowToken(), 0);
@@ -125,6 +131,7 @@ public class CreateGroupActivity extends Activity implements View.OnClickListene
 	}
 
     private void registerGroup(final String groupNameString) {
+        progressDialog.show();
 
         new Thread() {
             public void run() {
@@ -143,9 +150,11 @@ public class CreateGroupActivity extends Activity implements View.OnClickListene
                     intent.putExtra("group_name", groupNameString);
                     startActivity(intent);
 
+                    progressDialog.dismiss();
                     finish();
                 }
                 else {
+                    progressDialog.dismiss();
                     CreateGroupActivity.this.runOnUiThread(new Runnable() {
                         public void run() {
                             Log.d("TAG", "on the UI thread");
