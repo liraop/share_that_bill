@@ -57,7 +57,18 @@
     <string name="view_bill_picture">Picture:</string>
     <string name="view_bill_who_paid">Who paid:</string>
     <string name="view_bill_who_owns">Who owns:</string>
-
-
+    <string name="title_activity_create_bill">CreateBillActivity</string>
+    <string name="create_bill_title">Create bill</string>
+    <string name="create_bill_name">Bill name:</string>
+    <string name="create_bill_date">Date:</string>
+    <string name="create_bill_total_value">Total value:</string>
+    <string name="create_bill_now">Now</string>
+    <string name="create_bill_date_other">Other:</string>
+    <string name="create_bill_time">Time:</string>
+    <string name="create_bill_location">Location:</string>
+    <string name="create_bill_picture">Picture:</string>
+    <string name="create_bill_how_to_split">How will the value be split?</string>
+    <string name="create_bill_equaly">Equaly</string>
+    <string name="create_bill_custom">Not equaly</string>
 
 </resources>
