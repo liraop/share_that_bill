@@ -74,7 +74,7 @@
         android:layout_alignTop="@+id/editTextCreateGroupAddEmail"
         android:layout_toRightOf="@+id/editTextCreateGroupAddEmail"
         android:layout_toEndOf="@+id/editTextCreateGroupAddEmail"
-        android:background="@android:color/transparent" />
+        android:background="@null" />
 
     <ListView
         android:layout_width="wrap_content"

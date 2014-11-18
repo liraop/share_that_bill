@@ -2,6 +2,7 @@ package com.mobapp.almaslira.sharethatbill;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -70,12 +71,14 @@ public class BillsTab extends Activity implements View.OnClickListener, AdapterV
         arrayAdapter.notifyDataSetChanged();
         billsList.setOnItemClickListener(this);
 
-        updateMembers();
+        updateBills();
 
     }
 
     @Override
     public void onClick(View v) {
+        Log.d(TAG, "onClick");
+
         switch (v.getId()) {
             case R.id.imageButtonTabsAdd:
                 Log.d(TAG, "add button");
@@ -85,15 +88,20 @@ public class BillsTab extends Activity implements View.OnClickListener, AdapterV
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Log.d(TAG, "onItemClick");
 
+        Intent intent = new Intent(BillsTab.this, ViewBillActivity.class);
+        intent.putExtra("bill_name", billsNamesList.get(position));
+        intent.putExtra("group_name", thisGroupName);
+        startActivity(intent);
     }
 
-    void updateMembers() {
+    void updateBills() {
         progressDialog.show();
 
         new Thread() {
             public void run() {
-                Log.d(TAG, "in thread updateMembers");
+                Log.d(TAG, "in thread updateBills");
 
                 billsNamesList = ((ShareThatBillApp) getApplication()).dataBase.getGroupBills(thisGroupName);
 

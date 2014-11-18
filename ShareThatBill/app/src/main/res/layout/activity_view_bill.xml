@@ -85,7 +85,8 @@
                 android:src="@drawable/add_button"
                 android:layout_below="@+id/buttonSeeMap"
                 android:layout_toRightOf="@+id/textViewViewBillPicture"
-                android:layout_marginLeft="20dp" />
+                android:layout_marginLeft="20dp"
+                android:background="@null"/>
 
             <TextView
                 android:layout_width="wrap_content"

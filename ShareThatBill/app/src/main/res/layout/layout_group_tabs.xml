@@ -22,7 +22,8 @@
         android:src="@drawable/add_button"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/textViewGroupTabAdd"
-        android:layout_marginTop="5dp"/>
+        android:layout_marginTop="5dp"
+        android:background="@null"/>
 
     <ListView
         android:layout_width="wrap_content"

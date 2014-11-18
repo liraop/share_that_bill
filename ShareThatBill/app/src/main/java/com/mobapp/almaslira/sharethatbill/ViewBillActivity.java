@@ -2,6 +2,8 @@ package com.mobapp.almaslira.sharethatbill;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.graphics.Picture;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -10,14 +12,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Date;
 
 
 public class ViewBillActivity extends Activity {
@@ -25,8 +26,11 @@ public class ViewBillActivity extends Activity {
 
     String billName;
     String groupName;
-    ArrayList<String> whoPaidStringList;
-    ArrayList<String> whoOwnsStringList;
+
+    Bill thisBill;
+
+    ArrayList<TwoStringsClass> whoPaidTwoStringsList;
+    ArrayList<TwoStringsClass> whoOwnsStringList;
 
     ProgressDialog progressDialog;
 
@@ -47,9 +51,6 @@ public class ViewBillActivity extends Activity {
             groupName = extras.getString("group_name");
         }
 
-        billName = new String("bgroup11");
-        groupName = new String("group1");
-
         progressDialog = new ProgressDialog(ViewBillActivity.this);
         progressDialog.setMessage(getResources().getString(R.string.warning_loading));
         progressDialog.setCancelable(false);
@@ -64,13 +65,17 @@ public class ViewBillActivity extends Activity {
             public void run() {
                 Log.d(TAG, "in thread fetchBillData");
 
-                progressDialog.dismiss();
+                thisBill = ((ShareThatBillApp) getApplication()).dataBase.getBill(billName);
+                whoPaidTwoStringsList = ((ShareThatBillApp) getApplication()).dataBase.getWhoPaidBill(billName);
+                whoOwnsStringList = ((ShareThatBillApp) getApplication()).dataBase.getWhoOwnsBill(billName);
 
                 runOnUiThread(new Runnable(){
                     public void run() {
                         setUpTables();
                     }
                 });
+
+                progressDialog.dismiss();
             }
         }.start();
     }
@@ -79,29 +84,23 @@ public class ViewBillActivity extends Activity {
         Log.d(TAG, "setUpTables");
 
         TextView title = (TextView) findViewById(R.id.textViewViewBillTitle);
-        title.setText(getResources().getString(R.string.view_bill_bill) + " " + billName);
+        title.setText(getResources().getString(R.string.view_bill_bill) + " " + thisBill.billName);
 
         TextView total = (TextView) findViewById(R.id.textViewViewBillTotal);
-        total.setText(getResources().getString(R.string.view_bill_total) + "22.10");
+        total.setText(getResources().getString(R.string.view_bill_total) + String.format("%2.2f", thisBill.billValue));
 
         TextView date = (TextView) findViewById(R.id.textViewViewBillDate);
-        date.setText(getResources().getString(R.string.view_bill_date) + "10/22/2014");
+        date.setText(getResources().getString(R.string.view_bill_date) + (new SimpleDateFormat("MM-dd-yyyy kk:mm").format(thisBill.billDate)));
+
 
         TextView location = (TextView) findViewById(R.id.textViewViewBillLocation);
         location.setText(getResources().getString(R.string.view_bill_location));
 
         // ** Who paid list
 
-
-        for (int i = 0; i < 10; i++)
-            whoPaidStringList.add("person " + i);
-
         ListView whoPaidListView = (ListView) findViewById(R.id.listViewViewBillWhoPaid);
 
-        ArrayAdapter<String> whoPaidArrayAdapter = new ArrayAdapter<String>(
-                this,
-                android.R.layout.simple_list_item_1,
-                whoPaidStringList);
+        CustomTwoItemAdapter whoPaidArrayAdapter = new CustomTwoItemAdapter(this, whoPaidTwoStringsList);
 
         whoPaidListView.setAdapter(whoPaidArrayAdapter);
 
@@ -121,15 +120,9 @@ public class ViewBillActivity extends Activity {
 
         // ** Who owns list
 
-        for (int i = 0; i < 10; i++)
-            whoOwnsStringList.add("person " + (i+10));
-
         ListView whoOwnsListView = (ListView) findViewById(R.id.listViewViewBillWhoOwns);
 
-        ArrayAdapter<String> whoOwnsArrayAdapter = new ArrayAdapter<String>(
-                this,
-                android.R.layout.simple_list_item_1,
-                whoOwnsStringList);
+        CustomTwoItemAdapter whoOwnsArrayAdapter = new CustomTwoItemAdapter(this, whoOwnsStringList);
 
         whoOwnsListView.setAdapter(whoOwnsArrayAdapter);
         whoOwnsArrayAdapter.notifyDataSetChanged();

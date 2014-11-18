@@ -2,7 +2,11 @@ package com.mobapp.almaslira.sharethatbill;
 
 
 
+import android.location.Location;
+
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 /**
  * Created by José Ernesto on 11/10/2014.
@@ -18,13 +22,6 @@ public class FakeDataBase {
 
 	private class Group {
 		String groupName;
-	}
-
-	private class Bill {
-		String billName;
-		float billValue;
-		String groupName;
-		//TODO complete
 	}
 
 	private class UserBillRelation {
@@ -77,7 +74,11 @@ public class FakeDataBase {
 		bill.billName = new String("bgroup11");
 		bill.groupName = new String("group1");
 		bill.billValue = 50.0f;
-		bills.add(bill);
+        bill.billDate = new Date();
+        bill.billLocation = new Location("android");
+        bill.billLocation.setAltitude(-22.017280d);
+        bill.billLocation.setLongitude(-47.886883d);
+        bills.add(bill);
 
 
 		/* USERS AND BILLS */
@@ -178,6 +179,55 @@ public class FakeDataBase {
         return result;
     }
 
+    public ArrayList<TwoStringsClass> getWhoPaidBill (String billName) {
+        try {
+            Thread.sleep((int) (Math.random() * delayDelta + delayMin));
+        } catch (InterruptedException ex) {
+        }
+
+        ArrayList<TwoStringsClass> result = new ArrayList<TwoStringsClass>();
+
+        for (UserBillRelation ubr : userBillRelations) {
+            if (ubr.billName.compareTo(billName) == 0)
+                if (ubr.value > 0)
+                    result.add(new TwoStringsClass(ubr.userEmail, String.format("%2.2f", ubr.value)));
+        }
+
+        return result;
+    }
+
+    public ArrayList<TwoStringsClass> getWhoOwnsBill (String billName) {
+        try {
+            Thread.sleep((int) (Math.random() * delayDelta + delayMin));
+        } catch (InterruptedException ex) {
+        }
+
+        ArrayList<TwoStringsClass> result = new ArrayList<TwoStringsClass>();
+
+        for (UserBillRelation ubr : userBillRelations) {
+            if (ubr.billName.compareTo(billName) == 0)
+                if (ubr.value < 0)
+                    result.add(new TwoStringsClass(ubr.userEmail, String.format("%2.2f", -ubr.value)));
+        }
+
+        return result;
+    }
+
+    public Bill getBill (String billName) {
+        try {
+            Thread.sleep((int) (Math.random() * delayDelta + delayMin));
+        } catch (InterruptedException ex) {
+        }
+
+        Bill result;
+
+        for (Bill b : bills) {
+            if (b.billName.compareTo(billName) == 0)
+                return b;
+        }
+        return null;
+    }
+
     public void addUserToGroup (String user, String group) {
         try {
             Thread.sleep((int) (Math.random() * delayDelta + delayMin));
@@ -224,6 +274,4 @@ public class FakeDataBase {
 
 		return true;
 	}
-
-
 }

@@ -97,7 +97,7 @@ public class MembersTab extends Activity implements View.OnClickListener, Adapte
 
         new Thread() {
             public void run() {
-                Log.d(TAG, "in thread updateMembers");
+                Log.d(TAG, "in thread updateBills");
 
                 memberNamesList = ((ShareThatBillApp) getApplication()).dataBase.getGroupUsers(thisGroupName);
 
