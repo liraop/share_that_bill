@@ -197,8 +197,7 @@ public class CreateGroupActivity extends Activity implements View.OnClickListene
 	 * Pops a dialog with the option to edit the clicked userEmail or remove it.
 	 * @param index: item clicked
 	 */
-	void createUpdateEmailDialog (int index) {
-		final int indexf = index;
+	void createUpdateEmailDialog (final int index) {
 
 		AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
@@ -214,8 +213,8 @@ public class CreateGroupActivity extends Activity implements View.OnClickListene
 
 				Log.d(TAG, "Ok to edit to " + newValue);
 
-				membersListStrings.remove(indexf);
-				membersListStrings.add(indexf, newValue);
+				membersListStrings.remove(index);
+				membersListStrings.add(index, newValue);
 				arrayAdapter.notifyDataSetChanged();
 			}
 		});
@@ -226,7 +225,7 @@ public class CreateGroupActivity extends Activity implements View.OnClickListene
 
 				Log.d(TAG, "remove userEmail: " + value1);
 
-				membersListStrings.remove(indexf);
+				membersListStrings.remove(index);
 				arrayAdapter.notifyDataSetChanged();
 			}
 		});

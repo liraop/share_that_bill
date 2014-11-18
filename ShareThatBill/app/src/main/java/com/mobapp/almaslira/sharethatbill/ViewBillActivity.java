@@ -12,6 +12,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -92,11 +95,11 @@ public class ViewBillActivity extends Activity {
         TextView date = (TextView) findViewById(R.id.textViewViewBillDate);
         date.setText(getResources().getString(R.string.view_bill_date) + (new SimpleDateFormat("MM-dd-yyyy kk:mm").format(thisBill.billDate)));
 
-
         TextView location = (TextView) findViewById(R.id.textViewViewBillLocation);
         location.setText(getResources().getString(R.string.view_bill_location));
 
-        // ** Who paid list
+
+        // ** Who paid list **
 
         ListView whoPaidListView = (ListView) findViewById(R.id.listViewViewBillWhoPaid);
 
@@ -118,7 +121,8 @@ public class ViewBillActivity extends Activity {
         whoPaidListView.setLayoutParams(params);
         whoPaidListView.requestLayout();
 
-        // ** Who owns list
+
+        // ** Who owns list **
 
         ListView whoOwnsListView = (ListView) findViewById(R.id.listViewViewBillWhoOwns);
 

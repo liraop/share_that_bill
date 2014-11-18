@@ -46,8 +46,8 @@
                 android:layout_below="@+id/textViewCreateBillName"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true" />
+                android:layout_toLeftOf="@+id/buttonCreateBillCreate"
+                android:layout_toStartOf="@+id/buttonCreateBillCreate" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -109,9 +109,29 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/create_bill_who_paid"
+                android:id="@+id/textViewCreateBillWhoPaid"
+                android:layout_below="@+id/textViewCreateBillPicture"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+
+            <ListView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/listViewCreateBillWhoPaid"
+                android:fadeScrollbars="false"
+                android:layout_below="@+id/textViewCreateBillWhoPaid"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="10dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="@string/create_bill_how_to_split"
                 android:id="@+id/textViewCreateBillHowToSplit"
-                android:layout_below="@+id/textViewCreateBillPicture"
+                android:layout_below="@+id/listViewCreateBillWhoPaid"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true" />
 
@@ -119,17 +139,15 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:layout_below="@+id/textViewCreateBillHowToSplit"
-                android:layout_alignBottom="@+id/textViewCreateBillHowToSplit"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_marginBottom="202dp"
-                android:id="@+id/RadioGroupSplit">
+                android:id="@+id/RadioGroupCreateBillSplit">
 
                 <RadioButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/create_bill_equaly"
-                    android:id="@+id/radioButtonEqualy"
+                    android:text="@string/create_bill_equally"
+                    android:id="@+id/radioButtonCreateBillEqually"
                     android:layout_centerVertical="true"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
@@ -139,14 +157,32 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/create_bill_custom"
-                    android:id="@+id/radioButtonCustom"
+                    android:id="@+id/radioButtonCreateBillCustom"
                     android:layout_centerVertical="true"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
                     android:checked="false" />
                 </RadioGroup>
 
+            <ListView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/listViewCreateBillWhoOwns"
+                android:fadeScrollbars="false"
+                android:layout_below="@+id/RadioGroupCreateBillSplit"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="10dp"/>
 
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/create_bill_create"
+                android:id="@+id/buttonCreateBillCreate"
+                android:layout_alignBottom="@+id/editTextCreateBillBillName"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true" />
 
 
         </RelativeLayout>.

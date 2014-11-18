@@ -68,7 +68,9 @@
     <string name="create_bill_location">Location:</string>
     <string name="create_bill_picture">Picture:</string>
     <string name="create_bill_how_to_split">How will the value be split?</string>
-    <string name="create_bill_equaly">Equaly</string>
+    <string name="create_bill_equally">Equaly</string>
     <string name="create_bill_custom">Not equaly</string>
+    <string name="create_bill_who_paid">Who paid?</string>
+    <string name="create_bill_create">Create!</string>
 
 </resources>
