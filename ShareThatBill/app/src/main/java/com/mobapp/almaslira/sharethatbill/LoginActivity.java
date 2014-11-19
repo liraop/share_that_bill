@@ -88,7 +88,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 					sendLoginRequest(emailString, passwordString);
 				}
 */
-                sendLoginRequest("user1@us.er", "1234");
+                sendLoginRequest(emailString, passwordString);
 				break;
 
 			case R.id.buttonLoginCreateAccount:
@@ -109,26 +109,19 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 			public void run() {
 				Log.d(TAG, "in thread");
 
-				//TODO: ((ShareThatBillApp) getApplication()).dataBase.checkLogin(userEmail, userPassword);
-
-                boolean login = false;
-
-                try{
-                    login = dbhandler.checkLogin(userEmail,userPassword);
-                } catch (SQLException e){
-                    System.out.print(e.getMessage());
-                }
-
-
-                if (!login) {
+                if (!dbhandler.checkLogin(userEmail,userPassword)) {
                     Log.d(TAG, "login unsuccessful");
                 } else {
                     Log.d(TAG, "login successful");
 
-                    ArrayList<String> userGroups = ((ShareThatBillApp) getApplication()).dataBase.getUserGroups(userEmail);
+                    try {
+                        ArrayList<String> userGroups = dbhandler.getUserGroups(userEmail);
+                    } catch (SQLException e){
+                        Log.d(TAG,e.getMessage());
+                    }
 
                     Intent intent = new Intent(LoginActivity.this, ProfileActivity.class);
-                    intent.putExtra("user_name", "user1@us.er");//userEmail);
+                    intent.putExtra("user_name", userEmail);
                     startActivity(intent);
                 }
 

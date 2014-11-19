@@ -38,40 +38,51 @@ public class DBhandler {
          * @return
          * @throws SQLException
          */
-        public boolean checkLogin(String userEmail, String password) throws SQLException {
+        public boolean checkLogin(String userEmail, String password) {
             boolean isValid = false;
+
+
+            try {
+                connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
+
+                this.statement = connect.createStatement();
+                String query = "SELECT * FROM users";
+                this.resultSet = statement.executeQuery(query);
+
+                while (resultSet.next()) {
+                    int i = 1;
+                    while (i <= 2) {
+                        if(resultSet.getString(i++).equals(userEmail) && resultSet.getString(i).equals(password)){
+                            isValid = true;
+                            break;
+                        }
+                    }
+                }
+            } catch (SQLException e){
+                //do something with exception
+            }
+
+            return isValid;
+        }
+
+        public ArrayList<String> getUserGroups (String userEmail) throws SQLException{
+
+            ArrayList<String> result = new ArrayList<String>();
 
             connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
 
             this.statement = connect.createStatement();
-            String query = "SELECT * FROM users";
+            String query = "SELECT gid FROM usersAndGroups WHERE uid = '"+userEmail+"'";
             this.resultSet = statement.executeQuery(query);
 
             while (resultSet.next()) {
                 int i = 1;
-                while (i <= 2) {
-                    if(resultSet.getString(i++).equals(userEmail) && resultSet.getString(i).equals(password)){
-                        isValid = true;
-                        break;
-                    }
-                }
+                result.add(resultSet.getString(i++));
             }
-            return isValid;
-        }
-
-    /*
-         public ArrayList<String> getUserGroups (String email) {
-
-            ArrayList<String> result = new ArrayList<String>();
-
-            for (UserGroupRelation ugr : this.userGroupRelations) {
-                if (ugr.userEmail.compareTo(email) == 0)
-                    result.add(ugr.groupName);
-            }
-
             return result;
+
         }
 
-    */
+
 
 }
