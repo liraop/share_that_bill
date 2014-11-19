@@ -163,7 +163,7 @@ public class CreateGroupActivity extends Activity implements View.OnClickListene
                     progressDialog.dismiss();
                     CreateGroupActivity.this.runOnUiThread(new Runnable() {
                         public void run() {
-                            Log.d("TAG", "on the UI thread");
+                            Log.d(TAG, "on the UI thread");
                             createWarningAlert(getResources().getString(R.string.warning_error),
                                     getResources().getString(R.string.warning_creating_group_fail));
                         }
