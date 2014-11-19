@@ -22,7 +22,7 @@
         android:src="@drawable/add_button"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/textViewGroupTabAdd"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="15dp"
         android:background="@null"/>
 
     <ListView
@@ -30,6 +30,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/listViewTabsList"
         android:layout_below="@+id/imageButtonTabsAdd"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp" />
 
 </RelativeLayout>

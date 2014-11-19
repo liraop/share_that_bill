@@ -2,6 +2,7 @@ package com.mobapp.almaslira.sharethatbill;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -14,14 +15,27 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.NumberPicker;
 import android.widget.RadioGroup;
+import android.widget.TextView;
+import android.widget.TimePicker;
+import android.widget.Toast;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 
-public class CreateBillActivity extends Activity implements RadioGroup.OnCheckedChangeListener {
+public class CreateBillActivity extends Activity implements RadioGroup.OnCheckedChangeListener, View.OnClickListener {
     static final String TAG = "CreateBillActivity";
 
     String groupName;
@@ -33,6 +47,8 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
 
     boolean dividingEquallyFlag;
     boolean[] dividingEquallyMembers;
+
+    Bill thisBill;
 
     ProgressDialog progressDialog;
 
@@ -47,12 +63,12 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
 
         setContentView(R.layout.activity_create_bill);
 
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             groupName = extras.getString("group_name");
         }
-
-        groupName = new String("group1");
 
         progressDialog = new ProgressDialog(CreateBillActivity.this);
         progressDialog.setMessage(getResources().getString(R.string.warning_loading));
@@ -60,10 +76,195 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
 
         dividingEquallyFlag = true;
 
+        thisBill = new Bill();
+        thisBill.billDate = Calendar.getInstance();
+
         RadioGroup  radioGroup = (RadioGroup) findViewById(R.id.RadioGroupCreateBillSplit);
         radioGroup.setOnCheckedChangeListener(this);
 
+        Button setDateButton = (Button) findViewById(R.id.buttonCreateBillDate);
+        setDateButton.setOnClickListener(this);
+
+        Button setTimeButton = (Button) findViewById(R.id.buttonCreateBillTime);
+        setTimeButton.setOnClickListener(this);
+
+        Button createBill = (Button) findViewById(R.id.buttonCreateBillCreate);
+        createBill.setOnClickListener(this);
+
         fetchMembersList();
+    }
+
+    @Override
+    public void onClick(View view) {
+        Log.d(TAG, "onClick");
+
+        switch (view.getId()) {
+            case R.id.buttonCreateBillDate:
+                createGetDateDialog();
+                break;
+
+            case R.id.buttonCreateBillTime:
+                createGetTimeDialog();
+                break;
+
+            case R.id.buttonCreateBillCreate:
+                EditText billName = (EditText) findViewById(R.id.editTextCreateBillBillName);
+                thisBill.billName = new String(billName.getText().toString());
+
+                thisBill.billValue = totalBillValue();
+
+                thisBill.groupName = new String(groupName);
+
+                if (totalBillValue() == 0)
+                    createWarningAlert(getResources().getString(R.string.warning_error),
+                                        getResources().getString(R.string.warning_creating_bill_fail_total_zero));
+                else if (!billValuesMatch())
+                    createWarningAlert(getResources().getString(R.string.warning_error),
+                            getResources().getString(R.string.warning_creating_bill_fail_total_match));
+                else if (thisBill.billName == null)
+                    createWarningAlert(getResources().getString(R.string.warning_error),
+                            getResources().getString(R.string.warning_creating_bill_fail_name));
+                else
+                    sendCreateBillRequest();
+                break;
+        }
+    }
+
+    public boolean billValuesMatch() {
+        float totalOwns = 0;
+        for (TwoStringsClass m : whoOwns)
+            totalOwns += Float.parseFloat(m.second);
+
+        return ((totalOwns - totalBillValue()) == 0);
+    }
+
+    private void createWarningAlert (String title, String warning) {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(CreateBillActivity.this);
+
+        alertDialogBuilder.setTitle(title);
+        alertDialogBuilder.setMessage(warning);
+
+        alertDialogBuilder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog,int id) {
+            }
+        });
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+    }
+
+    public void sendCreateBillRequest() {
+        Log.d(TAG, "sendCreateBillRequest");
+        progressDialog.show();
+
+        new Thread() {
+            public void run() {
+                ((ShareThatBillApp) getApplication()).dataBase.createBill(thisBill);
+
+                for (TwoStringsClass mp : whoPaid) {
+                    if (Float.parseFloat(mp.second) > 0)
+                        ((ShareThatBillApp) getApplication()).dataBase.createUserBillRelation(mp.first, thisBill.billName, Float.parseFloat(mp.second));
+                }
+                for (TwoStringsClass mo : whoOwns) {
+                    if (Float.parseFloat(mo.second) > 0)
+                        ((ShareThatBillApp) getApplication()).dataBase.createUserBillRelation(mo.first, thisBill.billName, -Float.parseFloat(mo.second));
+                }
+
+                CreateBillActivity.this.runOnUiThread(new Runnable() {
+                    public void run() {
+                        Toast.makeText(CreateBillActivity.this, getResources().getText(R.string.create_bill_created), Toast.LENGTH_LONG).show();
+
+                        progressDialog.dismiss();
+
+                        finish();
+                    }
+                });
+            }
+        }.start();
+    }
+
+    public void createGetDateDialog () {
+
+        View dialogView = View.inflate(this, R.layout.layout_date_picker, null);
+
+        final NumberPicker month = (NumberPicker) dialogView.findViewById(R.id.numberPickerDatePickerFirst);
+        month.setMinValue(1);
+        month.setMaxValue(12);
+        DateFormat dateFormat = new SimpleDateFormat("MM");
+        month.setValue(Integer.parseInt(dateFormat.format(thisBill.billDate.getTime())));
+
+        final NumberPicker day = (NumberPicker) dialogView.findViewById(R.id.numberPickerDatePickerSecond);
+        day.setMinValue(1);
+        day.setMaxValue(31);
+        dateFormat = new SimpleDateFormat("dd");
+        day.setValue(Integer.parseInt(dateFormat.format(thisBill.billDate.getTime())));
+
+        final NumberPicker year = (NumberPicker) dialogView.findViewById(R.id.numberPickerDatePickerThird);
+        year.setMinValue(1970);
+        year.setMaxValue(2025);
+        dateFormat = new SimpleDateFormat("yyyy");
+        year.setValue(Integer.parseInt(dateFormat.format(thisBill.billDate.getTime())));
+
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getResources().getString(R.string.create_bill_set_date));
+        builder.setMessage(getResources().getString(R.string.create_bill_set_date_format))
+                .setView(dialogView)
+                .setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Log.d(TAG,  "month:" + month.getValue() +
+                                    " day: " + day.getValue() +
+                                    " year: " + year.getValue());
+
+                        thisBill.billDate.set(year.getValue(), month.getValue(), day.getValue());
+
+                        updateDateTime();
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                }).show();
+    }
+
+    public void createGetTimeDialog () {
+
+        View dialogView = View.inflate(this, R.layout.layout_time_picker, null);
+
+        final TimePicker timePicker = (TimePicker) dialogView.findViewById(R.id.timePicker);
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("HH");
+        timePicker.setCurrentHour(Integer.parseInt(dateFormat.format(thisBill.billDate.getTime())));
+
+        dateFormat = new SimpleDateFormat("mm");
+        timePicker.setCurrentMinute(Integer.parseInt(dateFormat.format(thisBill.billDate.getTime())));
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getResources().getString(R.string.create_bill_set_time))
+                .setView(dialogView)
+                .setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy");
+                        int year = Integer.parseInt(dateFormat.format(thisBill.billDate.getTime()));
+                        dateFormat = new SimpleDateFormat("MM");
+                        int month = Integer.parseInt(dateFormat.format(thisBill.billDate.getTime()));
+                        dateFormat = new SimpleDateFormat("dd");
+                        int day = Integer.parseInt(dateFormat.format(thisBill.billDate.getTime()));
+
+                        thisBill.billDate.set(year, month, day, timePicker.getCurrentHour(), timePicker.getCurrentMinute());
+
+                        updateDateTime();
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                }).show();
     }
 
     public void fetchMembersList() {
@@ -79,8 +280,8 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
                 whoOwns = new ArrayList<TwoStringsClass>();
 
                 for (String m : members) {
-                    whoPaid.add(new TwoStringsClass(m, "0.00"));
-                    whoOwns.add(new TwoStringsClass(m, "0.00"));
+                    whoPaid.add(new TwoStringsClass(m, "0.00", "$"));
+                    whoOwns.add(new TwoStringsClass(m, "0.00", "$"));
                     Log.d(TAG, "Adding member to lists: " + m);
                 }
 
@@ -100,6 +301,8 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
     }
 
     public void setUpTables() {
+        updateDateTime();
+
         // ** Who paid list **
 
         ListView whoPaidListView = (ListView) findViewById(R.id.listViewCreateBillWhoPaid);
@@ -156,11 +359,20 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
                 Log.d(TAG, "tapped whoOwnsList on " + position);
 
                 WhoOwnsListViewOnItemClickListener(position);
-
             }
         });
+    }
 
-        hideKeyboard();
+    private void updateDateTime() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+
+        TextView date = (TextView) findViewById(R.id.textViewCreateBillDate);
+        date.setText(getResources().getText(R.string.create_bill_date) + " " + dateFormat.format(thisBill.billDate.getTime()));
+
+        dateFormat = new SimpleDateFormat("hh:mm a");
+
+        TextView time = (TextView) findViewById(R.id.textViewCreateBillTime);
+        time.setText(getResources().getText(R.string.create_bill_time) + "  " + dateFormat.format(thisBill.billDate.getTime()));
     }
 
     void WhoOwnsListViewOnItemClickListener(int position) {
@@ -234,7 +446,6 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
             }
         });
 
-
         AlertDialog alertDialog = alert.create();
         alertDialog.show();
     }
@@ -273,10 +484,6 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
         alertDialog.show();
     }
 
-    public void hideKeyboard() {
-        getWindow().setSoftInputMode(
-                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.

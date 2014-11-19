@@ -93,7 +93,7 @@ public class ViewBillActivity extends Activity {
         total.setText(getResources().getString(R.string.view_bill_total) + String.format("%2.2f", thisBill.billValue));
 
         TextView date = (TextView) findViewById(R.id.textViewViewBillDate);
-        date.setText(getResources().getString(R.string.view_bill_date) + (new SimpleDateFormat("MM-dd-yyyy kk:mm").format(thisBill.billDate)));
+        date.setText(getResources().getString(R.string.view_bill_date) + " " + (new SimpleDateFormat("MM-dd-yyyy @ hh:mm a").format(thisBill.billDate.getTime())));
 
         TextView location = (TextView) findViewById(R.id.textViewViewBillLocation);
         location.setText(getResources().getString(R.string.view_bill_location));

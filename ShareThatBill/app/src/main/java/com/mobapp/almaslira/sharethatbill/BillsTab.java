@@ -82,6 +82,11 @@ public class BillsTab extends Activity implements View.OnClickListener, AdapterV
         switch (v.getId()) {
             case R.id.imageButtonTabsAdd:
                 Log.d(TAG, "add button");
+
+                Intent intent = new Intent(BillsTab.this, CreateBillActivity.class);
+                intent.putExtra("group_name", thisGroupName);
+                startActivity(intent);
+
                 break;
         }
     }
@@ -143,5 +148,6 @@ public class BillsTab extends Activity implements View.OnClickListener, AdapterV
         super.onResume();
 
         Log.d(TAG, "onResume");
+        updateBills();
     }
 }

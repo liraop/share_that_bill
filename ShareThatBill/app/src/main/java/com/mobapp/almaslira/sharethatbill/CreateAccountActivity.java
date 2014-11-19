@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.nfc.tech.TagTechnology;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -15,12 +14,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
-
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.logging.Handler;
-import java.util.logging.LogRecord;
 
 
 public class CreateAccountActivity extends Activity implements View.OnClickListener {
@@ -123,15 +116,15 @@ public class CreateAccountActivity extends Activity implements View.OnClickListe
 
 					progressDialog.show();
 
-					sendCreateRequest(emailString, passwordString);
+					sendCreateAccountRequest(emailString, passwordString);
 				}
 
 				break;
 		}
 	}
 
-	public void sendCreateRequest(final String email, final String password) {
-		Log.d(TAG, "sendCreateRequest");
+	public void sendCreateAccountRequest(final String email, final String password) {
+		Log.d(TAG, "sendCreateAccountRequest");
 
 		new Thread() {
 			public void run() {

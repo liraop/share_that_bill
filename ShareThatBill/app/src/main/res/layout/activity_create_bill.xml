@@ -57,7 +57,8 @@
                 android:id="@+id/textViewCreateBillDate"
                 android:layout_below="@+id/editTextCreateBillBillName"
                 android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="25dp" />
 
             <!--
             <DatePicker
@@ -74,7 +75,8 @@
                 android:id="@+id/textViewCreateBillTime"
                 android:layout_below="@+id/textViewCreateBillDate"
                 android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="25dp" />
 
             <!--
             <TimePicker
@@ -93,7 +95,8 @@
                 android:id="@+id/textViewCreateBillLocation"
                 android:layout_below="@+id/textViewCreateBillTime"
                 android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="25dp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -103,7 +106,8 @@
                 android:id="@+id/textViewCreateBillPicture"
                 android:layout_below="@+id/textViewCreateBillLocation"
                 android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="25dp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -113,7 +117,8 @@
                 android:id="@+id/textViewCreateBillWhoPaid"
                 android:layout_below="@+id/textViewCreateBillPicture"
                 android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="25dp" />
 
             <ListView
                 android:layout_width="wrap_content"
@@ -133,7 +138,8 @@
                 android:id="@+id/textViewCreateBillHowToSplit"
                 android:layout_below="@+id/listViewCreateBillWhoPaid"
                 android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="20dp" />
 
             <RadioGroup
                 android:layout_width="fill_parent"
@@ -141,7 +147,8 @@
                 android:layout_below="@+id/textViewCreateBillHowToSplit"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:id="@+id/RadioGroupCreateBillSplit">
+                android:id="@+id/RadioGroupCreateBillSplit"
+                android:layout_marginTop="10dp">
 
                 <RadioButton
                     android:layout_width="wrap_content"
@@ -182,7 +189,52 @@
                 android:id="@+id/buttonCreateBillCreate"
                 android:layout_alignBottom="@+id/editTextCreateBillBillName"
                 android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true" />
+                android:layout_alignParentEnd="true"
+                android:layout_marginBottom="-10dp" />
+
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/create_bill_set_date"
+                android:id="@+id/buttonCreateBillDate"
+                android:layout_alignBottom="@+id/textViewCreateBillDate"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginBottom="-10dp" />
+
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/create_bill_set_time"
+                android:id="@+id/buttonCreateBillTime"
+                android:layout_alignBottom="@+id/textViewCreateBillTime"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginBottom="-10dp" />
+
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/create_bill_set_location"
+                android:id="@+id/buttonCreateBillLocation"
+                android:layout_alignBottom="@+id/textViewCreateBillLocation"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginBottom="-10dp" />
+
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/create_bill_set_picture"
+                android:id="@+id/buttonCreateBillPicture"
+                android:layout_alignBottom="@+id/textViewCreateBillPicture"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginBottom="-10dp" />
 
 
         </RelativeLayout>.

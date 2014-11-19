@@ -35,7 +35,11 @@ public class CustomTwoItemAdapter extends ArrayAdapter<TwoStringsClass> {
 
         // Populate the data into the template view using the data object
         tvName.setText(item.first);
-        tvHome.setText(item.second);
+
+        if (item.appendSecond != null)
+            tvHome.setText(item.appendSecond + item.second);
+        else
+            tvHome.setText(item.second);
         // Return the completed view to render on screen
         return convertView;
     }

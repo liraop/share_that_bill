@@ -31,6 +31,9 @@
     <string name="warning_creating_account_fail">Account creation failed</string>
     <string name="warning_creating_group_success">Group created successfully!</string>
     <string name="warning_creating_group_fail">Group creation failed</string>
+    <string name="warning_creating_bill_fail_name">Invalid bill name.</string>
+    <string name="warning_creating_bill_fail_total_match">Total paid amount does not match owned amount.</string>
+    <string name="warning_creating_bill_fail_total_zero">Total bill amount must be greater than zero.</string>
     <string name="title_activity_profile">ProfileActivity</string>
     <string name="profile_title">Your groups:</string>
     <string name="profile_no_groups">You don\'t have any group.</string>
@@ -68,9 +71,17 @@
     <string name="create_bill_location">Location:</string>
     <string name="create_bill_picture">Picture:</string>
     <string name="create_bill_how_to_split">How will the value be split?</string>
-    <string name="create_bill_equally">Equaly</string>
-    <string name="create_bill_custom">Not equaly</string>
+    <string name="create_bill_equally">Equally (tap members that will share it)</string>
+    <string name="create_bill_custom">Not equally (tap users to specify the amount)</string>
     <string name="create_bill_who_paid">Who paid?</string>
     <string name="create_bill_create">Create!</string>
+    <string name="create_bill_set_date">Set date</string>
+    <string name="create_bill_set_time">Set time</string>
+    <string name="create_bill_set_location">Get location</string>
+    <string name="create_bill_set_picture">Take picture</string>
+    <string name="create_bill_set_date_format">MM/DD/YYYY</string>
+    <string name="create_bill_created">Bill successfully created.</string>
+    <string name="view_bill_check_map">Check map</string>
+    <string name="view_bill_check_picture">Take a look</string>
 
 </resources>

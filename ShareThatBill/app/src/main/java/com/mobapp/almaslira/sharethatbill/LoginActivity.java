@@ -99,7 +99,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 	}
 
 	public void sendLoginRequest(final String userEmail, final String userPassword) {
-		Log.d(TAG, "sendCreateRequest");
+		Log.d(TAG, "sendCreateAccountRequest");
 
         progressDialog.show();
 
