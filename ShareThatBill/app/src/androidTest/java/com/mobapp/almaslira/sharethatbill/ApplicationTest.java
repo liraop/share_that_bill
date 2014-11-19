@@ -24,15 +24,4 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 
     }
 
-    public void testGetUserGroups(){
-        DBhandler dbhandler = new DBhandler();
-        ArrayList<String> result = new ArrayList<String>();
-
-        try{
-            dbhandler.getUserGroups("user1");
-        } catch (SQLException e){
-            System.out.print(e.getMessage());
-        }
-    }
-
 }

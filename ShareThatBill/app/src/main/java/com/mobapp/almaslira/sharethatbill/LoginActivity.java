@@ -25,7 +25,7 @@ import java.util.List;
 
 public class LoginActivity extends Activity implements View.OnClickListener {
 	static final String TAG = "LoginActivity";
-    static DBhandler dbhandler = new DBhandler();
+    private static DBhandler dbhandler = new DBhandler();
 
     ProgressDialog progressDialog;
 
@@ -113,12 +113,6 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                     Log.d(TAG, "login unsuccessful");
                 } else {
                     Log.d(TAG, "login successful");
-
-                    try {
-                        ArrayList<String> userGroups = dbhandler.getUserGroups(userEmail);
-                    } catch (SQLException e){
-                        Log.d(TAG,e.getMessage());
-                    }
 
                     Intent intent = new Intent(LoginActivity.this, ProfileActivity.class);
                     intent.putExtra("user_name", userEmail);

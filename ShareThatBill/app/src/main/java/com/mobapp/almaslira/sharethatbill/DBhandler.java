@@ -65,19 +65,24 @@ public class DBhandler {
             return isValid;
         }
 
-        public ArrayList<String> getUserGroups (String userEmail) throws SQLException{
+        public ArrayList<String> getUserGroups (String userEmail){
 
             ArrayList<String> result = new ArrayList<String>();
 
-            connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
+            try {
 
-            this.statement = connect.createStatement();
-            String query = "SELECT gid FROM usersAndGroups WHERE uid = '"+userEmail+"'";
-            this.resultSet = statement.executeQuery(query);
+                connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
 
-            while (resultSet.next()) {
-                int i = 1;
-                result.add(resultSet.getString(i++));
+                this.statement = connect.createStatement();
+                String query = "SELECT gid FROM usersAndGroups WHERE uid = '" + userEmail + "'";
+                this.resultSet = statement.executeQuery(query);
+
+                while (resultSet.next()) {
+                    int i = 1;
+                    result.add(resultSet.getString(i++));
+                }
+            } catch (SQLException e){
+                //do something with sql exception
             }
             return result;
 

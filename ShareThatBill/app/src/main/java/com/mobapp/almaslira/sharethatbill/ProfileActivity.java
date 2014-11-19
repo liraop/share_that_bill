@@ -28,8 +28,10 @@ public class ProfileActivity extends Activity implements View.OnClickListener, A
 	private ArrayAdapter<String> arrayAdapter;
 	private List<String> groupsNamesList;
 	private String userName;
+    private static DBhandler dbhandler = new DBhandler();
 
-	ProgressDialog progressDialog;
+
+    ProgressDialog progressDialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -90,7 +92,7 @@ public class ProfileActivity extends Activity implements View.OnClickListener, A
 			public void run() {
 				Log.d(TAG, "in thread updateGroups");
 
-				groupsNamesList = ((ShareThatBillApp) getApplication()).dataBase.getUserGroups(userName);
+				groupsNamesList = dbhandler.getUserGroups(userName);
 
 				if (groupsNamesList != null) {
 
