@@ -18,12 +18,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class LoginActivity extends Activity implements View.OnClickListener {
 	static final String TAG = "LoginActivity";
+    static DBhandler dbhandler = new DBhandler();
 
     ProgressDialog progressDialog;
 
@@ -107,22 +109,28 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 			public void run() {
 				Log.d(TAG, "in thread");
 
+				//TODO: ((ShareThatBillApp) getApplication()).dataBase.checkLogin(userEmail, userPassword);
 
-				boolean login = true;//TODO: ((ShareThatBillApp) getApplication()).dataBase.checkLogin(userEmail, userPassword);
+                boolean login = false;
 
-				if (login)
-				{
-					Log.d(TAG, "login successful");
+                try{
+                    login = dbhandler.checkLogin(userEmail,userPassword);
+                } catch (SQLException e){
+                    System.out.print(e.getMessage());
+                }
 
-					ArrayList<String> userGroups = ((ShareThatBillApp) getApplication()).dataBase.getUserGroups(userEmail);
 
-					Intent intent = new Intent(LoginActivity.this, ProfileActivity.class);
-					intent.putExtra("user_name", "user1@us.er");//userEmail);
-					startActivity(intent);
-				}
-				else {
-					Log.d(TAG, "login unsuccessful");
-				}
+                if (!login) {
+                    Log.d(TAG, "login unsuccessful");
+                } else {
+                    Log.d(TAG, "login successful");
+
+                    ArrayList<String> userGroups = ((ShareThatBillApp) getApplication()).dataBase.getUserGroups(userEmail);
+
+                    Intent intent = new Intent(LoginActivity.this, ProfileActivity.class);
+                    intent.putExtra("user_name", "user1@us.er");//userEmail);
+                    startActivity(intent);
+                }
 
                 progressDialog.dismiss();
 			}
