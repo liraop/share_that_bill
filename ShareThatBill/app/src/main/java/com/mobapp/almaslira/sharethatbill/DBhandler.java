@@ -2,10 +2,14 @@ package com.mobapp.almaslira.sharethatbill;
 
 
 
+import android.util.Log;
+
 import java.sql.*;
 import java.util.ArrayList;
 
 public class DBhandler {
+        private static final String TAG = "DBHANDLER debug";
+
         private static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
         private static final String HOST = "jdbc:mysql://sql4.freesqldatabase.com/sql457251";
         private static final String DB_USER = "sql457251";
@@ -58,9 +62,13 @@ public class DBhandler {
                         }
                     }
                 }
+
+                connect.close();
+
             } catch (SQLException e){
                 //do something with exception
             }
+
 
             return isValid;
         }
@@ -81,13 +89,104 @@ public class DBhandler {
                     int i = 1;
                     result.add(resultSet.getString(i++));
                 }
+
+                connect.close();
+
             } catch (SQLException e){
                 //do something with sql exception
             }
-            return result;
 
+            return result;
         }
 
 
+    /* Method to create a group. It uses groupExists method
+     * then creates the group or not. Adds the group on the groups table
+     *
+     * @param userName
+     * @param groupName
+     * @return
+     */
 
+        public boolean createGroup (String groupName) {
+
+            if(!groupExists(groupName)){
+
+                try {
+                connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
+
+                this.statement = connect.createStatement();
+                String query = "INSERT INTO groups VALUES ('" + groupName + "')";
+                statement.executeUpdate(query);
+
+
+                connect.close();
+
+                return true;
+
+                } catch (SQLException e) {
+                    //do something with exception
+                }
+            }
+
+            return false;
+        }
+
+
+    /*
+     * Method to add an user to a group.
+     * User and group are added on usersAndGroups table.
+     *
+     * @param userName
+     * @param groupName
+     */
+    public void addUserToGroup(String userName, String groupName){
+        try {
+            connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
+
+            this.statement = connect.createStatement();
+            String query = "INSERT INTO `usersAndGroups`(`uid`, `gid`) VALUES ('"+userName+"','"+groupName+"')";
+            statement.executeUpdate(query);
+
+            connect.close();
+
+
+        } catch (SQLException e) {
+            //do something with exception
+        }
+    }
+
+
+    /**
+     * Method to check if the group already exists on the db
+     *
+     * @param groupName
+     * @return
+     */
+        private boolean groupExists(String groupName) {
+            boolean doesExist = false;
+
+            try {
+
+                connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
+                this.statement = connect.createStatement();
+                String query = "SELECT EXISTS(SELECT 1 FROM `groups` WHERE name = '"+groupName+"')";
+                this.resultSet = statement.executeQuery(query);
+
+                while (resultSet.next()) {
+                    int i = 1;
+                    if (Integer.parseInt(resultSet.getString(i++)) == 1){
+                        doesExist = true;
+                        break;
+                    }
+                }
+
+                connect.close();
+
+            } catch (SQLException e) {
+                //do something with sql exception
+            }
+
+            return doesExist;
+        }
 }

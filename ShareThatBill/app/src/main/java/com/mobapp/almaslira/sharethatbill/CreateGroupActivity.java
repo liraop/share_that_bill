@@ -32,6 +32,7 @@ import java.util.List;
 
 public class CreateGroupActivity extends Activity implements View.OnClickListener, AdapterView.OnItemClickListener {
 	static final String TAG = "CreateGroupActivity";
+    private static DBhandler dbhandler = new DBhandler();
 
 	ListView membersListView;
 	List<String> membersListStrings;
@@ -137,13 +138,18 @@ public class CreateGroupActivity extends Activity implements View.OnClickListene
             public void run() {
                 Log.d(TAG, "in thread");
 
-                if ( ((ShareThatBillApp) getApplication()).dataBase.createGroup(groupNameString) ) {
+
+                if (dbhandler.createGroup(groupNameString)) {
+
+                    Log.d(TAG, "group created");
 
                     membersListStrings.add(userName);
 
                     for (String m : membersListStrings) {
-                        ((ShareThatBillApp) getApplication()).dataBase.addUserToGroup(m, groupNameString);
+                        dbhandler.addUserToGroup(m, groupNameString);
                     }
+
+                    Log.d(TAG, "members added");
 
                     Intent intent = new Intent(getApplicationContext(), GroupActivity.class);
                     intent.putExtra("user_name", userName);

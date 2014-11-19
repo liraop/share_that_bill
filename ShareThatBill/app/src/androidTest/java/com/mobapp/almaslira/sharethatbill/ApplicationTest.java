@@ -17,10 +17,10 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         super(Application.class);
     }
 
-    public void testLogin(){
+    public void testGroupExists(){
         DBhandler dbhandler = new DBhandler();
 
-        assertTrue(dbhandler.checkLogin("user1","1234"));
+        assertTrue(dbhandler.createGroup("group3"));
 
     }
 
