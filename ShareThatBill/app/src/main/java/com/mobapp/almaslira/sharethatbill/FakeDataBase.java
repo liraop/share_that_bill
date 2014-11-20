@@ -117,56 +117,9 @@ public class FakeDataBase {
 		this.userGroupRelations.add(userGroupRelation);
 	}
 
-	/**
-	 * Returns if userEmail and userPassword match an existing profile.
-	 */
-	public boolean checkLogin (String email, String password) {
-		try {
-			Thread.sleep((int) (Math.random() * delayDelta + delayMin));
-		} catch (InterruptedException ex) {
-		}
 
-		for (User u : users) {
-			if (u.userEmail.compareTo(email) == 0) {
-				if (u.userPassword.compareTo(password) == 0)
-					return true;
-				else
-					return false;
-			}
-		}
 
-		return false;
-	}
 
-	public ArrayList<String> getUserGroups (String email) {
-		try {
-			Thread.sleep((int) (Math.random() * delayDelta + delayMin));
-		} catch (InterruptedException ex) {
-		}
-		ArrayList<String> result = new ArrayList<String>();
-
-		for (UserGroupRelation ugr : this.userGroupRelations) {
-			if (ugr.userEmail.compareTo(email) == 0)
-				result.add(ugr.groupName);
-		}
-
-		return result;
-	}
-
-    public ArrayList<String> getGroupUsers (String groupName) {
-        try {
-            Thread.sleep((int) (Math.random() * delayDelta + delayMin));
-        } catch (InterruptedException ex) {
-        }
-        ArrayList<String> result = new ArrayList<String>();
-
-        for (UserGroupRelation ugr : this.userGroupRelations) {
-            if (ugr.groupName.compareTo(groupName) == 0)
-                result.add(ugr.userEmail);
-        }
-
-        return result;
-    }
 
     public ArrayList<String> getGroupBills (String groupName) {
         try {
@@ -232,52 +185,6 @@ public class FakeDataBase {
         return null;
     }
 
-    public void addUserToGroup (String user, String group) {
-        try {
-            Thread.sleep((int) (Math.random() * delayDelta + delayMin));
-        } catch (InterruptedException ex) {
-        }
-
-        UserGroupRelation userGroupRelation = new UserGroupRelation();
-        userGroupRelation.userEmail = new String(user);
-        userGroupRelation.groupName = new String(group);
-        this.userGroupRelations.add(userGroupRelation);
-    }
-
-    public boolean createGroup (String groupName) {
-        try {
-            Thread.sleep((int) (Math.random() * delayDelta + delayMin));
-        } catch (InterruptedException ex) {
-        }
-
-        for(Group g : groups)
-            if (g.groupName.compareTo(groupName) == 0)
-                return false;
-
-        Group group = new Group();
-        group.groupName = new String(groupName);
-        groups.add(group);
-
-        return true;
-    }
-
-	public boolean createAccount (String email, String password) {
-		try {
-			Thread.sleep((int) (Math.random() * delayDelta + delayMin));
-		} catch (InterruptedException ex) {
-		}
-
-		for(User u : users)
-			if (u.userEmail.compareTo(email) == 0)
-				return false;
-
-		User user = new User();
-		user.userEmail = new String(email);
-		user.userPassword = new String(password);
-		users.add(user);
-
-		return true;
-	}
 
     public void createBill (Bill bill) {
         try {

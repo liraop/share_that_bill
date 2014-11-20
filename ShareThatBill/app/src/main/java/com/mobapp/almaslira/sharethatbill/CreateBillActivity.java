@@ -37,6 +37,7 @@ import java.util.GregorianCalendar;
 
 public class CreateBillActivity extends Activity implements RadioGroup.OnCheckedChangeListener, View.OnClickListener {
     static final String TAG = "CreateBillActivity";
+    private static DBhandler dbhandler = new DBhandler();
 
     String groupName;
     ArrayList<TwoStringsClass> whoPaid;
@@ -274,7 +275,7 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
 
         new Thread() {
             public void run() {
-                ArrayList<String> members = ((ShareThatBillApp) getApplication()).dataBase.getGroupUsers(groupName);
+                ArrayList<String> members = dbhandler.getGroupMembers(groupName);
 
                 whoPaid = new ArrayList<TwoStringsClass>();
                 whoOwns = new ArrayList<TwoStringsClass>();

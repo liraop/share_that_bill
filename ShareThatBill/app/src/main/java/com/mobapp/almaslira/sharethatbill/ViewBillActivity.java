@@ -26,6 +26,7 @@ import java.util.Date;
 
 public class ViewBillActivity extends Activity {
     static final String TAG = "ViewBillActivity";
+    private static DBhandler dbhandler = new DBhandler();
 
     String billName;
     String groupName;
@@ -68,7 +69,8 @@ public class ViewBillActivity extends Activity {
             public void run() {
                 Log.d(TAG, "in thread fetchBillData");
 
-                thisBill = ((ShareThatBillApp) getApplication()).dataBase.getBill(billName);
+                thisBill = dbhandler.getBill(billName);
+                Log.d(TAG, thisBill.billDate.toString());
                 whoPaidTwoStringsList = ((ShareThatBillApp) getApplication()).dataBase.getWhoPaidBill(billName);
                 whoOwnsStringList = ((ShareThatBillApp) getApplication()).dataBase.getWhoOwnsBill(billName);
 
