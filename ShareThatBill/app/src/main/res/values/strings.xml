@@ -52,6 +52,8 @@
     <string name="tabs_members_add">Add new member: </string>
     <string name="tabs_bills_add">Add new bill: </string>
     <string name="members_tab_you">(you)</string>
+    <string name="members_tab_warning_user_user_added">User added.</string>
+    <string name="members_tab_warning_user_already_on_group">User already on group.</string>
     <string name="title_activity_view_bill">ViewBillActivity</string>
     <string name="view_bill_bill">Bill:</string>
     <string name="view_bill_total">Total: $</string>

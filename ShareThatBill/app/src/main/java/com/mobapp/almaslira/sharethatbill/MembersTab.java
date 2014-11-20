@@ -1,17 +1,22 @@
 package com.mobapp.almaslira.sharethatbill;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,8 +85,109 @@ public class MembersTab extends Activity implements View.OnClickListener, Adapte
         switch (v.getId()) {
             case R.id.imageButtonTabsAdd:
                 Log.d(TAG, "add button");
+
+                createAddUserDialog();
                 break;
         }
+    }
+
+    public void createAddUserDialog() {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+        alert.setTitle("Edit userEmail");
+
+        final EditText newMemberInput = new EditText(this);
+        newMemberInput.setHint(getResources().getString(R.string.create_group_email_hint));
+        alert.setView(newMemberInput);
+
+        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                String newMember = newMemberInput.getText().toString();
+
+                Log.d(TAG, "add " + newMember);
+
+                memberNamesList.add(newMember);
+
+                addUser(newMember);
+            }
+        });
+
+        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                Log.d(TAG, "alert cancelled");
+            }
+        });
+
+
+        AlertDialog alertDialog = alert.create();
+        alertDialog.show();
+    }
+
+    public final static boolean isValidEmail(CharSequence target) {
+        return !TextUtils.isEmpty(target) && android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
+    }
+
+    private void addUser(final String newMember) {
+        progressDialog.show();
+
+        new Thread() {
+            public void run() {
+
+                if (isValidEmail(newMember)) {
+                    if (dbhandler.addUserToGroup(newMember, thisGroupName)) {
+                        Log.d(TAG, "user " + newMember + " added");
+
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                arrayAdapter.notifyDataSetChanged();
+
+                                progressDialog.dismiss();
+
+                                Toast.makeText(MembersTab.this, getResources().getString(R.string.members_tab_warning_user_user_added), Toast.LENGTH_LONG).show();
+                            }
+                        });
+
+
+                    } else {
+                        Log.d(TAG, "user " + newMember + " not added");
+
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                progressDialog.dismiss();
+
+                                createWarningAlert(getResources().getString(R.string.warning_error),
+                                        getResources().getString(R.string.members_tab_warning_user_already_on_group));
+                            }
+                        });
+                    }
+                }
+                else {
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            progressDialog.dismiss();
+
+                            createWarningAlert(getResources().getString(R.string.warning_error),
+                                    getResources().getString(R.string.warning_invalid_email));
+                        }
+                    });
+                }
+            }
+        }.start();
+    }
+
+    private void createWarningAlert (String title, String warning) {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MembersTab.this);
+
+        alertDialogBuilder.setTitle(title);
+        alertDialogBuilder.setMessage(warning);
+
+        alertDialogBuilder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog,int id) {
+            }
+        });
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
     }
 
     @Override

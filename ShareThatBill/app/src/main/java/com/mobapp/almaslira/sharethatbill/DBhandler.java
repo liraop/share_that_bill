@@ -179,20 +179,49 @@ public class DBhandler {
      * @param userName
      * @param groupName
      */
-    public void addUserToGroup(String userName, String groupName){
-        try {
-            connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
+    public boolean addUserToGroup(String userName, String groupName){
 
+        if (!isUserMember(userName, groupName)) {
+            try {
+                connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
+
+                this.statement = connect.createStatement();
+                String query = "INSERT INTO `usersAndGroups`(`uid`, `gid`) VALUES ('" + userName + "','" + groupName + "')";
+                statement.executeUpdate(query);
+
+                connect.close();
+
+                return true;
+            } catch (SQLException e) {
+                //do something with exception
+            }
+        }
+
+        return false;
+    }
+
+    private boolean isUserMember(String userName, String groupName){
+        try {
+
+            connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
             this.statement = connect.createStatement();
-            String query = "INSERT INTO `usersAndGroups`(`uid`, `gid`) VALUES ('"+userName+"','"+groupName+"')";
-            statement.executeUpdate(query);
+            String query = "SELECT EXISTS(SELECT 1 FROM `usersAndGroups` WHERE uid = '"+userName+"' and gid = '"+groupName+"')";
+            this.resultSet = statement.executeQuery(query);
+
+            while (resultSet.next()) {
+                int i = 1;
+                if (Integer.parseInt(resultSet.getString(i++)) == 1){
+                    return true;
+                }
+            }
 
             connect.close();
 
-
         } catch (SQLException e) {
-            //do something with exception
+            //do something with sql exception
         }
+
+        return false;
     }
 
 
