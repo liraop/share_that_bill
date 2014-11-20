@@ -21,6 +21,7 @@ import java.util.List;
  */
 public class MembersTab extends Activity implements View.OnClickListener, AdapterView.OnItemClickListener {
 	static final String TAG = "MembersTab";
+    private static DBhandler dbhandler = new DBhandler();
 
     String thisUserName;
     String thisGroupName;
@@ -99,7 +100,7 @@ public class MembersTab extends Activity implements View.OnClickListener, Adapte
             public void run() {
                 Log.d(TAG, "in thread updateBills");
 
-                memberNamesList = ((ShareThatBillApp) getApplication()).dataBase.getGroupUsers(thisGroupName);
+                memberNamesList = dbhandler.getGroupMembers(thisGroupName);
 
                 if (memberNamesList != null) {
 

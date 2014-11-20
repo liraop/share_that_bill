@@ -39,7 +39,7 @@ public class DBhandler {
          *
          * @param userEmail
          * @param password
-         * @return
+         * @return login valid (true) or not (false)
          * @throws SQLException
          */
         public boolean checkLogin(String userEmail, String password) {
@@ -73,6 +73,11 @@ public class DBhandler {
             return isValid;
         }
 
+    /**
+     * Method to get the groups of an user.
+     * @param userEmail
+     * @return ArrayList<String> users
+     */
         public ArrayList<String> getUserGroups (String userEmail){
 
             ArrayList<String> result = new ArrayList<String>();
@@ -100,12 +105,46 @@ public class DBhandler {
         }
 
 
+    /**
+     * Method to get the group's members
+     * @param groupName
+     * @return ArrayList<String> members
+     */
+        public ArrayList<String> getGroupMembers (String groupName){
+
+            ArrayList<String> result = new ArrayList<String>();
+
+            try {
+
+                connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
+
+                this.statement = connect.createStatement();
+                String query = "SELECT uid FROM usersAndGroups WHERE gid = '" + groupName + "'";
+                this.resultSet = statement.executeQuery(query);
+
+                while (resultSet.next()) {
+                    int i = 1;
+                    result.add(resultSet.getString(i++));
+                }
+
+                connect.close();
+
+            } catch (SQLException e){
+                //do something with sql exception
+            }
+
+            return result;
+
+        }
+
+
+
     /* Method to create a group. It uses groupExists method
      * then creates the group or not. Adds the group on the groups table
      *
      * @param userName
      * @param groupName
-     * @return
+     * @return group created (true) or not (false)
      */
 
         public boolean createGroup (String groupName) {
@@ -161,7 +200,7 @@ public class DBhandler {
      * Method to check if the group already exists on the db
      *
      * @param groupName
-     * @return
+     * @return group exists (true) or not (false)
      */
         private boolean groupExists(String groupName) {
             boolean doesExist = false;
