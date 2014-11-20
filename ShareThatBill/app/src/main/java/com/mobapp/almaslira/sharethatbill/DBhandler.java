@@ -203,8 +203,6 @@ public class DBhandler {
      * @return group exists (true) or not (false)
      */
         private boolean groupExists(String groupName) {
-            boolean doesExist = false;
-
             try {
 
                 connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
@@ -215,8 +213,7 @@ public class DBhandler {
                 while (resultSet.next()) {
                     int i = 1;
                     if (Integer.parseInt(resultSet.getString(i++)) == 1){
-                        doesExist = true;
-                        break;
+                        return true;
                     }
                 }
 
@@ -226,6 +223,68 @@ public class DBhandler {
                 //do something with sql exception
             }
 
-            return doesExist;
+            return false;
         }
+
+    /**
+     * Method to create an user account.
+     * Adds the username to users table on db
+     *
+     * @param userName
+     * @param userPassword
+     * @return if creates (true) if not (false)
+     */
+    public boolean createUserAccount(String userName, String userPassword){
+
+        if(!userExists(userName)){
+
+            try {
+                connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
+
+                this.statement = connect.createStatement();
+                String query = "INSERT INTO `users`(`email`,`password`) VALUES ('" + userName + "','" + userPassword + "')";
+                statement.executeUpdate(query);
+
+
+                connect.close();
+
+                return true;
+
+            } catch (SQLException e) {
+                //do something with exception
+            }
+        }
+
+        return false;
+
+    }
+
+    /**
+     * Method to check if a user already exists in db
+     * @param userName
+     * @return true if exists, false if not
+     */
+    private boolean userExists(String userName){
+        try {
+
+            connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
+            this.statement = connect.createStatement();
+            String query = "SELECT EXISTS(SELECT 1 FROM `users` WHERE email = '"+userName+"')";
+            this.resultSet = statement.executeQuery(query);
+
+            while (resultSet.next()) {
+                int i = 1;
+                if (Integer.parseInt(resultSet.getString(i++)) == 1){
+                    return true;
+                }
+            }
+
+            connect.close();
+
+        } catch (SQLException e) {
+            //do something with sql exception
+        }
+
+        return false;
+    }
 }
