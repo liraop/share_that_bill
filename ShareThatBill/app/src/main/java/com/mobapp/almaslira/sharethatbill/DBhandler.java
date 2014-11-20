@@ -365,6 +365,13 @@ public class DBhandler {
         return result;
     }
 
+    /**
+     * Method to get a bill from db.
+     * TODO: implement location,picture request
+     *
+     * @param billID
+     * @return the Bill
+     */
     public Bill getBill(String billID){
 
         Bill b = new Bill();
@@ -377,7 +384,7 @@ public class DBhandler {
 
 
 
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 
         try {
@@ -388,16 +395,13 @@ public class DBhandler {
             this.resultSet = statement.executeQuery(query);
 
             while (resultSet.next()) {
-                int i = 2;
-                while (i <= 3){
-                    b.billValue = Float.parseFloat(this.resultSet.getString(i++));
+                    b.billValue = Float.parseFloat(this.resultSet.getString(2));
                     try {
-                        b.billDate.setTime(df.parse(this.resultSet.getString(i++)));
+                        b.billDate.setTime(df.parse(this.resultSet.getString(3)));
                     } catch (Exception e){
                         //do something with the exception
                     }
-                    b.groupName = this.resultSet.getString(i++);
-                }
+                    b.groupName = this.resultSet.getString(6);
             }
             connect.close();
 
@@ -406,6 +410,31 @@ public class DBhandler {
         }
 
         return b;
+    }
+
+    /*
+     * Method to create a bill on db.
+     * @param bill
+     */
+    public void createBill(Bill bill){
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        try {
+            connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
+
+            this.statement = connect.createStatement();
+            String query = "INSERT INTO `bills`(`id`, `value`, `date&time`, `gid`) " +
+                    "VALUES ('"+bill.billName+"','"+bill.billValue+"','"+sdf.format(bill.billDate.getTime())+"','"+bill.groupName+"')";
+
+           statement.executeUpdate(query);
+
+
+            connect.close();
+
+        } catch (SQLException e) {
+            //do something with exception
+        }
     }
 
 }

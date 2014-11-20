@@ -170,22 +170,6 @@ public class FakeDataBase {
         return result;
     }
 
-    public Bill getBill (String billName) {
-        try {
-            Thread.sleep((int) (Math.random() * delayDelta + delayMin));
-        } catch (InterruptedException ex) {
-        }
-
-        Bill result;
-
-        for (Bill b : bills) {
-            if (b.billName.compareTo(billName) == 0)
-                return b;
-        }
-        return null;
-    }
-
-
     public void createBill (Bill bill) {
         try {
             Thread.sleep((int) (Math.random() * delayDelta + delayMin));

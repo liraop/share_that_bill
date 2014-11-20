@@ -20,7 +20,8 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
     public void testGroupExists(){
         DBhandler dbhandler = new DBhandler();
 
-        assertTrue(dbhandler.createGroup("group3"));
+        Log.d(TAG, ((String) dbhandler.createBill(dbhandler.getBill("bill2"))));
+
 
     }
 

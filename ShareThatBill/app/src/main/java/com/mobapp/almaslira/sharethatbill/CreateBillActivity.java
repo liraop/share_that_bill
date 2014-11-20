@@ -160,7 +160,7 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
 
         new Thread() {
             public void run() {
-                ((ShareThatBillApp) getApplication()).dataBase.createBill(thisBill);
+                dbhandler.createBill(thisBill);
 
                 for (TwoStringsClass mp : whoPaid) {
                     if (Float.parseFloat(mp.second) > 0)
