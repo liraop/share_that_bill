@@ -452,7 +452,11 @@ public class DBhandler {
         }
     }
 
-
+    /*
+     * Method to get who not paid the bill
+     * @param billName
+     * @return ArrayList<TwoStringsClass> paid bills
+     */
     public ArrayList<TwoStringsClass> getWhoPaidBill(String billName){
 
         ArrayList<TwoStringsClass> result = new ArrayList<TwoStringsClass>();
@@ -481,6 +485,12 @@ public class DBhandler {
        return result;
     }
 
+
+    /**
+     * Method to get users that have not paid the bill
+     * @param billName
+     * @return ArrayList<TwoStringsClass> owns bill
+     */
     public ArrayList<TwoStringsClass> getWhoOwnsBill(String billName){
 
         ArrayList<TwoStringsClass> result = new ArrayList<TwoStringsClass>();
