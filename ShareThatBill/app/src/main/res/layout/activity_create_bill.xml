@@ -60,13 +60,6 @@
                 android:layout_alignParentStart="true"
                 android:layout_marginTop="25dp" />
 
-            <!--
-            <DatePicker
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/datePickerCreateBillDate"
-                android:layout_below="@+id/textViewCreateBillDate" />
-            -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -78,15 +71,6 @@
                 android:layout_alignParentStart="true"
                 android:layout_marginTop="25dp" />
 
-            <!--
-            <TimePicker
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/timePickerCreateBillTime"
-                android:layout_below="@+id/textViewCreateBillTime"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
-            -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -169,7 +153,7 @@
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
                     android:checked="false" />
-                </RadioGroup>
+            </RadioGroup>
 
             <ListView
                 android:layout_width="wrap_content"
@@ -235,6 +219,23 @@
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
                 android:layout_marginBottom="-10dp" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageViewCreateBillThumbnail"
+                android:layout_alignBottom="@+id/textViewCreateBillPicture"
+                android:layout_toRightOf="@+id/textViewCreateBillWhoPaid"
+                android:src="@drawable/no_image"
+                android:maxHeight="20dp"
+                android:maxWidth="20dp"
+                android:scaleType="centerInside"
+                android:layout_below="@+id/textViewCreateBillLocation"
+                android:layout_alignRight="@+id/textViewCreateBillHowToSplit"
+                android:layout_alignEnd="@+id/textViewCreateBillHowToSplit"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="-5dp"
+                android:layout_marginRight="80dp" />
 
 
         </RelativeLayout>.

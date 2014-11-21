@@ -4,8 +4,15 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.text.InputType;
 import android.util.Log;
 import android.view.Menu;
@@ -27,6 +34,9 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -71,6 +81,8 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
             groupName = extras.getString("group_name");
         }
 
+        groupName = "group1";
+
         progressDialog = new ProgressDialog(CreateBillActivity.this);
         progressDialog.setMessage(getResources().getString(R.string.warning_loading));
         progressDialog.setCancelable(false);
@@ -91,6 +103,9 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
 
         Button createBill = (Button) findViewById(R.id.buttonCreateBillCreate);
         createBill.setOnClickListener(this);
+
+        Button takePicture = (Button) findViewById(R.id.buttonCreateBillPicture);
+        takePicture.setOnClickListener(this);
 
         fetchMembersList();
     }
@@ -122,13 +137,131 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
                 else if (!billValuesMatch())
                     createWarningAlert(getResources().getString(R.string.warning_error),
                             getResources().getString(R.string.warning_creating_bill_fail_total_match));
-                else if (thisBill.billName == null)
+                else if (thisBill.billName.length() == 0)
                     createWarningAlert(getResources().getString(R.string.warning_error),
                             getResources().getString(R.string.warning_creating_bill_fail_name));
                 else
                     sendCreateBillRequest();
                 break;
+
+            case R.id.buttonCreateBillPicture:
+                Log.d(TAG, "take picture button");
+                takePicture();
+                break;
+
+            case R.id.imageViewCreateBillThumbnail:
+                Log.d(TAG, "touched image");
+
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setDataAndType(Uri.parse("file://" + thisBill.billPicturePath),"image/jpg");
+                startActivity(intent);
+
+                break;
         }
+    }
+
+    static final int REQUEST_IMAGE_CAPTURE = 1;
+
+    private void takePicture() {
+        Log.d(TAG, "calling camera");
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException e) {
+                Log.e(TAG, "exception on createImageFile", e);
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+                Log.d(TAG, "started camera activity");
+            }
+            else
+                Log.d(TAG, "error creating image file");
+        }
+        else
+            Log.d(TAG, "error checking camera activity");
+    }
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + groupName + "_bill_" + timeStamp;
+        File storageDir = Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        thisBill.billPicturePath = /*"file:" + */image.getAbsolutePath();
+        Log.d(TAG, "image save path created: " + thisBill.billPicturePath);
+        return image;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d(TAG, "returned from camera");
+        File f = new File(thisBill.billPicturePath);
+        if(f.exists() && !f.isDirectory())
+            Log.d(TAG, "image exists");
+        else
+            Log.d(TAG, "image does not exist");
+
+        Log.d(TAG, "result ok: " + (resultCode == RESULT_OK));
+
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            ImageView mImageView = (ImageView) findViewById(R.id.imageViewCreateBillThumbnail);
+            mImageView.setImageBitmap(BitmapFactory.decodeFile(thisBill.billPicturePath));
+            mImageView.setOnClickListener(this);
+        }
+/*
+
+            Log.d(TAG, "result ok");
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+
+            Log.d(TAG, "passou");
+
+
+        }
+        */
+    }
+
+    /**
+     * http://developer.android.com/training/camera/photobasics.html
+     */
+    public Bitmap compressBitmap (String photoPath, int targetW, int targetH) {
+
+        // Get the dimensions of the bitmap
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(photoPath, bmOptions);
+        int photoW = bmOptions.outWidth;
+        int photoH = bmOptions.outHeight;
+
+        // Determine how much to scale down the image
+        int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
+
+        // Decode the image file into a Bitmap sized to fill the View
+        bmOptions.inJustDecodeBounds = false;
+        bmOptions.inSampleSize = scaleFactor;
+        bmOptions.inPurgeable = true;
+
+        return BitmapFactory.decodeFile(photoPath, bmOptions);
+    }
+
+    public Uri getImageUri(Context inContext, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, thisBill.billName, null);
+        return Uri.parse(path);
     }
 
     public boolean billValuesMatch() {
@@ -136,7 +269,10 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
         for (TwoStringsClass m : whoOwns)
             totalOwns += Float.parseFloat(m.second);
 
-        return ((totalOwns - totalBillValue()) == 0);
+        Log.d(TAG, "totalOwns: " + totalOwns);
+        Log.d(TAG, "totalBillValue: " + totalBillValue());
+
+        return ( Math.abs(totalOwns - totalBillValue()) < 0.02f);
     }
 
     private void createWarningAlert (String title, String warning) {
@@ -414,7 +550,6 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
         for (TwoStringsClass m : whoPaid)
             total += Float.parseFloat(m.second);
 
-        Log.d(TAG, "Bill total: " + total);
         return total;
     }
 
