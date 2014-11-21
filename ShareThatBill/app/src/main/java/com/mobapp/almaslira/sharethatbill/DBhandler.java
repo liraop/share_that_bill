@@ -437,4 +437,25 @@ public class DBhandler {
         }
     }
 
+    /*
+     * Method to create a relation between an user and a bill and its value.
+     * @param user
+     * @param billName
+     * @param value
+     */
+    public void createUserBillRelation(String user, String billName, float value){
+
+        try {
+            connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
+
+            this.statement = connect.createStatement();
+            String query = "INSERT INTO `usersAndBills`(`uid`, `bid`, `value`) VALUES ('"+user+"','"+billName+"','"+value+"')";
+            statement.executeUpdate(query);
+            connect.close();
+
+        } catch (SQLException e) {
+            //do something with exception
+        }
+    }
+
 }

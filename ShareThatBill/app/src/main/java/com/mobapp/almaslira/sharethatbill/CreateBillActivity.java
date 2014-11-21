@@ -164,11 +164,11 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
 
                 for (TwoStringsClass mp : whoPaid) {
                     if (Float.parseFloat(mp.second) > 0)
-                        ((ShareThatBillApp) getApplication()).dataBase.createUserBillRelation(mp.first, thisBill.billName, Float.parseFloat(mp.second));
+                        dbhandler.createUserBillRelation(mp.first, thisBill.billName, Float.parseFloat(mp.second));
                 }
                 for (TwoStringsClass mo : whoOwns) {
                     if (Float.parseFloat(mo.second) > 0)
-                        ((ShareThatBillApp) getApplication()).dataBase.createUserBillRelation(mo.first, thisBill.billName, -Float.parseFloat(mo.second));
+                        dbhandler.createUserBillRelation(mo.first, thisBill.billName, -Float.parseFloat(mo.second));
                 }
 
                 CreateBillActivity.this.runOnUiThread(new Runnable() {

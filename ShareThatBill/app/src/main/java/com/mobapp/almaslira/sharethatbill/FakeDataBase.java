@@ -118,24 +118,6 @@ public class FakeDataBase {
 	}
 
 
-
-
-
-    public ArrayList<String> getGroupBills (String groupName) {
-        try {
-            Thread.sleep((int) (Math.random() * delayDelta + delayMin));
-        } catch (InterruptedException ex) {
-        }
-        ArrayList<String> result = new ArrayList<String>();
-
-        for (Bill bill : this.bills) {
-            if (bill.groupName.compareTo(groupName) == 0)
-                result.add(bill.billName);
-        }
-
-        return result;
-    }
-
     public ArrayList<TwoStringsClass> getWhoPaidBill (String billName) {
         try {
             Thread.sleep((int) (Math.random() * delayDelta + delayMin));
@@ -168,31 +150,5 @@ public class FakeDataBase {
         }
 
         return result;
-    }
-
-    public void createBill (Bill bill) {
-        try {
-            Thread.sleep((int) (Math.random() * delayDelta + delayMin));
-        } catch (InterruptedException ex) {
-        }
-
-        bills.add(bill);
-    }
-
-    public void createUserBillRelation (String user, String bill, float value) {
-        try {
-            Thread.sleep((int) (Math.random() * delayDelta + delayMin));
-        } catch (InterruptedException ex) {
-        }
-
-        UserBillRelation userBillRelation = new UserBillRelation();
-
-        userBillRelation.billName = new String(bill);
-        userBillRelation.userEmail = new String(user);
-        userBillRelation.value = value;
-
-        Log.d(TAG, "Registering bill " + bill + " for " + user + " $" + value);
-
-        userBillRelations.add(userBillRelation);
     }
 }
