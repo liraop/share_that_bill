@@ -9,15 +9,10 @@ import android.util.Log;
 public class ShareThatBillApp extends Application {
 	static final String TAG = "ShareThatBillApp";
 
-	public FakeDataBase dataBase;
-
 	@Override
 	public void onCreate() {
 		Log.d(TAG, "onCreate");
 
 		super.onCreate();
-
-		dataBase = new FakeDataBase();
-		dataBase.initialize();
 	}
 }

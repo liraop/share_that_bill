@@ -118,7 +118,7 @@ public class BillsTab extends Activity implements View.OnClickListener, AdapterV
                         Log.d(TAG, "bill: " + s);
                 }
                 else
-                    Log.d(TAG, "list null");
+                    Log.d(TAG,   "list null");
 
 
                 progressDialog.dismiss();

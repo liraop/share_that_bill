@@ -60,9 +60,6 @@ public class ViewBillActivity extends Activity implements View.OnClickListener {
             groupName = extras.getString("group_name");
         }
 
-        billName = "bgroup11";
-        groupName = "group1";
-
         progressDialog = new ProgressDialog(ViewBillActivity.this);
         progressDialog.setMessage(getResources().getString(R.string.warning_loading));
         progressDialog.setCancelable(false);
@@ -78,9 +75,12 @@ public class ViewBillActivity extends Activity implements View.OnClickListener {
                 Log.d(TAG, "in thread fetchBillData");
 
                 thisBill = dbhandler.getBill(billName);
-                Log.d(TAG, thisBill.billDate.toString());
-                whoPaidTwoStringsList = ((ShareThatBillApp) getApplication()).dataBase.getWhoPaidBill(billName);
-                whoOwnsStringList = ((ShareThatBillApp) getApplication()).dataBase.getWhoOwnsBill(billName);
+
+                Log.d(TAG, "get who paid");
+                whoPaidTwoStringsList = dbhandler.getWhoPaidBill(billName);
+
+                Log.d(TAG, "get who owns");
+                whoOwnsStringList = dbhandler.getWhoOwnsBill(billName);
 
                 runOnUiThread(new Runnable(){
                     public void run() {

@@ -1,11 +1,8 @@
 package com.mobapp.almaslira.sharethatbill;
 
-
-
 import android.graphics.Picture;
 import android.location.Location;
 import android.util.Log;
-
 import java.sql.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -109,7 +106,6 @@ public class DBhandler {
         return result;
     }
 
-
     /**
      * Method to get the group's members
      *
@@ -144,7 +140,6 @@ public class DBhandler {
     }
 
 
-
     /* Method to create a group. It uses groupExists method
      * then creates the group or not. Adds the group on the groups table
      *
@@ -152,7 +147,6 @@ public class DBhandler {
      * @param groupName
      * @return group created (true) or not (false)
      */
-
     public boolean createGroup(String groupName) {
 
         if (!groupExists(groupName)) {
@@ -458,4 +452,57 @@ public class DBhandler {
         }
     }
 
+
+    public ArrayList<TwoStringsClass> getWhoPaidBill(String billName){
+
+        ArrayList<TwoStringsClass> result = new ArrayList<TwoStringsClass>();
+
+        try {
+            String user;
+
+            connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
+
+            this.statement = connect.createStatement();
+            String query = "SELECT uid,value FROM usersAndBills WHERE bid = '" + billName + "'";
+            this.resultSet = statement.executeQuery(query);
+
+            while (resultSet.next()) {
+                if(Float.parseFloat(resultSet.getString(2)) > 0) {
+                    result.add(new TwoStringsClass(resultSet.getString(1),resultSet.getString(2)));
+                }
+            }
+
+            connect.close();
+
+        } catch (SQLException e) {
+            //do something with sql exception
+        }
+
+       return result;
+    }
+
+    public ArrayList<TwoStringsClass> getWhoOwnsBill(String billName){
+
+        ArrayList<TwoStringsClass> result = new ArrayList<TwoStringsClass>();
+
+        try {
+            connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
+
+            this.statement = connect.createStatement();
+            String query = "SELECT uid,value FROM usersAndBills WHERE bid = '"+billName+"'";
+            this.resultSet = statement.executeQuery(query);
+
+            while (resultSet.next()) {
+                if(Float.parseFloat(resultSet.getString(2)) < 0) {
+                    result.add(new TwoStringsClass(resultSet.getString(1),resultSet.getString(2)));
+                }
+            }
+
+            connect.close();
+
+        } catch (SQLException e) {
+            //do something with sql exception
+        }
+        return result;
+    }
 }

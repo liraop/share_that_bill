@@ -20,9 +20,6 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
     public void testGroupExists(){
         DBhandler dbhandler = new DBhandler();
 
-        Log.d(TAG, ((String) dbhandler.createBill(dbhandler.getBill("bill2"))));
-
-
     }
 
 }
