@@ -34,6 +34,8 @@
     <string name="warning_creating_bill_fail_name">Invalid bill name.</string>
     <string name="warning_creating_bill_fail_total_match">Total paid amount does not match owned amount.</string>
     <string name="warning_creating_bill_fail_total_zero">Total bill amount must be greater than zero.</string>
+    <string name="members_tab_warning_user_user_added">User already added.</string>
+    <string name="members_tab_warning_user_already_on_group">User already added.</string>
     <string name="title_activity_profile">ProfileActivity</string>
     <string name="profile_title">Your groups:</string>
     <string name="profile_no_groups">You don\'t have any group.</string>
@@ -45,6 +47,8 @@
     <string name="create_group_edit_email">Edit email</string>
     <string name="create_group_email_hint">yourfriend@provider.net</string>
     <string name="create_group_create">Create group</string>
+    <string name="create_group_add_new_member_title">Add new member</string>
+    <string name="create_group_add_new_member_message">Type the user\'s email:</string>
     <string name="create_group_warning_email_already_added">Email already on invite list!</string>
     <string name="title_activity_group">GroupActivity</string>
     <string name="profile_create_group">Create new group:</string>
@@ -52,8 +56,6 @@
     <string name="tabs_members_add">Add new member: </string>
     <string name="tabs_bills_add">Add new bill: </string>
     <string name="members_tab_you">(you)</string>
-    <string name="members_tab_warning_user_user_added">User added.</string>
-    <string name="members_tab_warning_user_already_on_group">User already on group.</string>
     <string name="title_activity_view_bill">ViewBillActivity</string>
     <string name="view_bill_bill">Bill:</string>
     <string name="view_bill_total">Total: $</string>

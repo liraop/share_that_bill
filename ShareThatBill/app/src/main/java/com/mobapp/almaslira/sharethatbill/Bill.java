@@ -15,6 +15,6 @@ public class Bill {
     Float billValue;
     Calendar billDate;
     Location billLocation;
-    Picture billPicture;
+    String billPicturePath;
 
 }
