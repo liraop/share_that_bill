@@ -2,8 +2,11 @@ package com.mobapp.almaslira.sharethatbill;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.graphics.Picture;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -15,6 +18,8 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -24,7 +29,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 
-public class ViewBillActivity extends Activity {
+public class ViewBillActivity extends Activity implements View.OnClickListener {
     static final String TAG = "ViewBillActivity";
     private static DBhandler dbhandler = new DBhandler();
 
@@ -54,6 +59,9 @@ public class ViewBillActivity extends Activity {
             billName = extras.getString("bill_name");
             groupName = extras.getString("group_name");
         }
+
+        billName = "bgroup11";
+        groupName = "group1";
 
         progressDialog = new ProgressDialog(ViewBillActivity.this);
         progressDialog.setMessage(getResources().getString(R.string.warning_loading));
@@ -100,6 +108,14 @@ public class ViewBillActivity extends Activity {
         TextView location = (TextView) findViewById(R.id.textViewViewBillLocation);
         location.setText(getResources().getString(R.string.view_bill_location));
 
+        //TODO: remove this
+        thisBill.billPicturePath = "/storage/emulated/0/Pictures/JPEG_group1_bill_20141120_215058870093638.jpg";
+
+        ImageView viewPicture = (ImageView) findViewById(R.id.imageViewViewBillThumbnail);
+        viewPicture.setOnClickListener(this);
+        if (thisBill.billPicturePath != null)
+            if (thisBill.billPicturePath.length() != 0)
+                viewPicture.setImageBitmap(BitmapFactory.decodeFile(thisBill.billPicturePath));
 
         // ** Who paid list **
 
@@ -147,6 +163,21 @@ public class ViewBillActivity extends Activity {
 
         ScrollView scrollView = (ScrollView) findViewById(R.id.scrollViewViewBill);
         scrollView.scrollTo(0, scrollView.getTop());
+    }
+
+    @Override
+    public void onClick(View view) {
+        Log.d(TAG, "onClick");
+
+        switch (view.getId()) {
+            case R.id.imageViewViewBillThumbnail:
+
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setDataAndType(Uri.parse("file://" + thisBill.billPicturePath),"image/jpg");
+                startActivity(intent);
+
+                break;
+        }
     }
 
     @Override

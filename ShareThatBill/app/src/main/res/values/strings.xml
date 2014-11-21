@@ -87,5 +87,6 @@
     <string name="create_bill_created">Bill successfully created.</string>
     <string name="view_bill_check_map">Check map</string>
     <string name="view_bill_check_picture">Take a look</string>
+    <string name="view_bill_no_picture">No picture attached</string>
 
 </resources>

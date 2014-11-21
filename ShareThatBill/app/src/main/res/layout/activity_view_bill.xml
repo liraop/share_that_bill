@@ -59,7 +59,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/view_bill_check_map"
-                android:id="@+id/buttonSeeMap"
+                android:id="@+id/buttonViewBillSeeMap"
                 android:layout_toEndOf="@+id/textViewViewBillLocation"
                 android:layout_below="@+id/textViewViewBillDate"
                 android:layout_toRightOf="@+id/textViewViewBillLocation"
@@ -76,17 +76,6 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_marginTop="30dp" />
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/buttonPicture"
-                android:layout_toEndOf="@+id/textViewViewBillPicture"
-                android:layout_alignTop="@+id/textViewViewBillPicture"
-                android:layout_alignLeft="@+id/buttonSeeMap"
-                android:layout_alignStart="@+id/buttonSeeMap"
-                android:layout_marginTop="-12dp"
-                android:text="@string/view_bill_check_picture" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -127,6 +116,28 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_marginTop="20dp" />
+
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageViewViewBillThumbnail"
+                android:layout_alignBottom="@+id/textViewViewBillPicture"
+                android:src="@drawable/no_image"
+                android:maxHeight="20dp"
+                android:maxWidth="20dp"
+                android:scaleType="centerInside"
+                android:layout_below="@+id/textViewViewBillLocation"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="-15dp"
+                android:layout_toEndOf="@+id/textViewViewBillPicture"
+                android:layout_alignLeft="@+id/buttonViewBillSeeMap"
+                android:layout_alignStart="@+id/buttonViewBillSeeMap"
+                android:layout_marginLeft="0dp"
+                android:layout_toLeftOf="@+id/textViewWhoPaid"
+                android:layout_toStartOf="@+id/textViewWhoPaid"
+                android:layout_marginRight="-20dp" />
+                -->
         </RelativeLayout>
     </ScrollView>
 </RelativeLayout>
