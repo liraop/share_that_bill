@@ -100,7 +100,7 @@ public class ViewBillActivity extends Activity implements View.OnClickListener {
         title.setText(getResources().getString(R.string.view_bill_bill) + " " + thisBill.billName);
 
         TextView total = (TextView) findViewById(R.id.textViewViewBillTotal);
-        total.setText(getResources().getString(R.string.view_bill_total) + String.format("%2.2f", thisBill.billValue));
+        total.setText(getResources().getString(R.string.view_bill_total) + String.format("%.2f", thisBill.billValue));
 
         TextView date = (TextView) findViewById(R.id.textViewViewBillDate);
         date.setText(getResources().getString(R.string.view_bill_date) + " " + (new SimpleDateFormat("MM-dd-yyyy @ hh:mm a").format(thisBill.billDate.getTime())));
