@@ -15,4 +15,10 @@ public class ShareThatBillApp extends Application {
 
 		super.onCreate();
 	}
+
+    @Override
+    public void onTerminate() {
+        Log.d(TAG, "onTerminate");
+        super.onTerminate();
+    }
 }

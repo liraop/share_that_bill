@@ -68,8 +68,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 
 				Log.d(TAG, "userEmail: " + emailString);
 				Log.d(TAG, "userPassword: " + passwordString);
-                //TODO
-/*
+
 				if (! isValidEmail(emailString)) {
 					Log.d(TAG, "invalid userEmail");
 					createWarningAlert(getResources().getString(R.string.warning_error),
@@ -87,8 +86,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 
 					sendLoginRequest(emailString, passwordString);
 				}
-*/
-                sendLoginRequest(emailString, passwordString);
+
 				break;
 
 			case R.id.buttonLoginCreateAccount:
@@ -120,6 +118,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                 }
 
                 progressDialog.dismiss();
+                finish();
 			}
 		}.start();
 	}
