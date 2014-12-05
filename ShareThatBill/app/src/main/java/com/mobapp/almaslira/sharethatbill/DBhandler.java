@@ -437,14 +437,13 @@ public class DBhandler {
      * @param billName
      * @param value
      */
-    public void createUserBillRelation(String user, String billName, float value){
+    public void createUserBillRelation(String user, String billName, float valueOwn, float valuePaid){
 
         try {
             connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
 
             this.statement = connect.createStatement();
-            String query = "INSERT INTO `usersAndBills`(`uid`, `bid`, `value`) VALUES ('"+user+"','"+billName+"','"+value+"')";
-            statement.executeUpdate(query);
+            String query = "INSERT INTO `usersAndBills`(`uid`, `bid`, `valueOwn`, `valuePaid`) VALUES ('"+user+"','"+billName+"','"+valueOwn+" ,'"+valuePaid+"')";            statement.executeUpdate(query);
             connect.close();
 
         } catch (SQLException e) {
