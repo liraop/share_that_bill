@@ -81,7 +81,7 @@
     <string name="create_bill_create">Create!</string>
     <string name="create_bill_set_date">Set date</string>
     <string name="create_bill_set_time">Set time</string>
-    <string name="create_bill_set_location">Get location</string>
+    <string name="create_bill_set_location">Get current location</string>
     <string name="create_bill_set_picture">Take picture</string>
     <string name="create_bill_set_date_format">MM/DD/YYYY</string>
     <string name="create_bill_created">Bill successfully created.</string>

@@ -9,6 +9,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -45,7 +48,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 
-public class CreateBillActivity extends Activity implements RadioGroup.OnCheckedChangeListener, View.OnClickListener {
+public class CreateBillActivity extends Activity implements RadioGroup.OnCheckedChangeListener, View.OnClickListener, LocationListener {
     static final String TAG = "CreateBillActivity";
     private static DBhandler dbhandler = new DBhandler();
 
@@ -61,7 +64,12 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
 
     Bill thisBill;
 
+    boolean getLocation;
+
     ProgressDialog progressDialog;
+
+    protected LocationManager locationManagerGPS;
+    protected LocationManager locationManagerNetwork;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,7 +115,53 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
         Button takePicture = (Button) findViewById(R.id.buttonCreateBillPicture);
         takePicture.setOnClickListener(this);
 
+        Button getLocationButton = (Button) findViewById(R.id.buttonCreateBillLocation);
+        getLocationButton.setOnClickListener(this);
+
+        ImageView mapImage = (ImageView) findViewById(R.id.imageViewCreateBillMap);
+        mapImage.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.map_image_faded));
+        mapImage.setOnClickListener(this);
+
+        getLocation = false;
+
+        locationManagerGPS = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        locationManagerGPS.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+
+        locationManagerNetwork = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        locationManagerNetwork.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+
         fetchMembersList();
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+
+        Log.d(TAG,"Latitude:" + location.getLatitude() + ", Longitude:" + location.getLongitude() + ", Accuracy: "  + location.getAccuracy());
+
+        if (getLocation == true) {
+            Log.d(TAG, "getting location");
+
+            thisBill.billLocation = location;
+            getLocation = false;
+
+            ImageView mapImage = (ImageView) findViewById(R.id.imageViewCreateBillMap);
+            mapImage.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.map_image));
+        }
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+        Log.d("Latitude","disable");
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+        Log.d("Latitude","enable");
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+        Log.d("Latitude","status");
     }
 
     @Override
@@ -155,6 +209,15 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
                 Intent intent = new Intent(Intent.ACTION_VIEW);
                 intent.setDataAndType(Uri.parse("file://" + thisBill.billPicturePath),"image/jpg");
                 startActivity(intent);
+
+                break;
+
+            case R.id.buttonCreateBillLocation:
+                Log.d(TAG, "getLocationButton");
+                getLocation = true;
+                break;
+
+            case R.id.imageViewCreateBillMap:
 
                 break;
         }
@@ -423,8 +486,8 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
                 whoOwns = new ArrayList<TwoStringsClass>();
 
                 for (String m : members) {
-                    whoPaid.add(new TwoStringsClass(m, "0.00", "$"));
-                    whoOwns.add(new TwoStringsClass(m, "0.00", "$"));
+                    whoPaid.add(new TwoStringsClass(m, "0.00"));
+                    whoOwns.add(new TwoStringsClass(m, "0.00"));
                     Log.d(TAG, "Adding member to lists: " + m);
                 }
 
@@ -530,7 +593,7 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
 
     void updateWhoOwnsValues() {
         int totalPaying = 0;
-        for (int i=0; i<whoOwns.size(); ++i)
+        for (int i=0; i < whoOwns.size(); ++i)
             if (dividingEquallyMembers[i])
                 totalPaying++;
 
@@ -538,7 +601,7 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
             float billTotal = totalBillValue();
             float totalDivided = billTotal/totalPaying;
 
-            for (int i=0; i<whoOwns.size(); ++i)
+            for (int i=0; i < whoOwns.size(); ++i)
                 if (dividingEquallyMembers[i])
                     whoOwns.get(i).second = String.format("%.2f", totalDivided);
                 else

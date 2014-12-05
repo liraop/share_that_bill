@@ -3,9 +3,12 @@ package com.mobapp.almaslira.sharethatbill;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Canvas;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -16,11 +19,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
-
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class LoginActivity extends Activity implements View.OnClickListener {
@@ -28,7 +26,6 @@ public class LoginActivity extends Activity implements View.OnClickListener {
     private static DBhandler dbhandler = new DBhandler();
 
     ProgressDialog progressDialog;
-
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +47,12 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         progressDialog = new ProgressDialog(LoginActivity.this);
         progressDialog.setMessage(getResources().getString(R.string.warning_loading));
         progressDialog.setCancelable(false);
-	}
+
+
+
+    }
+
+
 
 	@Override
 	public void onClick(View view) {

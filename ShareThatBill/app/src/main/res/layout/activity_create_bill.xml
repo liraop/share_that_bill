@@ -224,18 +224,25 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/imageViewCreateBillThumbnail"
-                android:layout_alignBottom="@+id/textViewCreateBillPicture"
-                android:layout_toRightOf="@+id/textViewCreateBillWhoPaid"
                 android:src="@drawable/no_image"
-                android:maxHeight="20dp"
-                android:maxWidth="20dp"
                 android:scaleType="centerInside"
-                android:layout_below="@+id/textViewCreateBillLocation"
-                android:layout_alignRight="@+id/textViewCreateBillHowToSplit"
-                android:layout_alignEnd="@+id/textViewCreateBillHowToSplit"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="-5dp"
-                android:layout_marginRight="80dp" />
+                android:layout_toEndOf="@+id/textViewCreateBillPicture"
+                android:layout_alignBottom="@+id/buttonCreateBillPicture"
+                android:layout_toRightOf="@+id/textViewCreateBillPicture"
+                android:layout_marginLeft="20dp" />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageViewCreateBillMap"
+                android:layout_above="@+id/buttonCreateBillPicture"
+                android:layout_toRightOf="@+id/textViewCreateBillLocation"
+                android:layout_toEndOf="@+id/textViewCreateBillLocation"
+                android:scaleType="centerInside"
+                android:src="@drawable/map_image_faded"
+                android:background="@android:color/transparent"
+                android:layout_marginLeft="20dp"
+                android:layout_marginBottom="3dp" />
 
 
         </RelativeLayout>.

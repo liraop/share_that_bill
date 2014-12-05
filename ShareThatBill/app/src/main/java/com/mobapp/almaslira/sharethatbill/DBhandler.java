@@ -471,7 +471,7 @@ public class DBhandler {
             this.resultSet = statement.executeQuery(query);
 
             while (resultSet.next()) {
-                if(Float.parseFloat(resultSet.getString(2)) > 0) {
+                if(Float.parseFloat(resultSet.getString(2)) != 0) {
                     result.add(new TwoStringsClass(resultSet.getString(1),resultSet.getString(2)));
                 }
             }
@@ -503,7 +503,7 @@ public class DBhandler {
             this.resultSet = statement.executeQuery(query);
 
             while (resultSet.next()) {
-                if(Float.parseFloat(resultSet.getString(2)) < 0) {
+                if(Float.parseFloat(resultSet.getString(2)) != 0) {
                     result.add(new TwoStringsClass(resultSet.getString(1),resultSet.getString(2)));
                 }
             }

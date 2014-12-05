@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
-import android.graphics.Picture;
-import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,10 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.AdapterView;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ScrollView;
@@ -26,7 +20,6 @@ import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 
 public class ViewBillActivity extends Activity implements View.OnClickListener {
@@ -39,7 +32,7 @@ public class ViewBillActivity extends Activity implements View.OnClickListener {
     Bill thisBill;
 
     ArrayList<TwoStringsClass> whoPaidTwoStringsList;
-    ArrayList<TwoStringsClass> whoOwnsStringList;
+    ArrayList<TwoStringsClass> whoOwnsTwoStringList;
 
     ProgressDialog progressDialog;
 
@@ -80,7 +73,7 @@ public class ViewBillActivity extends Activity implements View.OnClickListener {
                 whoPaidTwoStringsList = dbhandler.getWhoPaidBill(billName);
 
                 Log.d(TAG, "get who owns");
-                whoOwnsStringList = dbhandler.getWhoOwnsBill(billName);
+                whoOwnsTwoStringList = dbhandler.getWhoOwnsBill(billName);
 
                 runOnUiThread(new Runnable(){
                     public void run() {
@@ -144,7 +137,7 @@ public class ViewBillActivity extends Activity implements View.OnClickListener {
 
         ListView whoOwnsListView = (ListView) findViewById(R.id.listViewViewBillWhoOwns);
 
-        CustomTwoItemAdapter whoOwnsArrayAdapter = new CustomTwoItemAdapter(this, whoOwnsStringList);
+        CustomTwoItemAdapter whoOwnsArrayAdapter = new CustomTwoItemAdapter(this, whoOwnsTwoStringList);
 
         whoOwnsListView.setAdapter(whoOwnsArrayAdapter);
         whoOwnsArrayAdapter.notifyDataSetChanged();
