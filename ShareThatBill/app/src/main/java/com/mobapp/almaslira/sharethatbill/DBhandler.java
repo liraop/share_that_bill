@@ -443,7 +443,8 @@ public class DBhandler {
             connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
 
             this.statement = connect.createStatement();
-            String query = "INSERT INTO `usersAndBills`(`uid`, `bid`, `valueOwn`, `valuePaid`) VALUES ('"+user+"','"+billName+"','"+valueOwn+" ,'"+valuePaid+"')";            statement.executeUpdate(query);
+            String query = "INSERT INTO `usersAndBills`(`uid`, `bid`, `valueOwn`, `valuePaid`) VALUES ('"+user+"','"+billName+"','"+valueOwn+"','"+valuePaid+"')";
+            statement.executeUpdate(query);
             connect.close();
 
         } catch (SQLException e) {

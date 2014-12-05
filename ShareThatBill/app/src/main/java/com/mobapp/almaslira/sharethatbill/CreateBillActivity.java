@@ -298,13 +298,19 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
             public void run() {
                 dbhandler.createBill(thisBill);
 
-                for (TwoStringsClass mp : whoPaid) {
-                    if (Float.parseFloat(mp.second) > 0)
-                        dbhandler.createUserBillRelation(mp.first, thisBill.billName, Float.parseFloat(mp.second));
-                }
-                for (TwoStringsClass mo : whoOwns) {
-                    if (Float.parseFloat(mo.second) > 0)
-                        dbhandler.createUserBillRelation(mo.first, thisBill.billName, -Float.parseFloat(mo.second));
+                Log.d(TAG, "creating bill");
+
+                for (int i = 0; i < whoPaid.size(); i++) {
+                    if (Float.parseFloat(whoPaid.get(i).second) > 0 || Float.parseFloat(whoOwns.get(i).second) > 0) {
+                        Log.d(TAG, "user " + whoPaid.get(i).first +
+                                " owns " + Float.parseFloat(whoOwns.get(i).second) +
+                                " and paid " + Float.parseFloat(whoPaid.get(i).second));
+
+                        dbhandler.createUserBillRelation(whoPaid.get(i).first, thisBill.billName,
+                                Float.parseFloat(whoOwns.get(i).second),
+                                Float.parseFloat(whoPaid.get(i).second));
+
+                    }
                 }
 
                 CreateBillActivity.this.runOnUiThread(new Runnable() {
