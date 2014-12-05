@@ -467,7 +467,7 @@ public class DBhandler {
             connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
 
             this.statement = connect.createStatement();
-            String query = "SELECT uid,value FROM usersAndBills WHERE bid = '" + billName + "'";
+            String query = "SELECT uid,valuePaid FROM usersAndBills WHERE bid = '" + billName + "'";
             this.resultSet = statement.executeQuery(query);
 
             while (resultSet.next()) {
@@ -499,7 +499,7 @@ public class DBhandler {
             connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
 
             this.statement = connect.createStatement();
-            String query = "SELECT uid,value FROM usersAndBills WHERE bid = '"+billName+"'";
+            String query = "SELECT uid,valueOwn FROM usersAndBills WHERE bid = '"+billName+"'";
             this.resultSet = statement.executeQuery(query);
 
             while (resultSet.next()) {
