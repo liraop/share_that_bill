@@ -1,6 +1,6 @@
 - bill
 *	valor de quem pagou sem .00
-*	valor de quem deve com sinal de menos e sem .00
+*	valor de quem deve  sem .00
 *	alguns usuarios nao aparecendo
 	editar
 	usuario pendente pode ser adicionado a bill, mesmo nao aceitando o convite
