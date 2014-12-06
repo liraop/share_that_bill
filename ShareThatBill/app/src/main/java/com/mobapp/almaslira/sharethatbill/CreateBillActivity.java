@@ -2,7 +2,6 @@ package com.mobapp.almaslira.sharethatbill;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -49,8 +48,8 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
     private static DBhandler dbhandler = new DBhandler();
 
     String groupName;
-    ArrayList<TwoStringsClass> whoPaid;
-    ArrayList<TwoStringsClass> whoOwns;
+    ArrayList<TwoStringsClass> whoPaidTwoStringsList;
+    ArrayList<TwoStringsClass> whoOwnsTwoStringsList;
 
     CustomTwoItemAdapter whoPaidArrayAdapter;
     CustomTwoItemAdapter whoOwnsArrayAdapter;
@@ -324,17 +323,6 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
             mImageView.setImageBitmap(BitmapFactory.decodeFile(thisBill.billPicturePath));
             mImageView.setOnClickListener(this);
         }
-/*
-
-            Log.d(TAG, "result ok");
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-
-            Log.d(TAG, "passou");
-
-
-        }
-        */
     }
 
     /**
@@ -369,7 +357,7 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
 
     public boolean billValuesMatch() {
         float totalOwns = 0;
-        for (TwoStringsClass m : whoOwns)
+        for (TwoStringsClass m : whoOwnsTwoStringsList)
             totalOwns += Float.parseFloat(m.second);
 
         Log.d(TAG, "totalOwns: " + totalOwns);
@@ -403,15 +391,15 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
 
                 Log.d(TAG, "creating bill");
 
-                for (int i = 0; i < whoPaid.size(); i++) {
-                    if (Float.parseFloat(whoPaid.get(i).second) > 0 || Float.parseFloat(whoOwns.get(i).second) > 0) {
-                        Log.d(TAG, "user " + whoPaid.get(i).first +
-                                " owns " + Float.parseFloat(whoOwns.get(i).second) +
-                                " and paid " + Float.parseFloat(whoPaid.get(i).second));
+                for (int i = 0; i < whoPaidTwoStringsList.size(); i++) {
+                    if (Float.parseFloat(whoPaidTwoStringsList.get(i).second) > 0 || Float.parseFloat(whoOwnsTwoStringsList.get(i).second) > 0) {
+                        Log.d(TAG, "user " + whoPaidTwoStringsList.get(i).first +
+                                " owns " + Float.parseFloat(whoOwnsTwoStringsList.get(i).second) +
+                                " and paid " + Float.parseFloat(whoPaidTwoStringsList.get(i).second));
 
-                        dbhandler.createUserBillRelation(whoPaid.get(i).first, thisBill.billName,
-                                Float.parseFloat(whoOwns.get(i).second),
-                                Float.parseFloat(whoPaid.get(i).second));
+                        dbhandler.createUserBillRelation(whoPaidTwoStringsList.get(i).first, thisBill.billName,
+                                Float.parseFloat(whoOwnsTwoStringsList.get(i).second),
+                                Float.parseFloat(whoPaidTwoStringsList.get(i).second));
 
                     }
                 }
@@ -521,18 +509,39 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
             public void run() {
                 ArrayList<String> members = dbhandler.getGroupMembers(groupName);
 
-                whoPaid = new ArrayList<TwoStringsClass>();
-                whoOwns = new ArrayList<TwoStringsClass>();
+                whoPaidTwoStringsList = new ArrayList<TwoStringsClass>();
+                whoOwnsTwoStringsList = new ArrayList<TwoStringsClass>();
 
                 for (String m : members) {
-                    whoPaid.add(new TwoStringsClass(m, "0.00"));
-                    whoOwns.add(new TwoStringsClass(m, "0.00"));
+                    whoPaidTwoStringsList.add(new TwoStringsClass(m, "0.00"));
+                    whoOwnsTwoStringsList.add(new TwoStringsClass(m, "0.00"));
                     Log.d(TAG, "Adding member to lists: " + m);
                 }
 
-                dividingEquallyMembers = new boolean[members.size()];
-                for (int i=0; i<members.size(); ++i)
-                    dividingEquallyMembers[i] = false;
+                if (editingBill) {
+                    thisBill = dbhandler.getBill(thisBill.billName);
+
+                    Log.d(TAG, "get who paid");
+                    whoPaidTwoStringsList = dbhandler.getWhoPaidBill(thisBill.billName);
+
+                    Log.d(TAG, "get who owns");
+                    whoOwnsTwoStringsList = dbhandler.getWhoOwnsBill(thisBill.billName);
+
+                    if (thisBill.billLocationLatitute != 0 || thisBill.billLocationLongitude != 0) {
+                        thisBill.locationIsSet = true;
+
+                        
+                    }
+                    else {
+                        thisBill.locationIsSet = false;
+                    }
+                }
+
+                if (!editingBill) {
+                    dividingEquallyMembers = new boolean[members.size()];
+                    for (int i = 0; i < members.size(); ++i)
+                        dividingEquallyMembers[i] = false;
+                }
 
                 CreateBillActivity.this.runOnUiThread(new Runnable() {
                     public void run() {
@@ -546,14 +555,13 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
     }
 
     public void setUpTables() {
-        if (!editingBill)
-            updateDateTime();
+        updateDateTime();
 
         // ** Who paid list **
 
         ListView whoPaidListView = (ListView) findViewById(R.id.listViewCreateBillWhoPaid);
 
-        whoPaidArrayAdapter = new CustomTwoItemAdapter(this, whoPaid);
+        whoPaidArrayAdapter = new CustomTwoItemAdapter(this, whoPaidTwoStringsList);
 
         whoPaidListView.setAdapter(whoPaidArrayAdapter);
 
@@ -582,11 +590,8 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
         // ** Who owns list **
 
         ListView whoOwnsListView = (ListView) findViewById(R.id.listViewCreateBillWhoOwns);
-      /*
-        if (editingBill)
-            whoOwnsListView.set*/
 
-        whoOwnsArrayAdapter = new CustomTwoItemAdapter(this, whoOwns);
+        whoOwnsArrayAdapter = new CustomTwoItemAdapter(this, whoOwnsTwoStringsList);
 
         whoOwnsListView.setAdapter(whoOwnsArrayAdapter);
         whoOwnsArrayAdapter.notifyDataSetChanged();
@@ -636,7 +641,7 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
 
     void updateWhoOwnsValues() {
         int totalPaying = 0;
-        for (int i=0; i < whoOwns.size(); ++i)
+        for (int i=0; i < whoOwnsTwoStringsList.size(); ++i)
             if (dividingEquallyMembers[i])
                 totalPaying++;
 
@@ -644,14 +649,14 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
             float billTotal = totalBillValue();
             float totalDivided = billTotal/totalPaying;
 
-            for (int i=0; i < whoOwns.size(); ++i)
+            for (int i=0; i < whoOwnsTwoStringsList.size(); ++i)
                 if (dividingEquallyMembers[i])
-                    whoOwns.get(i).second = String.format("%.2f", totalDivided);
+                    whoOwnsTwoStringsList.get(i).second = String.format("%.2f", totalDivided);
                 else
-                    whoOwns.get(i).second = new String("0.00");
+                    whoOwnsTwoStringsList.get(i).second = new String("0.00");
         }
         else {
-            for (TwoStringsClass m : whoOwns)
+            for (TwoStringsClass m : whoOwnsTwoStringsList)
                 m.second = new String("0.00");
         }
         whoOwnsArrayAdapter.notifyDataSetChanged();
@@ -659,7 +664,7 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
 
     public float totalBillValue() {
         float total = 0;
-        for (TwoStringsClass m : whoPaid)
+        for (TwoStringsClass m : whoPaidTwoStringsList)
             total += Float.parseFloat(m.second);
 
         return total;
@@ -674,7 +679,7 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
 
         final EditText newValueInput = new EditText(this);
         newValueInput.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
-        newValueInput.setText(this.whoPaid.get(index).second);
+        newValueInput.setText(this.whoPaidTwoStringsList.get(index).second);
         alert.setView(newValueInput);
 
         alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
@@ -683,7 +688,7 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
 
                 Log.d(TAG, "Ok to edit to " + newValue);
 
-                whoPaid.get(index).second = String.format("%.2f", Float.parseFloat(newValue));
+                whoPaidTwoStringsList.get(index).second = String.format("%.2f", Float.parseFloat(newValue));
                 whoPaidArrayAdapter.notifyDataSetChanged();
             }
         });
@@ -707,7 +712,7 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
 
         final EditText newValueInput = new EditText(this);
         newValueInput.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
-        newValueInput.setText(this.whoOwns.get(index).second);
+        newValueInput.setText(this.whoOwnsTwoStringsList.get(index).second);
         alert.setView(newValueInput);
 
         alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
@@ -716,7 +721,7 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
 
                 Log.d(TAG, "Ok to edit to " + newValue);
 
-                whoOwns.get(index).second = String.format("%.2f", Float.parseFloat(newValue));
+                whoOwnsTwoStringsList.get(index).second = String.format("%.2f", Float.parseFloat(newValue));
                 whoOwnsArrayAdapter.notifyDataSetChanged();
             }
         });
@@ -770,7 +775,7 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
                 break;
         }
 
-        for (TwoStringsClass m : whoOwns)
+        for (TwoStringsClass m : whoOwnsTwoStringsList)
             m.second = new String("0.00");
 
         whoOwnsArrayAdapter.notifyDataSetChanged();

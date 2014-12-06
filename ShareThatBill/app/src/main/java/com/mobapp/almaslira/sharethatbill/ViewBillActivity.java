@@ -184,8 +184,8 @@ public class ViewBillActivity extends Activity implements View.OnClickListener {
 
             case R.id.imageButtonViewBillMap:
 
-                if (thisBill.billLocation != null) {
-                    String geoUri = "http://maps.google.com/maps?q=loc:" + thisBill.billLocation.getLatitude() + "," + thisBill.billLocation.getLongitude();
+                if (thisBill.locationIsSet) {
+                    String geoUri = "http://maps.google.com/maps?q=loc:" + thisBill.billLocationLatitute + "," + thisBill.billLocationLongitude;
 
                     EditText name = (EditText) findViewById(R.id.editTextCreateBillBillName);
                     if ( name.getText().toString().length() > 0)
