@@ -46,6 +46,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 
 
 public class CreateBillActivity extends Activity implements RadioGroup.OnCheckedChangeListener, View.OnClickListener, LocationListener {
@@ -146,6 +147,7 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
 
             ImageView mapImage = (ImageView) findViewById(R.id.imageViewCreateBillMap);
             mapImage.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.map_image));
+            mapImage.setOnClickListener(this);
         }
     }
 
@@ -167,6 +169,8 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
     @Override
     public void onClick(View view) {
         Log.d(TAG, "onClick");
+
+        Intent intent;
 
         switch (view.getId()) {
             case R.id.buttonCreateBillDate:
@@ -206,7 +210,7 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
             case R.id.imageViewCreateBillThumbnail:
                 Log.d(TAG, "touched image");
 
-                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent = new Intent(Intent.ACTION_VIEW);
                 intent.setDataAndType(Uri.parse("file://" + thisBill.billPicturePath),"image/jpg");
                 startActivity(intent);
 
@@ -219,6 +223,16 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
 
             case R.id.imageViewCreateBillMap:
 
+                if (thisBill.billLocation != null) {
+                    String geoUri = "http://maps.google.com/maps?q=loc:" + thisBill.billLocation.getLatitude() + "," + thisBill.billLocation.getLongitude();
+
+                    EditText name = (EditText) findViewById(R.id.editTextCreateBillBillName);
+                    if ( name.getText().toString().length() > 0)
+                        geoUri += " (" + name.getText().toString() + ")";
+
+                    intent = new Intent(Intent.ACTION_VIEW, Uri.parse(geoUri));
+                    startActivity(intent);
+                }
                 break;
         }
     }
