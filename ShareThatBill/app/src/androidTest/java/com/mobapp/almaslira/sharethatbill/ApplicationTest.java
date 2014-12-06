@@ -18,7 +18,13 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
     }
 
     public void testGroupExists(){
+        DBhandler dbhandler = new DBhandler();
 
+        //ArrayList<TwoStringsClass>membersBalanceList = dbhandler.getUserGroupBalance("group1", dbhandler.getGroupMembers("group1"),dbhandler.getGroupBills("group1"));
+
+        //Log.d(TAG, ""+membersBalanceList.size());
+
+        dbhandler.deleteBill("pedulira");
 
     }
 

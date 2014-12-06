@@ -335,16 +335,14 @@ public class DBhandler {
      * @param groupName
      * @return ArrayList<TwoStringsClass> first uses second balance
      */
-    public ArrayList<TwoStringsClass> getUserGroupBalance(String groupName){
+    public ArrayList<TwoStringsClass> getUserGroupBalance(String groupName, ArrayList<String> users, ArrayList<String> bills){
         ArrayList<TwoStringsClass> result = new ArrayList<TwoStringsClass>();
-        ArrayList<String> users = this.getGroupMembers(groupName);
-        ArrayList<String> bills = this.getGroupBills(groupName);
         try {
             connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
-            this.statement = connect.createStatement();
             for (int i = 0; i < users.size(); i++){
                 float balance = 0;
                 for (int j = 0; j < bills.size(); j++){
+                    this.statement = connect.createStatement();
                     String query = "SELECT valueOwn, valuePaid FROM usersAndBills WHERE bid = '"+bills.get(j)+"' AND uid ='"+users.get(i)+"'";
                     this.resultSet = statement.executeQuery(query);
                     while (resultSet.next()){
@@ -360,6 +358,7 @@ public class DBhandler {
         }
         return result;
     }
+
     /**
      * Method to check if a user already exists in db
      *
@@ -548,9 +547,9 @@ public class DBhandler {
             connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
             this.statement = connect.createStatement();
             String query = "DELETE FROM usersAndBills WHERE bid = '"+billName+"'";
-            this.resultSet = statement.executeQuery(query);
-            query = "DELETE FROM bills WHERE bid = '"+billName+"'";
-            this.resultSet = statement.executeQuery(query);
+            statement.executeUpdate(query);
+            query = "DELETE FROM bills WHERE id = '"+billName+"'";
+            statement.executeUpdate(query);
             connect.close();
 
         } catch (SQLException e) {
