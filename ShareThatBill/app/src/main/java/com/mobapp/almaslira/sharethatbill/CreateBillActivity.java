@@ -69,6 +69,8 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
 
     ProgressDialog progressDialog;
 
+    boolean editingBill;
+
     protected LocationManager locationManagerGPS;
     protected LocationManager locationManagerNetwork;
 
@@ -85,21 +87,28 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
+        thisBill = new Bill();
+
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             groupName = extras.getString("group_name");
-        }
+            editingBill = extras.getBoolean("editing");
 
-        groupName = "group1";
+            if (editingBill) {
+                thisBill.billName = extras.getString("bill_name");
+
+                Log.d(TAG, "editing bill" + thisBill.billName + " from group " + groupName);
+            }
+        }
 
         progressDialog = new ProgressDialog(CreateBillActivity.this);
         progressDialog.setMessage(getResources().getString(R.string.warning_loading));
         progressDialog.setCancelable(false);
 
-        dividingEquallyFlag = true;
-
-        thisBill = new Bill();
-        thisBill.billDate = Calendar.getInstance();
+        if (!editingBill) {
+            thisBill.billDate = Calendar.getInstance();
+            dividingEquallyFlag = true;
+        }
 
         RadioGroup  radioGroup = (RadioGroup) findViewById(R.id.RadioGroupCreateBillSplit);
         radioGroup.setOnCheckedChangeListener(this);
@@ -424,7 +433,6 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
         year.setMaxValue(2025);
         dateFormat = new SimpleDateFormat("yyyy");
         year.setValue(Integer.parseInt(dateFormat.format(thisBill.billDate.getTime())));
-
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getResources().getString(R.string.create_bill_set_date));
