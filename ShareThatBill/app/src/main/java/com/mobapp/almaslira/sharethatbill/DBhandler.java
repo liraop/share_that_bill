@@ -542,4 +542,21 @@ public class DBhandler {
         }
         return result;
     }
+
+    public void deleteBill(String billName){
+        try {
+            connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
+            this.statement = connect.createStatement();
+            String query = "DELETE FROM usersAndBills WHERE bid = '"+billName+"'";
+            this.resultSet = statement.executeQuery(query);
+            query = "DELETE FROM bills WHERE bid = '"+billName+"'";
+            this.resultSet = statement.executeQuery(query);
+            connect.close();
+
+        } catch (SQLException e) {
+            //do something with sql exception
+        }
+    }
+
+
 }
