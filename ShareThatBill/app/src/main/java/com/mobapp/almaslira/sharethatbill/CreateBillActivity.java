@@ -530,7 +530,8 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
                     if (thisBill.billLocationLatitute != 0 || thisBill.billLocationLongitude != 0) {
                         thisBill.locationIsSet = true;
 
-                        
+                        ImageView mapImage = (ImageView) findViewById(R.id.imageViewCreateBillMap);
+                        mapImage.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.map_image));
                     }
                     else {
                         thisBill.locationIsSet = false;
