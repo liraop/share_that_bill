@@ -443,8 +443,9 @@ public class DBhandler {
             connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
 
             this.statement = connect.createStatement();
-            String query = "INSERT INTO `bills`(`id`, `value`, `date&time`, `gid`) " +
-                    "VALUES ('"+bill.billName+"','"+bill.billValue+"','"+sdf.format(bill.billDate.getTime())+"','"+bill.groupName+"')";
+            String query = "INSERT INTO `bills`(`id`, `value`, `date&time`, `gid`, `latitude`,`longitude`) " +
+                    "VALUES ('"+bill.billName+"','"+bill.billValue+"','"+sdf.format(bill.billDate.getTime())
+                    +"','"+bill.groupName+"','"+bill.billLocationLatitute+"','"+bill.billLocationLongitude+"')";
 
            statement.executeUpdate(query);
 
