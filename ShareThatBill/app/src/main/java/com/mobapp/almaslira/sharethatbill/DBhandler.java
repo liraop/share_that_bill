@@ -335,25 +335,17 @@ public class DBhandler {
      * @param groupName
      * @return ArrayList<TwoStringsClass> first uses second balance
      */
-    public ArrayList<TwoStringsClass> getUserGroupAmount(String groupName){
+    public ArrayList<TwoStringsClass> getUserGroupBalance(String groupName){
         ArrayList<TwoStringsClass> result = new ArrayList<TwoStringsClass>();
-
-
         ArrayList<String> users = this.getGroupMembers(groupName);
         ArrayList<String> bills = this.getGroupBills(groupName);
-
-
         try {
             connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
-
-            String query;
             this.statement = connect.createStatement();
-
             for (int i = 0; i < users.size(); i++){
                 float balance = 0;
-
                 for (int j = 0; j < bills.size(); j++){
-                    query = "SELECT valueOwn, valuePaid FROM usersAndBills WHERE bid = '"+bills.get(j)+"' AND uid ='"+users.get(i)+"'";
+                    String query = "SELECT valueOwn, valuePaid FROM usersAndBills WHERE bid = '"+bills.get(j)+"' AND uid ='"+users.get(i)+"'";
                     this.resultSet = statement.executeQuery(query);
                     while (resultSet.next()){
                         balance -= Float.parseFloat(resultSet.getString(1));
@@ -362,15 +354,12 @@ public class DBhandler {
                 }
                 result.add(new TwoStringsClass(users.get(i),""+balance));
             }
-
             connect.close();
-
         } catch (SQLException e) {
             //do something with sql exception
         }
         return result;
     }
-
     /**
      * Method to check if a user already exists in db
      *
