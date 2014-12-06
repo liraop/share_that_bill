@@ -106,6 +106,7 @@ public class DBhandler {
         return result;
     }
 
+
     /**
      * Method to get the group's members
      *
@@ -296,6 +297,80 @@ public class DBhandler {
 
     }
 
+    /*
+     * Method to get all the bills for a group.
+     *
+     * @param groupName
+     * @return ArrayList<String> bills ID
+     */
+    public ArrayList<String> getGroupBills (String groupName){
+
+        ArrayList<String> result = new ArrayList<String>();
+
+        try {
+
+            connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
+
+            this.statement = connect.createStatement();
+            String query = "SELECT id FROM bills WHERE gid = '" + groupName + "'";
+            this.resultSet = statement.executeQuery(query);
+
+            while (resultSet.next()) {
+                int i = 1;
+                result.add(resultSet.getString(i++));
+            }
+
+            connect.close();
+
+        } catch (SQLException e) {
+            //do something with sql exception
+        }
+
+        return result;
+    }
+
+    /*
+     * Method to get the users from a group and their respective balance.
+     *
+     * @param groupName
+     * @return ArrayList<TwoStringsClass> first uses second balance
+     */
+    public ArrayList<TwoStringsClass> getUserGroupAmount(String groupName){
+        ArrayList<TwoStringsClass> result = new ArrayList<TwoStringsClass>();
+
+
+        ArrayList<String> users = this.getGroupMembers(groupName);
+        ArrayList<String> bills = this.getGroupBills(groupName);
+
+
+        try {
+            connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
+
+            String query;
+            this.statement = connect.createStatement();
+
+            for (int i = 0; i < users.size(); i++){
+                float balance = 0;
+
+                for (int j = 0; j < bills.size(); j++){
+                    query = "SELECT valueOwn, valuePaid FROM usersAndBills WHERE bid = '"+bills.get(j)+"' AND uid ='"+users.get(i)+"'";
+                    this.resultSet = statement.executeQuery(query);
+                    while (resultSet.next()){
+                        balance -= Float.parseFloat(resultSet.getString(1));
+                        balance += Float.parseFloat(resultSet.getString(2));
+                    }
+                }
+                result.add(new TwoStringsClass(users.get(i),""+balance));
+            }
+
+            connect.close();
+
+        } catch (SQLException e) {
+            //do something with sql exception
+        }
+        return result;
+    }
+
     /**
      * Method to check if a user already exists in db
      *
@@ -327,38 +402,6 @@ public class DBhandler {
     }
 
 
-    /*
-     * Method to get all the bills for a group.
-     *
-     * @param groupName
-     * @return ArrayList<String> bills
-     */
-    public ArrayList<String> getGroupBills (String groupName){
-
-        ArrayList<String> result = new ArrayList<String>();
-
-        try {
-
-            connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
-
-            this.statement = connect.createStatement();
-            String query = "SELECT id FROM bills WHERE gid = '" + groupName + "'";
-            this.resultSet = statement.executeQuery(query);
-
-            while (resultSet.next()) {
-                int i = 1;
-                result.add(resultSet.getString(i++));
-            }
-
-            connect.close();
-
-        } catch (SQLException e) {
-            //do something with sql exception
-        }
-
-        return result;
-    }
-
     /**
      * Method to get a bill from db.
      * TODO: implement location,picture request
@@ -369,18 +412,11 @@ public class DBhandler {
     public Bill getBill(String billID){
 
         Bill b = new Bill();
-
         b.billName = billID;
-
         String groupName = null;
         Float billValue = null;
         b.billDate = Calendar.getInstance();
-
-
-
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-
         try {
 
             connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
