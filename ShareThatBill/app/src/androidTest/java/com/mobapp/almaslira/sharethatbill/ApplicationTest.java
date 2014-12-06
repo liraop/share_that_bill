@@ -11,14 +11,14 @@ import java.util.ArrayList;
  * <a href="http://d.android.com/tools/testing/testing_android.html">Testing Fundamentals</a>
  */
 public class ApplicationTest extends ApplicationTestCase<Application> {
-    static final String TAG = "LoginActivity";
+    static final String TAG = "AAAAAAAAAAAAAAA";
 
     public ApplicationTest() {
         super(Application.class);
     }
 
     public void testGroupExists(){
-        DBhandler dbhandler = new DBhandler();
+
 
     }
 
