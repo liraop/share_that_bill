@@ -14,7 +14,9 @@ public class Bill {
     String groupName;
     Float billValue;
     Calendar billDate;
-    Location billLocation;
+    Float billLocationLatitute = 0.0f;
+    Float billLocationLongitude = 0.0f;
+    boolean locationIsSet = false;
     String billPicturePath;
 
 }

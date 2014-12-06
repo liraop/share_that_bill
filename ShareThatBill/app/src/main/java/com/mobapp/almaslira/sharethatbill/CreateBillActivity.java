@@ -146,6 +146,7 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
             TextView whoOwnsText = (TextView) findViewById(R.id.textViewCreateBillHowToSplit);
             whoOwnsText.setText(getResources().getString(R.string.view_bill_who_owns));
         }
+
         getLocation = false;
 
         locationManagerGPS = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -165,7 +166,9 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
         if (getLocation == true) {
             Log.d(TAG, "getting location");
 
-            thisBill.billLocation = location;
+            thisBill.billLocationLatitute = (float) location.getLatitude();
+            thisBill.billLocationLongitude = (float) location.getLongitude();
+
             getLocation = false;
 
             ImageView mapImage = (ImageView) findViewById(R.id.imageViewCreateBillMap);
@@ -246,8 +249,8 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
 
             case R.id.imageViewCreateBillMap:
 
-                if (thisBill.billLocation != null) {
-                    String geoUri = "http://maps.google.com/maps?q=loc:" + thisBill.billLocation.getLatitude() + "," + thisBill.billLocation.getLongitude();
+                if (thisBill.locationIsSet) {
+                    String geoUri = "http://maps.google.com/maps?q=loc:" + thisBill.billLocationLatitute + "," + thisBill.billLocationLongitude;
 
                     EditText name = (EditText) findViewById(R.id.editTextCreateBillBillName);
                     if ( name.getText().toString().length() > 0)
