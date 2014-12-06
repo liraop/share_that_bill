@@ -3,7 +3,6 @@
 	editar
 	usuario pendente pode ser adicionado a bill, mesmo nao aceitando o convite
 	salvar foto
-	salvar localizacao
 
 - grupo
 *	exibir saldo de cada membro

@@ -393,7 +393,7 @@ public class DBhandler {
 
     /**
      * Method to get a bill from db.
-     * TODO: implement location,picture request
+     * TODO: implement picture request
      *
      * @param billID
      * @return the Bill
@@ -420,7 +420,8 @@ public class DBhandler {
                     } catch (Exception e){
                         //do something with the exception
                     }
-                    b.groupName = this.resultSet.getString(6);
+                    b.billLocationLatitute = Float.parseFloat(this.resultSet.getString(6));
+                    b.billLocationLongitude = Float.parseFloat(this.resultSet.getString(7));
             }
             connect.close();
 
