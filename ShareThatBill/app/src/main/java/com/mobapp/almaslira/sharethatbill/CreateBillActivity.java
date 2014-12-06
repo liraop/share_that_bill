@@ -527,13 +527,19 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
                     Log.d(TAG, "get who owns");
                     whoOwnsTwoStringsList = dbhandler.getWhoOwnsBill(thisBill.billName);
 
-                    if (thisBill.billLocationLatitute != 0 || thisBill.billLocationLongitude != 0) {
+                    if (thisBill.billLocationLatitute != 0 && thisBill.billLocationLongitude != 0) {
+                        Log.d(TAG, "bill location is valid");
                         thisBill.locationIsSet = true;
 
-                        ImageView mapImage = (ImageView) findViewById(R.id.imageViewCreateBillMap);
-                        mapImage.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.map_image));
+                        CreateBillActivity.this.runOnUiThread(new Runnable() {
+                            public void run() {
+                                ImageView mapImage = (ImageView) findViewById(R.id.imageViewCreateBillMap);
+                                mapImage.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.map_image));
+                            }
+                        });
                     }
                     else {
+                        Log.d(TAG, "bill location is invalid");
                         thisBill.locationIsSet = false;
                     }
                 }

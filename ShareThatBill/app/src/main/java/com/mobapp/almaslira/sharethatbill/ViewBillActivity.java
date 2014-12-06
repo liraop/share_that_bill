@@ -78,6 +78,22 @@ public class ViewBillActivity extends Activity implements View.OnClickListener {
 
                 thisBill = dbhandler.getBill(billName);
 
+                if (thisBill.billLocationLatitute != 0 && thisBill.billLocationLongitude != 0) {
+                    Log.d(TAG, "bill location is valid");
+                    thisBill.locationIsSet = true;
+
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            ImageView mapImage = (ImageView) findViewById(R.id.imageButtonViewBillMap);
+                            mapImage.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.map_image));
+                        }
+                    });
+                }
+                else {
+                    Log.d(TAG, "bill location is invalid");
+                    thisBill.locationIsSet = false;
+                }
+
                 Log.d(TAG, "get who paid");
                 whoPaidTwoStringsList = dbhandler.getWhoPaidBill(billName);
 
@@ -185,11 +201,8 @@ public class ViewBillActivity extends Activity implements View.OnClickListener {
             case R.id.imageButtonViewBillMap:
 
                 if (thisBill.locationIsSet) {
-                    String geoUri = "http://maps.google.com/maps?q=loc:" + thisBill.billLocationLatitute + "," + thisBill.billLocationLongitude;
-
-                    EditText name = (EditText) findViewById(R.id.editTextCreateBillBillName);
-                    if ( name.getText().toString().length() > 0)
-                        geoUri += " (" + name.getText().toString() + ")";
+                    String geoUri = "http://maps.google.com/maps?q=loc:" + thisBill.billLocationLatitute + "," + thisBill.billLocationLongitude +
+                            " (" + thisBill.billName + ")";
 
                     intent = new Intent(Intent.ACTION_VIEW, Uri.parse(geoUri));
                     startActivity(intent);
