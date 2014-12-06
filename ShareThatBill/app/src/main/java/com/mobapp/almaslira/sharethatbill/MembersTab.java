@@ -33,8 +33,13 @@ public class MembersTab extends Activity implements View.OnClickListener, Adapte
     ProgressDialog progressDialog;
 
     private ListView membersList;
-    private ArrayAdapter<String> arrayAdapter;
-    private List<String> memberNamesList;
+
+    // private ArrayAdapter<String> arrayAdapter;
+
+    CustomTwoItemAdapter arrayAdapter;
+    ArrayList<TwoStringsClass> membersBalanceList;
+
+    List<String> memberNamesList;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +69,19 @@ public class MembersTab extends Activity implements View.OnClickListener, Adapte
 
         membersList = (ListView) findViewById(R.id.listViewTabsList);
 
+        //membersBalanceList = new ArrayList<TwoStringsClass>();
+        membersBalanceList = dbhandler.getUserGroupBalance("group1");
+
+        Log.d(TAG, "TAMANHO DA PICA 1 "+membersBalanceList.size());
+
+
+        arrayAdapter = new CustomTwoItemAdapter(this, membersBalanceList);
+        membersList.setAdapter(arrayAdapter);
+        arrayAdapter.notifyDataSetChanged();
+        /*
+        membersList = (ListView) findViewById(R.id.listViewTabsList);
+
+
         memberNamesList = new ArrayList<String>();
 
         arrayAdapter = new ArrayAdapter<String>(
@@ -75,6 +93,8 @@ public class MembersTab extends Activity implements View.OnClickListener, Adapte
 
         arrayAdapter.notifyDataSetChanged();
         membersList.setOnItemClickListener(this);
+
+        */
 
         updateMembers();
 
@@ -243,6 +263,18 @@ public class MembersTab extends Activity implements View.OnClickListener, Adapte
     }
 
     void updateList() {
+        membersBalanceList = dbhandler.getUserGroupBalance("group1");
+        Log.d(TAG, "TAMANHO DA PICA "+membersBalanceList.size());
+
+
+        membersList = (ListView) findViewById(R.id.listViewTabsList);
+
+
+        arrayAdapter = new CustomTwoItemAdapter(this, membersBalanceList);
+        membersList.setAdapter(arrayAdapter);
+        arrayAdapter.notifyDataSetChanged();
+
+        /*
         arrayAdapter = new ArrayAdapter<String>(
                 this,
                 android.R.layout.simple_list_item_1,
@@ -250,6 +282,7 @@ public class MembersTab extends Activity implements View.OnClickListener, Adapte
 
         membersList.setAdapter(arrayAdapter);
         arrayAdapter.notifyDataSetChanged();
+        */
     }
 
     @Override
