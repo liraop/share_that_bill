@@ -13,10 +13,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -52,6 +55,15 @@ public class ViewBillActivity extends Activity implements View.OnClickListener {
             billName = extras.getString("bill_name");
             groupName = extras.getString("group_name");
         }
+
+        billName = "bill1";
+        groupName = "group1";
+
+        ImageButton mapButton = (ImageButton) findViewById(R.id.imageButtonViewBillMap);
+        mapButton.setOnClickListener(this);
+
+        ImageButton editButton = (ImageButton) findViewById(R.id.imageButtonViewBillEditBill);
+        editButton.setOnClickListener(this);
 
         progressDialog = new ProgressDialog(ViewBillActivity.this);
         progressDialog.setMessage(getResources().getString(R.string.warning_loading));
@@ -162,11 +174,39 @@ public class ViewBillActivity extends Activity implements View.OnClickListener {
     public void onClick(View view) {
         Log.d(TAG, "onClick");
 
+        Intent intent;
+
         switch (view.getId()) {
             case R.id.imageViewViewBillThumbnail:
 
-                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent = new Intent(Intent.ACTION_VIEW);
                 intent.setDataAndType(Uri.parse("file://" + thisBill.billPicturePath),"image/jpg");
+                startActivity(intent);
+
+                break;
+
+            case R.id.imageButtonViewBillMap:
+
+                if (thisBill.billLocation != null) {
+                    String geoUri = "http://maps.google.com/maps?q=loc:" + thisBill.billLocation.getLatitude() + "," + thisBill.billLocation.getLongitude();
+
+                    EditText name = (EditText) findViewById(R.id.editTextCreateBillBillName);
+                    if ( name.getText().toString().length() > 0)
+                        geoUri += " (" + name.getText().toString() + ")";
+
+                    intent = new Intent(Intent.ACTION_VIEW, Uri.parse(geoUri));
+                    startActivity(intent);
+                }
+                else
+                    Toast.makeText(this, getResources().getText(R.string.view_bill_warning_no_location).toString(), Toast.LENGTH_LONG).show();
+                break;
+
+            case R.id.imageButtonViewBillEditBill:
+
+                intent = new Intent(ViewBillActivity.this, CreateBillActivity.class);
+                intent.putExtra("group_name", groupName);
+                intent.putExtra("bill_name", billName);
+                intent.putExtra("editing", true);
                 startActivity(intent);
 
                 break;
