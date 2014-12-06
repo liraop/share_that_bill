@@ -26,8 +26,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -45,9 +43,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.Locale;
-
 
 public class CreateBillActivity extends Activity implements RadioGroup.OnCheckedChangeListener, View.OnClickListener, LocationListener {
     static final String TAG = "CreateBillActivity";
@@ -107,11 +102,17 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
 
         if (!editingBill) {
             thisBill.billDate = Calendar.getInstance();
-            dividingEquallyFlag = true;
         }
 
-        RadioGroup  radioGroup = (RadioGroup) findViewById(R.id.RadioGroupCreateBillSplit);
-        radioGroup.setOnCheckedChangeListener(this);
+        dividingEquallyFlag = true;
+
+        RadioGroup radioGroup = (RadioGroup) findViewById(R.id.RadioGroupCreateBillSplit);
+        if (editingBill) {
+            radioGroup.setVisibility(View.GONE);
+        }
+        else {
+            radioGroup.setOnCheckedChangeListener(this);
+        }
 
         Button setDateButton = (Button) findViewById(R.id.buttonCreateBillDate);
         setDateButton.setOnClickListener(this);
@@ -121,6 +122,8 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
 
         Button createBill = (Button) findViewById(R.id.buttonCreateBillCreate);
         createBill.setOnClickListener(this);
+        if (editingBill)
+            createBill.setText(getResources().getText(R.string.create_bill_save));
 
         Button takePicture = (Button) findViewById(R.id.buttonCreateBillPicture);
         takePicture.setOnClickListener(this);
@@ -132,6 +135,17 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
         mapImage.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.map_image_faded));
         mapImage.setOnClickListener(this);
 
+        if (editingBill)
+        {
+            EditText billNameEditText = (EditText) findViewById(R.id.editTextCreateBillBillName);
+            billNameEditText.setText(thisBill.billName);
+
+            TextView whoPaidText = (TextView) findViewById(R.id.textViewCreateBillWhoPaid);
+            whoPaidText.setText(getResources().getString(R.string.view_bill_who_paid));
+
+            TextView whoOwnsText = (TextView) findViewById(R.id.textViewCreateBillHowToSplit);
+            whoOwnsText.setText(getResources().getString(R.string.view_bill_who_owns));
+        }
         getLocation = false;
 
         locationManagerGPS = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -529,7 +543,8 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
     }
 
     public void setUpTables() {
-        updateDateTime();
+        if (!editingBill)
+            updateDateTime();
 
         // ** Who paid list **
 
@@ -564,6 +579,9 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
         // ** Who owns list **
 
         ListView whoOwnsListView = (ListView) findViewById(R.id.listViewCreateBillWhoOwns);
+      /*
+        if (editingBill)
+            whoOwnsListView.set*/
 
         whoOwnsArrayAdapter = new CustomTwoItemAdapter(this, whoOwns);
 

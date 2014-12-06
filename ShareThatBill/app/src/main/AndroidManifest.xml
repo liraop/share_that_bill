@@ -32,6 +32,11 @@
         <activity
             android:name="com.mobapp.almaslira.sharethatbill.GroupActivity"
             android:label="GroupActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name="com.mobapp.almaslira.sharethatbill.MembersTab"
@@ -44,11 +49,6 @@
         <activity
             android:name="com.mobapp.almaslira.sharethatbill.ViewBillActivity"
             android:label="@string/title_activity_view_bill" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name="com.mobapp.almaslira.sharethatbill.CreateBillActivity"

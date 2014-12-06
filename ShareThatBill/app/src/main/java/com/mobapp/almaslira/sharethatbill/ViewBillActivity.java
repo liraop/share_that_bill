@@ -56,9 +56,6 @@ public class ViewBillActivity extends Activity implements View.OnClickListener {
             groupName = extras.getString("group_name");
         }
 
-        billName = "bill1";
-        groupName = "group1";
-
         ImageButton mapButton = (ImageButton) findViewById(R.id.imageButtonViewBillMap);
         mapButton.setOnClickListener(this);
 
