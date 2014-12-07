@@ -140,13 +140,13 @@ public class DBhandler {
     }
 
 
-    /* Method to create a group. It uses groupExists method
-     * then creates the group or not. Adds the group on the groups table
-     *
-     * @param userName
-     * @param groupName
-     * @return group created (true) or not (false)
-     */
+   /* Method to create a group. It uses groupExists method
+    * then creates the group or not. Adds the group on the groups table
+    *
+    * @param userName
+    * @param groupName
+    * @return group created (true) or not (false)
+    */
     public boolean createGroup(String groupName) {
 
         if (!groupExists(groupName)) {
@@ -429,12 +429,22 @@ public class DBhandler {
         return b;
     }
 
-    /*
-     * Method to create a bill on db.
+    /**
+     * TODO
      * @param bill
+     * @param sessionUserName
      */
-    public void createBill(Bill bill){
+    public void createBill(Bill bill, String sessionUserName){
+        this.createBill(bill,sessionUserName, true);
+    }
 
+    /**
+     * TODO
+     * @param bill
+     * @param sessionUserName
+     * @param post
+     */
+    private void createBill(Bill bill, String sessionUserName, boolean post){
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         try {
@@ -445,11 +455,9 @@ public class DBhandler {
                     "VALUES ('"+bill.billName+"','"+bill.billValue+"','"+sdf.format(bill.billDate.getTime())
                     +"','"+bill.groupName+"','"+bill.billLocationLatitute+"','"+bill.billLocationLongitude+"')";
 
-           statement.executeUpdate(query);
-
-
+            statement.executeUpdate(query);
             connect.close();
-
+            if (post) {this.postNotification(new Notification(sessionUserName,Notification.BILL_CREATED,bill.billName), bill.groupName);}
         } catch (SQLException e) {
             //do something with exception
         }
@@ -476,7 +484,20 @@ public class DBhandler {
         }
     }
 
-    /*
+    /**
+     *
+     * @param sessionUserName
+     * @param bill
+     */
+    public void editBill(String sessionUserName, Bill bill){
+
+        this.deleteBill(bill.billName, sessionUserName,bill.groupName, false);
+        this.createBill(bill, sessionUserName, false);
+        this.postNotification(new Notification(sessionUserName, Notification.BILL_EDITED,bill.billName), bill.groupName);
+
+    }
+
+    /**
      * Method to get who not paid the bill
      * @param billName
      * @return ArrayList<TwoStringsClass> paid bills
@@ -509,7 +530,6 @@ public class DBhandler {
        return result;
     }
 
-
     /**
      * Method to get users that have not paid the bill
      * @param billName
@@ -540,12 +560,24 @@ public class DBhandler {
         return result;
     }
 
-
-    /*
-        Method to delete a bill from the db.
-
+    /**
+     * TODO
+     * @param billName
+     * @param sessionUserName
+     * @param groupName
      */
-    public void deleteBill(String billName){
+    public void deleteBill(String billName, String sessionUserName, String groupName){
+        this.deleteBill(billName, sessionUserName,groupName, true);
+    }
+
+    /**
+     * TODO
+     * @param billName
+     * @param sessionUserName
+     * @param groupName
+     * @param post
+     */
+    private void deleteBill(String billName, String sessionUserName, String groupName, boolean post){
         try {
             connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
             this.statement = connect.createStatement();
@@ -555,17 +587,18 @@ public class DBhandler {
             statement.executeUpdate(query);
             connect.close();
 
+            if (post) {this.postNotification(new Notification(sessionUserName,Notification.BILL_DELETED,billName), groupName);}
         } catch (SQLException e) {
             //do something with sql exception
         }
     }
 
-    /*
-     * Method to get a group notification. Its ordered by time.
-     *
-     * @param groupName
-     * @return ArrayList<Notification>
-     */
+   /*
+    * Method to get a group notification. Its ordered by time.
+    *
+    * @param groupName
+    * @return ArrayList<Notification>
+    */
     public ArrayList<Notification> getGroupNotifications(String groupName){
         ArrayList<Notification> result = new ArrayList<Notification>();
 
@@ -601,7 +634,7 @@ public class DBhandler {
      * @param groupName
      * @return true if posted, false if not
      */
-    private boolean postNotification(Notification notification, String groupName){
+    private boolean postNotification(Notification notification, String groupName) {
         boolean result = false;
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         try {
@@ -609,8 +642,8 @@ public class DBhandler {
 
             this.statement = connect.createStatement();
             String query = "INSERT INTO `groupNotifications`(`nid`, `gid`, `uid`, `type`, `details`, `time`) VALUES " +
-                    "('"+notification.hashCode()+"','"+groupName+"','"+notification.owner+"','"+notification.type+
-                    "','"+notification.description+"','"+sdf.format(notification.date.getTime())+"')";
+                    "('" + notification.hashCode() + "','" + groupName + "','" + notification.owner + "','" + notification.type +
+                    "','" + notification.description + "','" + sdf.format(notification.date.getTime()) + "')";
             statement.executeUpdate(query);
             connect.close();
             result = true;

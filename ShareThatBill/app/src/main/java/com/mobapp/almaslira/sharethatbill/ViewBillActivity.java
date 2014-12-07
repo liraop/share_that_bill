@@ -33,6 +33,7 @@ public class ViewBillActivity extends Activity implements View.OnClickListener {
 
     String billName;
     String groupName;
+    String userName;
 
     Bill thisBill;
 
@@ -56,6 +57,7 @@ public class ViewBillActivity extends Activity implements View.OnClickListener {
         if (extras != null) {
             billName = extras.getString("bill_name");
             groupName = extras.getString("group_name");
+            userName = extras.getString("user_name");
         }
 
         ImageButton mapButton = (ImageButton) findViewById(R.id.imageButtonViewBillMap);
@@ -249,7 +251,7 @@ public class ViewBillActivity extends Activity implements View.OnClickListener {
                     public void run() {
                         Log.d(TAG, "in thread deleteBill");
 
-                        dbhandler.deleteBill(thisBill.billName);
+                        dbhandler.deleteBill(thisBill.billName, userName, groupName);
 
                         runOnUiThread(new Runnable() {
                             public void run() {
