@@ -39,6 +39,7 @@ public class GroupActivity extends TabActivity {
 			thisGroupName = extras.getString("group_name");
 		}
 
+        // TODO
         thisUserName = "user1@test.com";
         thisGroupName = "group1";
 
@@ -48,21 +49,28 @@ public class GroupActivity extends TabActivity {
 
 		tabHost = (TabHost) findViewById(android.R.id.tabhost);
 
-		TabHost.TabSpec billsTabSpec = tabHost.newTabSpec("First");
+        TabHost.TabSpec notificationsTabSpec = tabHost.newTabSpec("First");
+        notificationsTabSpec.setIndicator("Updates", null);
+        Intent notificationsIntent = new Intent(this, NotificationsTab.class);
+        notificationsIntent.putExtra("group_name", thisGroupName);
+        notificationsTabSpec.setContent(notificationsIntent);
+
+		TabHost.TabSpec billsTabSpec = tabHost.newTabSpec("Second");
 		billsTabSpec.setIndicator("Bills", null);
 		Intent billsIntent = new Intent(this, BillsTab.class);
         billsIntent.putExtra("user_name", thisUserName);
         billsIntent.putExtra("group_name", thisGroupName);
 		billsTabSpec.setContent(billsIntent);
 
-		TabHost.TabSpec membersTabSpec = tabHost.newTabSpec("Second");
+		TabHost.TabSpec membersTabSpec = tabHost.newTabSpec("Third");
 		membersTabSpec.setIndicator("Members", null);
 		Intent membersIntent = new Intent(this, MembersTab.class);
         membersIntent.putExtra("user_name", thisUserName);
         membersIntent.putExtra("group_name", thisGroupName);
 		membersTabSpec.setContent(membersIntent);
 
-		tabHost.addTab(billsTabSpec);
+        tabHost.addTab(notificationsTabSpec);
+        tabHost.addTab(billsTabSpec);
 		tabHost.addTab(membersTabSpec);
 	}
 

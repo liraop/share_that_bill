@@ -65,24 +65,6 @@ public class MembersTab extends Activity implements View.OnClickListener, Adapte
 
         membersList = (ListView) findViewById(R.id.listViewTabsList);
 
-        /*
-        membersList = (ListView) findViewById(R.id.listViewTabsList);
-
-
-        memberNamesList = new ArrayList<String>();
-
-        arrayAdapter = new ArrayAdapter<String>(
-                this,
-                android.R.layout.simple_list_item_1,
-                memberNamesList);
-
-        membersList.setAdapter(arrayAdapter);
-
-        arrayAdapter.notifyDataSetChanged();
-        membersList.setOnItemClickListener(this);
-
-        */
-
         updateMembers();
 
 	}
