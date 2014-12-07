@@ -559,10 +559,11 @@ public class DBhandler {
         }
     }
 
-    /**
+    /*
+     * Method to get a group notification. Its ordered by time.
      *
      * @param groupName
-     * @return
+     * @return ArrayList<Notification> 
      */
     public ArrayList<Notification> getGroupNotifications(String groupName){
         ArrayList<Notification> result = new ArrayList<Notification>();
@@ -572,7 +573,7 @@ public class DBhandler {
         try {
             connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
             this.statement = connect.createStatement();
-            String query = "SELECT * FROM groupNotifications WHERE gid = '" + groupName + "'";
+            String query = "SELECT * FROM groupNotifications WHERE gid = '"+groupName+"' ORDER BY `time` DESC";
             this.resultSet = statement.executeQuery(query);
 
             while(resultSet.next()){
