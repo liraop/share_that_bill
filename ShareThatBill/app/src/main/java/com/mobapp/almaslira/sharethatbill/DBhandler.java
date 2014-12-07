@@ -1,5 +1,6 @@
 package com.mobapp.almaslira.sharethatbill;
 
+import android.database.Cursor;
 import android.graphics.Picture;
 import android.location.Location;
 import android.util.Log;
@@ -542,6 +543,11 @@ public class DBhandler {
         return result;
     }
 
+
+    /*
+        Method to delete a bill from the db.
+
+     */
     public void deleteBill(String billName){
         try {
             connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
@@ -557,5 +563,28 @@ public class DBhandler {
         }
     }
 
+    /**
+     *
+     * @param groupName
+     * @return
+     */
+    public ArrayList<Notification> getGroupNotifications(String groupName){
+        ArrayList<Notification> result = new ArrayList<Notification>();
 
+        try {
+            connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
+            this.statement = connect.createStatement();
+            String query = "SELECT * FROM groupNotifications WHERE gid = '" + groupName + "'";
+            this.resultSet = statement.executeQuery(query);
+
+            while(resultSet.next()){
+                result.add(new Notification(resultSet.getString(2), (Integer.parseInt(resultSet.getString(3))), resultSet.getString(4)));
+            }
+            connect.close();
+
+        } catch (SQLException e) {
+            //do something with sql exception
+        }
+        return result;
+    }
 }

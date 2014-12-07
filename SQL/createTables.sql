@@ -21,9 +21,10 @@ CREATE TABLE bills (
 	id varchar(50) NOT NULL,
 	value float NOT NULL,
 	dateOcurred date DEFAULT NULL,
-	location varchar(50) DEFAULT NULL,
 	picture varbinary(1024) DEFAULT NULL,
 	gid varchar(50) NOT NULL,
+	latitude float,
+	longitude float,
 	PRIMARY KEY (id),
 	FOREIGN KEY (gid) REFERENCES groups(name) ON UPDATE CASCADE
 );
