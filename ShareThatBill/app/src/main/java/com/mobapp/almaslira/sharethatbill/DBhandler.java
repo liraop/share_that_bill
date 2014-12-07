@@ -577,7 +577,7 @@ public class DBhandler {
             this.resultSet = statement.executeQuery(query);
 
             while(resultSet.next()){
-               Notification n = new Notification(resultSet.getString(2),(Integer.parseInt(resultSet.getString(3))),resultSet.getString(4));
+               Notification n = new Notification(resultSet.getString(3),(Integer.parseInt(resultSet.getString(4))),resultSet.getString(5));
                try {
                    n.date.setTime(df.parse(resultSet.getString(5)));
                } catch (Exception e){

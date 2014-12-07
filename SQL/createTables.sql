@@ -45,3 +45,14 @@ CREATE TABLE usersAndBills (
 	FOREIGN KEY (uid) REFERENCES users(email) ON UPDATE CASCADE,
 	FOREIGN KEY (bid) REFERENCES bills(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
+
+CREATE TABLE groupNotifications (
+	notificationid int NOT NULL,
+	gid varchar(50) NOT NULL,
+	uid varchar(50) NOT NULL,
+	type int NOT NULL,
+	details varchar(50) NOT NULL,
+	time timestamp,
+	PRIMARY KEY (notificationid, gid),
+	FOREIGN KEY (gid) REFERENCES groups(name) ON UPDATE CASCADE
+);

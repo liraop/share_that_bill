@@ -6,9 +6,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -21,10 +24,10 @@ public class NotificationsTab extends Activity {
     String thisGroupName;
     ProgressDialog progressDialog;
 
-    ListView notificationsList;
+    ListView notificationsListView;
 
-    CustomTwoItemAdapter arrayAdapter;
-    ArrayList<TwoStringsClass> membersBalanceList;
+    NotificationAdapter arrayAdapter;
+    ArrayList<Notification> notificationList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +48,14 @@ public class NotificationsTab extends Activity {
         progressDialog.setMessage(getResources().getString(R.string.warning_loading));
         progressDialog.setCancelable(false);
 
+        notificationsListView = (ListView) findViewById(R.id.listViewTabsList);
+
+        ImageButton addButton = (ImageButton) findViewById(R.id.imageButtonTabsAdd);
+        addButton.setVisibility(View.GONE);
+
+        TextView addText = (TextView) findViewById(R.id.textViewGroupTabAdd);
+        addText.setVisibility(View.GONE);
+
         fetchNotification();
     }
 
@@ -54,16 +65,22 @@ public class NotificationsTab extends Activity {
         new Thread() {
             public void run() {
 
-                //get notification
+                notificationList = dbhandler.getGroupNotifications(thisGroupName);
+
+                if (notificationList == null)
+                    Log.d(TAG, "list null");
+                else
+                    Log.d(TAG, "list not null: " + notificationList.size());
 
                 runOnUiThread(new Runnable() {
                     public void run() {
-
+                        arrayAdapter = new NotificationAdapter(NotificationsTab.this, notificationList);
+                        notificationsListView.setAdapter(arrayAdapter);
+                        arrayAdapter.notifyDataSetChanged();
 
                         progressDialog.dismiss();
                     }
                 });
-
             }
         }.start();
     }
