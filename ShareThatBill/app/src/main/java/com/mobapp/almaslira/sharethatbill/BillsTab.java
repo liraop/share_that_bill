@@ -111,16 +111,6 @@ public class BillsTab extends Activity implements View.OnClickListener, AdapterV
 
                 billsNamesList = dbhandler.getGroupBills(thisGroupName);
 
-                if (billsNamesList != null) {
-
-                    Log.d(TAG, "group bills (" + billsNamesList.size() + ":");
-                    for (String s : billsNamesList)
-                        Log.d(TAG, "bill: " + s);
-                }
-                else
-                    Log.d(TAG,   "list null");
-
-
                 progressDialog.dismiss();
 
                 runOnUiThread(new Runnable(){
