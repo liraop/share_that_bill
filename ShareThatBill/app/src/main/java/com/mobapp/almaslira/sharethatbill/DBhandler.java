@@ -9,16 +9,13 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Map;
 
 public class DBhandler {
     private static final String TAG = "DBHANDLER debug";
-
     private static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
     private static final String HOST = "jdbc:mysql://sql4.freesqldatabase.com/sql457251";
     private static final String DB_USER = "sql457251";
     private static final String DB_PW = "wX2*aK7%";
-
     private Connection connect;
     private Statement statement;
     private PreparedStatement preparedStatement;
@@ -594,4 +591,35 @@ public class DBhandler {
         }
         return result;
     }
+
+    /*
+     * Method to post a notification on the db.
+     *
+     * @param notification
+     * @param groupName
+     * @return true if posted, false if not
+     */
+    private boolean postNotification(Notification notification, String groupName){
+        boolean result = false;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        try {
+            connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
+
+            this.statement = connect.createStatement();
+            String query = "INSERT INTO `groupNotifications`(`nid`, `gid`, `uid`, `type`, `time`) VALUES " +
+                    "('"+notification.hashCode()+"','"+groupName+"','"+notification.owner+"','"+notification.type+
+                    "','"+sdf.format(notification.date.getTime())+"')";
+            if (statement.executeUpdate(query) == 1){
+                result = true;
+            }
+            connect.close();
+
+        } catch (SQLException e) {
+            //do something with exception
+        }
+
+        return result;
+    }
 }
+
+

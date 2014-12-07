@@ -19,5 +19,10 @@ public class Notification {
     }
 
 
+    @Override
+    public int hashCode(){
+        return owner.hashCode() * description.hashCode() * date.hashCode();
+    }
+
 
 }
