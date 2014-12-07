@@ -180,25 +180,23 @@ public class DBhandler {
      * @param groupName
      * @return
      */
-    public boolean addUserToGroup(String userName, String groupName) {
-        boolean result = false;
-
-        if (!isUserMember(userName, groupName)) {
+    public boolean addUserToGroup(String addedUserName, String groupName, String sessionUserName) {
+        if (!isUserMember(addedUserName, groupName)) {
             try {
                 connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
 
                 this.statement = connect.createStatement();
-                String query = "INSERT INTO `usersAndGroups`(`uid`, `gid`) VALUES ('" + userName + "','" + groupName + "')";
+                String query = "INSERT INTO `usersAndGroups`(`uid`, `gid`) VALUES ('" + addedUserName + "','" + groupName + "')";
                 statement.executeUpdate(query);
 
                 connect.close();
 
-                result =  true;
+                this.postNotification(new Notification(sessionUserName,Notification.USER_ADDED,addedUserName), groupName);
+                return true;
             } catch (SQLException e) {
                 //do something with exception
             }
 
-            this.postNotification(new Notification("user1@test.com",Notification.USER_ADDED,"add"+userName), groupName);
         }
 
         return false;
@@ -582,7 +580,7 @@ public class DBhandler {
             while(resultSet.next()){
                Notification n = new Notification(resultSet.getString(3),(Integer.parseInt(resultSet.getString(4))),resultSet.getString(5));
                try {
-                   n.date.setTime(df.parse(resultSet.getString(5)));
+                   n.date.setTime(df.parse(resultSet.getString(6)));
                } catch (Exception e){
 
                }

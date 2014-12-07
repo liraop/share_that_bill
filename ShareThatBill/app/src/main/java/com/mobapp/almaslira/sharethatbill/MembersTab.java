@@ -123,7 +123,7 @@ public class MembersTab extends Activity implements View.OnClickListener, Adapte
             public void run() {
 
                 if (isValidEmail(newMember)) {
-                    if (dbhandler.addUserToGroup(newMember, thisGroupName)) {
+                    if (dbhandler.addUserToGroup(newMember, thisGroupName,thisUserName)) {
                         Log.d(TAG, "user " + newMember + " added");
 
                         runOnUiThread(new Runnable() {
