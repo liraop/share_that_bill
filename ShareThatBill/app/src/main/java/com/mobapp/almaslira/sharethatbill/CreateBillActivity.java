@@ -26,6 +26,7 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.NumberPicker;
@@ -148,6 +149,10 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
             whoOwnsText.setText(getResources().getString(R.string.view_bill_who_owns));
         }
 
+        ImageButton deleteLocation = (ImageButton) findViewById(R.id.imageButtonCreateBillDeleteLocation);
+        deleteLocation.setOnClickListener(this);
+        deleteLocation.setVisibility(View.GONE);
+
         getLocation = false;
 
         locationManagerGPS = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -169,12 +174,16 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
 
             thisBill.billLocationLatitute = (float) location.getLatitude();
             thisBill.billLocationLongitude = (float) location.getLongitude();
+            thisBill.locationIsSet = true;
 
             getLocation = false;
 
             ImageView mapImage = (ImageView) findViewById(R.id.imageViewCreateBillMap);
             mapImage.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.map_image));
             mapImage.setOnClickListener(this);
+
+            ImageButton deleteLocation = (ImageButton) findViewById(R.id.imageButtonCreateBillDeleteLocation);
+            deleteLocation.setVisibility(View.VISIBLE);
         }
     }
 
@@ -260,6 +269,19 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
                     intent = new Intent(Intent.ACTION_VIEW, Uri.parse(geoUri));
                     startActivity(intent);
                 }
+                break;
+
+            case R.id.imageButtonCreateBillDeleteLocation:
+
+                thisBill.billLocationLatitute = 0.0f;
+                thisBill.billLocationLongitude = 0.0f;
+                thisBill.locationIsSet = false;
+
+                ImageButton mapImage = (ImageButton) findViewById(R.id.imageViewCreateBillMap);
+                mapImage.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.map_image_faded));
+
+                ImageButton deleteLocation = (ImageButton) findViewById(R.id.imageButtonCreateBillDeleteLocation);
+                deleteLocation.setVisibility(View.GONE);
                 break;
         }
     }
@@ -551,16 +573,24 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
                         Log.d(TAG, "bill location is valid");
                         thisBill.locationIsSet = true;
 
+
+
                         CreateBillActivity.this.runOnUiThread(new Runnable() {
                             public void run() {
                                 ImageView mapImage = (ImageView) findViewById(R.id.imageViewCreateBillMap);
                                 mapImage.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.map_image));
+
+                                ImageButton deleteLocation = (ImageButton) findViewById(R.id.imageButtonCreateBillDeleteLocation);
+                                deleteLocation.setVisibility(View.VISIBLE);
                             }
                         });
                     }
                     else {
                         Log.d(TAG, "bill location is invalid");
                         thisBill.locationIsSet = false;
+
+                        ImageButton deleteLocation = (ImageButton) findViewById(R.id.imageButtonCreateBillDeleteLocation);
+                        deleteLocation.setVisibility(View.GONE);
                     }
                 }
 

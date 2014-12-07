@@ -244,6 +244,18 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginBottom="3dp" />
 
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageButtonCreateBillDeleteLocation"
+                android:background="@android:color/transparent"
+                android:layout_above="@+id/buttonCreateBillPicture"
+                android:layout_toRightOf="@+id/imageViewCreateBillMap"
+                android:layout_toEndOf="@+id/imageViewCreateBillMap"
+                android:src="@drawable/x_button"
+                android:layout_marginLeft="20dp"
+                android:layout_marginBottom="5dp" />
+
 
         </RelativeLayout>.
     </ScrollView>
