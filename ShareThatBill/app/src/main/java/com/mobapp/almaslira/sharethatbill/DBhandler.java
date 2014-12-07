@@ -181,6 +181,7 @@ public class DBhandler {
      * @return
      */
     public boolean addUserToGroup(String userName, String groupName) {
+        boolean result = false;
 
         if (!isUserMember(userName, groupName)) {
             try {
@@ -192,10 +193,12 @@ public class DBhandler {
 
                 connect.close();
 
-                return true;
+                result =  true;
             } catch (SQLException e) {
                 //do something with exception
             }
+
+            this.postNotification(new Notification("user1@test.com",2,"add"+userName), groupName);
         }
 
         return false;
@@ -563,7 +566,7 @@ public class DBhandler {
      * Method to get a group notification. Its ordered by time.
      *
      * @param groupName
-     * @return ArrayList<Notification> 
+     * @return ArrayList<Notification>
      */
     public ArrayList<Notification> getGroupNotifications(String groupName){
         ArrayList<Notification> result = new ArrayList<Notification>();
@@ -607,20 +610,16 @@ public class DBhandler {
             connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
 
             this.statement = connect.createStatement();
-            String query = "INSERT INTO `groupNotifications`(`nid`, `gid`, `uid`, `type`, `time`) VALUES " +
+            String query = "INSERT INTO `groupNotifications`(`nid`, `gid`, `uid`, `type`, `details`, `time`) VALUES " +
                     "('"+notification.hashCode()+"','"+groupName+"','"+notification.owner+"','"+notification.type+
-                    "','"+sdf.format(notification.date.getTime())+"')";
-            if (statement.executeUpdate(query) == 1){
-                result = true;
-            }
+                    "','"+notification.description+"','"+sdf.format(notification.date.getTime())+"')";
+            statement.executeUpdate(query);
             connect.close();
+            result = true;
 
         } catch (SQLException e) {
             //do something with exception
         }
-
         return result;
     }
 }
-
-
