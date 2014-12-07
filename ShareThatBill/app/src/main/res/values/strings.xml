@@ -94,5 +94,10 @@
     <string name="view_bill_warning_no_location">No location available for this bill</string>
     <string name="create_bill_save">Save</string>
     <string name="title_activity_notifications_tab">NotificationsTab</string>
+    <string name="notification_adapter_bill_created">created the bill</string>
+    <string name="notification_adapter_bill_edited">edited the bill</string>
+    <string name="notification_adapter_bill_deleted">deleted the bill</string>
+    <string name="notification_adapter_added">added</string>
+    <string name="notification_adapter_to_the_group">to the group</string>
 
 </resources>

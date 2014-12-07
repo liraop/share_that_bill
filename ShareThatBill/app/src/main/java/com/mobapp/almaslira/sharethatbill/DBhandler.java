@@ -198,7 +198,7 @@ public class DBhandler {
                 //do something with exception
             }
 
-            this.postNotification(new Notification("user1@test.com",2,"add"+userName), groupName);
+            this.postNotification(new Notification("user1@test.com",Notification.USER_ADDED,"add"+userName), groupName);
         }
 
         return false;
