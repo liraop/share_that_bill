@@ -1,6 +1,6 @@
 package com.mobapp.almaslira.sharethatbill;
 
-import java.util.Date;
+import java.util.Calendar;
 
 /**
  * Created by liraop on 12/7/14.
@@ -9,13 +9,13 @@ public class Notification {
 
     String owner, description;
     int type;
-    Date date;
+    Calendar date;
 
-    public Notification(String userName, int notificationType, String description, Date date){
+    public Notification(String userName, int notificationType, String description){
         this.description = description;
         this.owner = userName;
         this.type = notificationType;
-        this.date = date;
+        this.date = Calendar.getInstance();
     }
 
 

@@ -355,7 +355,6 @@ public class DBhandler {
         }
         catch (SQLException e) {
             //do something with sql exception
-            Log.e(TAG, "TAMANHO DA PICA 4", e);
         }
         return result;
     }
@@ -571,6 +570,8 @@ public class DBhandler {
     public ArrayList<Notification> getGroupNotifications(String groupName){
         ArrayList<Notification> result = new ArrayList<Notification>();
 
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
         try {
             connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
             this.statement = connect.createStatement();
@@ -578,7 +579,13 @@ public class DBhandler {
             this.resultSet = statement.executeQuery(query);
 
             while(resultSet.next()){
-                result.add(new Notification(resultSet.getString(2), (Integer.parseInt(resultSet.getString(3))), resultSet.getString(4)));
+               Notification n = new Notification(resultSet.getString(2),(Integer.parseInt(resultSet.getString(3))),resultSet.getString(4));
+               try {
+                   n.date.setTime(df.parse(resultSet.getString(5)));
+               } catch (Exception e){
+
+               }
+               result.add(n);
             }
             connect.close();
 
