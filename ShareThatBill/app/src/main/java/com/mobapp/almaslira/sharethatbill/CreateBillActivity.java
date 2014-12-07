@@ -64,6 +64,7 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
     ProgressDialog progressDialog;
 
     boolean editingBill;
+    String billOriginalName;
 
     protected LocationManager locationManagerGPS;
     protected LocationManager locationManagerNetwork;
@@ -90,8 +91,9 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
 
             if (editingBill) {
                 thisBill.billName = extras.getString("bill_name");
+                billOriginalName = thisBill.billName;
 
-                Log.d(TAG, "editing bill" + thisBill.billName + " from group " + groupName);
+                Log.d(TAG, "editing bill " + billOriginalName + " from group " + groupName);
             }
         }
 
@@ -160,7 +162,7 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
     @Override
     public void onLocationChanged(Location location) {
 
-        Log.d(TAG,"Latitude:" + location.getLatitude() + ", Longitude:" + location.getLongitude() + ", Accuracy: "  + location.getAccuracy());
+        //Log.d(TAG,"Latitude:" + location.getLatitude() + ", Longitude:" + location.getLongitude() + ", Accuracy: "  + location.getAccuracy());
 
         if (getLocation == true) {
             Log.d(TAG, "getting location");
@@ -387,6 +389,10 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
 
         new Thread() {
             public void run() {
+
+                if (editingBill)
+                    dbhandler.deleteBill(billOriginalName);
+
                 dbhandler.createBill(thisBill);
 
                 Log.d(TAG, "creating bill");
@@ -522,10 +528,24 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
                     thisBill = dbhandler.getBill(thisBill.billName);
 
                     Log.d(TAG, "get who paid");
-                    whoPaidTwoStringsList = dbhandler.getWhoPaidBill(thisBill.billName);
+                    ArrayList<TwoStringsClass> whoPaidTemp = dbhandler.getWhoPaidBill(thisBill.billName);
+
+                    for (int i = 0; i < members.size(); ++i) {
+                        for (int j = 0; j < whoPaidTemp.size(); ++j) {
+                            if (members.get(i).compareTo(whoPaidTemp.get(j).first) == 0)
+                                whoPaidTwoStringsList.get(i).second = whoPaidTemp.get(j).second;
+                        }
+                    }
 
                     Log.d(TAG, "get who owns");
-                    whoOwnsTwoStringsList = dbhandler.getWhoOwnsBill(thisBill.billName);
+                    ArrayList<TwoStringsClass> whoOweTemp = dbhandler.getWhoOwnsBill(thisBill.billName);
+
+                    for (int i = 0; i < members.size(); ++i) {
+                        for (int j = 0; j < whoOweTemp.size(); ++j) {
+                            if (members.get(i).compareTo(whoOweTemp.get(j).first) == 0)
+                                whoOwnsTwoStringsList.get(i).second = whoOweTemp.get(j).second;
+                        }
+                    }
 
                     if (thisBill.billLocationLatitute != 0 && thisBill.billLocationLongitude != 0) {
                         Log.d(TAG, "bill location is valid");
@@ -637,7 +657,8 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
     }
 
     void WhoOwnsListViewOnItemClickListener(int position) {
-        if (dividingEquallyFlag) {
+
+        if (dividingEquallyFlag && !editingBill) {
             dividingEquallyMembers[position] = !dividingEquallyMembers[position];
             updateWhoOwnsValues();
         }
@@ -692,6 +713,9 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
         alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 String newValue = newValueInput.getText().toString();
+
+                if (newValue.length() == 0)
+                    newValue = "0.00";
 
                 Log.d(TAG, "Ok to edit to " + newValue);
 

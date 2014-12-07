@@ -14,7 +14,9 @@
         android:text="@string/view_bill_bill"
         android:id="@+id/textViewViewBillTitle"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="20dp"
         android:layout_marginTop="10dp" />
 
     <ScrollView
@@ -145,10 +147,20 @@
         android:layout_height="wrap_content"
         android:id="@+id/imageButtonViewBillEditBill"
         android:background="@android:color/transparent"
+        android:src="@drawable/edit"
+        android:layout_alignBottom="@+id/textViewViewBillTitle"
+        android:layout_toLeftOf="@+id/imageButtonViewBillDelete"
+        android:layout_toStartOf="@+id/imageButtonViewBillDelete"
+        android:layout_marginRight="10dp" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageButtonViewBillDelete"
+        android:background="@android:color/transparent"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:src="@drawable/edit"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="5dp" />
+        android:src="@drawable/x_button"
+        android:layout_alignBottom="@+id/textViewViewBillTitle" />
 </RelativeLayout>

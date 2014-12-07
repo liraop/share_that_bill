@@ -64,6 +64,9 @@
     <string name="view_bill_picture">Picture:</string>
     <string name="view_bill_who_paid">Who paid:</string>
     <string name="view_bill_who_owns">Who owns:</string>
+    <string name="view_bill_delete_bill">Delete bill</string>
+    <string name="view_bill_delete_bill_question">Are you sure you want to delete this bill?</string>
+    <string name="view_bill_bill_delete">Bill deleted</string>
     <string name="title_activity_create_bill">CreateBillActivity</string>
     <string name="create_bill_title">Create bill</string>
     <string name="create_bill_name">Bill name:</string>

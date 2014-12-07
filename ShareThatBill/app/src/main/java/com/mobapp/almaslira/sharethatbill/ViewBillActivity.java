@@ -1,7 +1,9 @@
 package com.mobapp.almaslira.sharethatbill;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -61,6 +63,9 @@ public class ViewBillActivity extends Activity implements View.OnClickListener {
 
         ImageButton editButton = (ImageButton) findViewById(R.id.imageButtonViewBillEditBill);
         editButton.setOnClickListener(this);
+
+        ImageButton deleteButton = (ImageButton) findViewById(R.id.imageButtonViewBillDelete);
+        deleteButton.setOnClickListener(this);
 
         progressDialog = new ProgressDialog(ViewBillActivity.this);
         progressDialog.setMessage(getResources().getString(R.string.warning_loading));
@@ -219,8 +224,54 @@ public class ViewBillActivity extends Activity implements View.OnClickListener {
                 intent.putExtra("editing", true);
                 startActivity(intent);
 
+                finish();
+
+                break;
+
+            case R.id.imageButtonViewBillDelete:
+                createDeleteBillAlert();
+
                 break;
         }
+    }
+
+    private void createDeleteBillAlert () {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ViewBillActivity.this);
+
+        alertDialogBuilder.setTitle(getResources().getString(R.string.view_bill_delete_bill));
+        alertDialogBuilder.setMessage(getResources().getString(R.string.view_bill_delete_bill_question));
+
+        alertDialogBuilder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog,int id) {
+
+                progressDialog.show();
+                new Thread() {
+                    public void run() {
+                        Log.d(TAG, "in thread deleteBill");
+
+                        dbhandler.deleteBill(thisBill.billName);
+
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                Toast.makeText(ViewBillActivity.this, getResources().getString(R.string.view_bill_bill_delete), Toast.LENGTH_LONG).show();
+                                progressDialog.dismiss();
+                            }
+                        });
+
+                        finish();
+
+                    }
+                }.start();
+
+            }
+        });
+        alertDialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog,int id) {
+            }
+        });
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
     }
 
     @Override
