@@ -3,7 +3,6 @@
 	salvar foto
 
 - grupo
-*	exibir saldo de cada membro
 	exibir nome dos membros
 	se não estiver cadastrado, só mostrar email 
 	invite de grupo
