@@ -32,14 +32,10 @@ public class MembersTab extends Activity implements View.OnClickListener, Adapte
     String thisGroupName;
     ProgressDialog progressDialog;
 
-    private ListView membersList;
-
-    // private ArrayAdapter<String> arrayAdapter;
+    ListView membersList;
 
     CustomTwoItemAdapter arrayAdapter;
     ArrayList<TwoStringsClass> membersBalanceList;
-
-    List<String> memberNamesList;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -68,8 +64,6 @@ public class MembersTab extends Activity implements View.OnClickListener, Adapte
         addText.setText(getResources().getString(R.string.tabs_members_add));
 
         membersList = (ListView) findViewById(R.id.listViewTabsList);
-
-        //membersBalanceList = new ArrayList<TwoStringsClass>();
 
         /*
         membersList = (ListView) findViewById(R.id.listViewTabsList);
@@ -119,7 +113,7 @@ public class MembersTab extends Activity implements View.OnClickListener, Adapte
 
                 Log.d(TAG, "add " + newMember);
 
-                memberNamesList.add(newMember);
+                membersBalanceList.add(new TwoStringsClass(newMember, "0.00"));
 
                 addUser(newMember);
             }
@@ -209,7 +203,7 @@ public class MembersTab extends Activity implements View.OnClickListener, Adapte
     }
 
     void updateMembers() {
-        runOnUiThread(new Runnable(){
+        runOnUiThread(new Runnable() {
             public void run() {
                 progressDialog.show();
             }
@@ -219,30 +213,13 @@ public class MembersTab extends Activity implements View.OnClickListener, Adapte
             public void run() {
                 Log.d(TAG, "in thread updateBills");
 
-//                memberNamesList = dbhandler.getGroupMembers(thisGroupName);
+                membersBalanceList = dbhandler.getUserGroupBalance (thisGroupName);
 
-                membersBalanceList = dbhandler.getUserGroupBalance("group1");
-
-                arrayAdapter = new CustomTwoItemAdapter(MembersTab.this, membersBalanceList);
-                membersList.setAdapter(arrayAdapter);
-                arrayAdapter.notifyDataSetChanged();
-
-/*
-                if (memberNamesList != null) {
-
-                    removeThisUserFromMembersList();
-                    memberNamesList.add(0, thisUserName + " " + getResources().getString(R.string.members_tab_you));
-
-                    Log.d(TAG, "group members (" + memberNamesList.size() + ":");
-                    for (String s : memberNamesList)
-                        Log.d(TAG, "user: " + s);
-                }
-                else
-                    Log.d(TAG, "list null");
-*/
                 runOnUiThread(new Runnable(){
                     public void run() {
-                        updateList();
+                        arrayAdapter = new CustomTwoItemAdapter(MembersTab.this, membersBalanceList);
+                        membersList.setAdapter(arrayAdapter);
+                        arrayAdapter.notifyDataSetChanged();
 
                         progressDialog.dismiss();
                     }
@@ -250,7 +227,7 @@ public class MembersTab extends Activity implements View.OnClickListener, Adapte
             }
         }.start();
     }
-
+/*
     void removeThisUserFromMembersList() {
         Log.d(TAG, "removing user: " + thisUserName +  ",size: " + memberNamesList.size());
 
@@ -261,9 +238,10 @@ public class MembersTab extends Activity implements View.OnClickListener, Adapte
             }
         }
     }
-
+    */
+/*
     void updateList() {
-        membersBalanceList = dbhandler.getUserGroupBalance("group1");
+        membersBalanceList = dbhandler.getUserGroupBalance("group1", dbhandler.getGroupMembers("group1"),dbhandler.getGroupBills("group1"));
         Log.d(TAG, "TAMANHO DA PICA "+membersBalanceList.size());
 
 
@@ -274,7 +252,7 @@ public class MembersTab extends Activity implements View.OnClickListener, Adapte
         membersList.setAdapter(arrayAdapter);
         arrayAdapter.notifyDataSetChanged();
 
-        /*
+
         arrayAdapter = new ArrayAdapter<String>(
                 this,
                 android.R.layout.simple_list_item_1,
@@ -282,9 +260,9 @@ public class MembersTab extends Activity implements View.OnClickListener, Adapte
 
         membersList.setAdapter(arrayAdapter);
         arrayAdapter.notifyDataSetChanged();
-        */
-    }
 
+    }
+*/
     @Override
     protected void onResume() {
         super.onResume();
