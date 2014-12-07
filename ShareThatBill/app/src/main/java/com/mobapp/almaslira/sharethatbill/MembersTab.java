@@ -71,15 +71,6 @@ public class MembersTab extends Activity implements View.OnClickListener, Adapte
 
         //membersBalanceList = new ArrayList<TwoStringsClass>();
 
-        membersBalanceList = dbhandler.getUserGroupBalance("group1", dbhandler.getGroupMembers("group1"),dbhandler.getGroupBills("group1"));
-
-        Log.d(TAG, "TAMANHO DA PICA 1 "+membersBalanceList.size());
-
-
-        arrayAdapter = new CustomTwoItemAdapter(this, membersBalanceList);
-        membersList.setAdapter(arrayAdapter);
-        arrayAdapter.notifyDataSetChanged();
-
         /*
         membersList = (ListView) findViewById(R.id.listViewTabsList);
 
@@ -228,8 +219,15 @@ public class MembersTab extends Activity implements View.OnClickListener, Adapte
             public void run() {
                 Log.d(TAG, "in thread updateBills");
 
-                memberNamesList = dbhandler.getGroupMembers(thisGroupName);
+//                memberNamesList = dbhandler.getGroupMembers(thisGroupName);
 
+                membersBalanceList = dbhandler.getUserGroupBalance("group1");
+
+                arrayAdapter = new CustomTwoItemAdapter(MembersTab.this, membersBalanceList);
+                membersList.setAdapter(arrayAdapter);
+                arrayAdapter.notifyDataSetChanged();
+
+/*
                 if (memberNamesList != null) {
 
                     removeThisUserFromMembersList();
@@ -241,7 +239,7 @@ public class MembersTab extends Activity implements View.OnClickListener, Adapte
                 }
                 else
                     Log.d(TAG, "list null");
-
+*/
                 runOnUiThread(new Runnable(){
                     public void run() {
                         updateList();
@@ -265,7 +263,7 @@ public class MembersTab extends Activity implements View.OnClickListener, Adapte
     }
 
     void updateList() {
-        membersBalanceList = dbhandler.getUserGroupBalance("group1", dbhandler.getGroupMembers("group1"),dbhandler.getGroupBills("group1"));
+        membersBalanceList = dbhandler.getUserGroupBalance("group1");
         Log.d(TAG, "TAMANHO DA PICA "+membersBalanceList.size());
 
 

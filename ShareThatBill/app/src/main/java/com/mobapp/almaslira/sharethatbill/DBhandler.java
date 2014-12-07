@@ -8,6 +8,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Map;
 
 public class DBhandler {
     private static final String TAG = "DBHANDLER debug";
@@ -15,7 +16,7 @@ public class DBhandler {
     private static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
     private static final String HOST = "jdbc:mysql://sql4.freesqldatabase.com/sql457251";
     private static final String DB_USER = "sql457251";
-        private static final String DB_PW = "wX2*aK7%";
+    private static final String DB_PW = "wX2*aK7%";
 
     private Connection connect;
     private Statement statement;
@@ -335,26 +336,25 @@ public class DBhandler {
      * @param groupName
      * @return ArrayList<TwoStringsClass> first uses second balance
      */
-    public ArrayList<TwoStringsClass> getUserGroupBalance(String groupName, ArrayList<String> users, ArrayList<String> bills){
+    public ArrayList<TwoStringsClass> getUserGroupBalance(String groupName){
         ArrayList<TwoStringsClass> result = new ArrayList<TwoStringsClass>();
+        String query = "";
+
         try {
             connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
-            for (int i = 0; i < users.size(); i++){
-                float balance = 0;
-                for (int j = 0; j < bills.size(); j++){
-                    this.statement = connect.createStatement();
-                    String query = "SELECT valueOwn, valuePaid FROM usersAndBills WHERE bid = '"+bills.get(j)+"' AND uid ='"+users.get(i)+"'";
-                    this.resultSet = statement.executeQuery(query);
-                    while (resultSet.next()){
-                        balance -= Float.parseFloat(resultSet.getString(1));
-                        balance += Float.parseFloat(resultSet.getString(2));
-                    }
-                }
-                result.add(new TwoStringsClass(users.get(i),""+balance));
+
+            this.statement = connect.createStatement();
+            query = "SELECT usersAndGroups.uid,SUM(valuePaid)-SUM(valueOwn) FROM usersAndGroups INNER JOIN usersAndBills WHERE usersAndGroups.gid='"+groupName+"' AND usersAndBills.uid=usersAndGroups.uid GROUP BY usersAndGroups.uid";
+            this.resultSet = statement.executeQuery(query);
+
+            while(resultSet.next()){
+                result.add(new TwoStringsClass(resultSet.getString(1),resultSet.getString(2)));
             }
             connect.close();
-        } catch (SQLException e) {
+        }
+        catch (SQLException e) {
             //do something with sql exception
+            Log.e(TAG, "TAMANHO DA PICA 4", e);
         }
         return result;
     }
