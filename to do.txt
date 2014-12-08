@@ -7,13 +7,10 @@
 	se não estiver cadastrado, só mostrar email 
 	invite de grupo
 	convites pendentes
-	aba de updates do grupo
+*	exibir todos os membros na aba membros
 
 - profile
 	notificação de convite para grupo
-
-- login
-	finish depois de successful
 
 - botao de logout
 
