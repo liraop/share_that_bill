@@ -67,8 +67,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 
 				final String emailString = email.getText().toString();
 				final String passwordString = password.getText().toString();
-// TODO
-                /*
+
                 Log.d(TAG, "userEmail: " + emailString);
                 Log.d(TAG, "userPassword: " + passwordString);
 
@@ -86,9 +85,9 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 				else
 				{
 					Log.d(TAG, "logging in");
-*/
+
                 sendLoginRequest("user1@test.com","123456");//emailString, passwordString);
-//				}
+				}
 
 				break;
 

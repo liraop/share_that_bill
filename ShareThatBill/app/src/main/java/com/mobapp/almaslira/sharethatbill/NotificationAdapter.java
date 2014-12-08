@@ -1,15 +1,12 @@
 package com.mobapp.almaslira.sharethatbill;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -65,16 +62,7 @@ public class NotificationAdapter extends ArrayAdapter<Notification> {
 
         long difference =  now.getTimeInMillis() - item.date.getTimeInMillis();
 
-        // TODO
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-        Log.d(TAG, "item date: " + df.format(item.date.getTime()));
-
-        Log.d(TAG, "difference: " + difference + ", item date: " + item.date.getTimeInMillis() + ", now: " + now.getTimeInMillis());
-
         difference /= 1000; // difference is now in seconds
-
-        Log.d(TAG, "difference in secs: " + difference);
 
         String timeStamp = "";
 

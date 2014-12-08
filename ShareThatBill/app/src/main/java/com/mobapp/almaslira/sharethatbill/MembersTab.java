@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -195,8 +194,9 @@ public class MembersTab extends Activity implements View.OnClickListener, Adapte
             public void run() {
                 Log.d(TAG, "in thread updateBills");
 
-                membersBalanceList = dbhandler.getUserGroupBalance (thisGroupName);
+                membersBalanceList = dbhandler.getUserGroupBalance(thisGroupName);
 
+                Log.d(TAG, "list size " + membersBalanceList.size());
                 runOnUiThread(new Runnable(){
                     public void run() {
                         arrayAdapter = new CustomTwoItemAdapter(MembersTab.this, membersBalanceList);
@@ -250,5 +250,7 @@ public class MembersTab extends Activity implements View.OnClickListener, Adapte
         super.onResume();
 
         Log.d(TAG, "onResume");
+
+        updateMembers();
     }
 }

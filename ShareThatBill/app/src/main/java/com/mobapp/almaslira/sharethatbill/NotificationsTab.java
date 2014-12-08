@@ -69,10 +69,6 @@ public class NotificationsTab extends Activity {
 
                 notificationList = dbhandler.getGroupNotifications(thisGroupName);
 
-                for (Notification n : notificationList) {
-                    DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                    Log.d(TAG, "item date: " + df.format(n.date.getTime()));
-                }
                 runOnUiThread(new Runnable() {
                     public void run() {
                         arrayAdapter = new NotificationAdapter(NotificationsTab.this, notificationList);
@@ -107,5 +103,13 @@ public class NotificationsTab extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onResume() {
+        Log.d(TAG, "onResume");
+        super.onResume();
+
+        fetchNotification();
     }
 }
