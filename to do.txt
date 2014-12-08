@@ -7,7 +7,10 @@
 	se não estiver cadastrado, só mostrar email 
 	invite de grupo
 	convites pendentes
-*	exibir todos os membros na aba membros
+*	exibir membros {
+	quando nao tem nenhuma bill criada
+	
+}
 
 - profile
 	notificação de convite para grupo
