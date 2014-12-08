@@ -491,7 +491,7 @@ public class DBhandler {
      */
     public void editBill(Bill bill, String oldBillName, String sessionUserName){
 
-        this.deleteBill(bill.billName, sessionUserName,bill.groupName, false);
+        this.deleteBill(oldBillName, sessionUserName,bill.groupName, false);
         this.createBill(bill, sessionUserName, false);
         this.postNotification(new Notification(sessionUserName, Notification.BILL_EDITED, bill.billName), bill.groupName);
 
