@@ -14,6 +14,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 
@@ -67,11 +69,10 @@ public class NotificationsTab extends Activity {
 
                 notificationList = dbhandler.getGroupNotifications(thisGroupName);
 
-                if (notificationList == null)
-                    Log.d(TAG, "list null");
-                else
-                    Log.d(TAG, "list not null: " + notificationList.size());
-
+                for (Notification n : notificationList) {
+                    DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    Log.d(TAG, "item date: " + df.format(n.date.getTime()));
+                }
                 runOnUiThread(new Runnable() {
                     public void run() {
                         arrayAdapter = new NotificationAdapter(NotificationsTab.this, notificationList);

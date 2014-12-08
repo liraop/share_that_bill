@@ -66,6 +66,7 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
 
     boolean editingBill;
     String billOriginalName;
+    String userName;
 
     protected LocationManager locationManagerGPS;
     protected LocationManager locationManagerNetwork;
@@ -89,6 +90,9 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
         if (extras != null) {
             groupName = extras.getString("group_name");
             editingBill = extras.getBoolean("editing");
+            userName = extras.getString("user_name");
+
+            Log.d(TAG, "received userName " + userName);
 
             if (editingBill) {
                 thisBill.billName = extras.getString("bill_name");
@@ -413,9 +417,9 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
             public void run() {
 
                 if (editingBill)
-                    dbhandler.deleteBill(billOriginalName);
-
-                dbhandler.createBill(thisBill);
+                    dbhandler.editBill(thisBill, billOriginalName, userName);
+                else
+                    dbhandler.createBill(thisBill, userName);
 
                 Log.d(TAG, "creating bill");
 

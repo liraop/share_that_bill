@@ -223,6 +223,8 @@ public class ViewBillActivity extends Activity implements View.OnClickListener {
                 intent = new Intent(ViewBillActivity.this, CreateBillActivity.class);
                 intent.putExtra("group_name", groupName);
                 intent.putExtra("bill_name", billName);
+                intent.putExtra("user_name", userName);
+                Log.d(TAG, "sending userName " + userName);
                 intent.putExtra("editing", true);
                 startActivity(intent);
 

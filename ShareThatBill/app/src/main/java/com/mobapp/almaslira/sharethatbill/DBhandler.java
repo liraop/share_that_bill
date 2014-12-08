@@ -489,11 +489,11 @@ public class DBhandler {
      * @param sessionUserName
      * @param bill
      */
-    public void editBill(String sessionUserName, Bill bill){
+    public void editBill(Bill bill, String oldBillName, String sessionUserName){
 
         this.deleteBill(bill.billName, sessionUserName,bill.groupName, false);
         this.createBill(bill, sessionUserName, false);
-        this.postNotification(new Notification(sessionUserName, Notification.BILL_EDITED,bill.billName), bill.groupName);
+        this.postNotification(new Notification(sessionUserName, Notification.BILL_EDITED, bill.billName), bill.groupName);
 
     }
 

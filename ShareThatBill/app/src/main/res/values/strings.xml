@@ -99,5 +99,10 @@
     <string name="notification_adapter_bill_deleted">deleted the bill</string>
     <string name="notification_adapter_added">added</string>
     <string name="notification_adapter_to_the_group">to the group</string>
+    <string name="notification_adapter_less_than_one_minute_ago">Less than a minute ago</string>
+    <string name="notification_adapter_minutes_ago">minutes ago</string>
+    <string name="notification_adapter_hours_ago">hours ago</string>
+    <string name="notification_adapter_days_ago">days ago</string>
+    <string name="notification_adapter_weeks_ago">weeks ago</string>
 
 </resources>

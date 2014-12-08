@@ -146,7 +146,7 @@ public class CreateGroupActivity extends Activity implements View.OnClickListene
                     membersListStrings.add(userName);
 
                     for (String m : membersListStrings) {
-                        dbhandler.addUserToGroup(m, groupNameString);
+                        dbhandler.addUserToGroup(m, groupNameString, userName);
                     }
 
                     Log.d(TAG, "members added");
