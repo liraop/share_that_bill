@@ -15,7 +15,11 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 
-
+/**
+ * CreateBill activity:
+ * - interface to create a new bill
+ * - interface to edit a bill
+ */
 public class CreateAccountActivity extends Activity implements View.OnClickListener {
 	static final String TAG = "CreateAccountActivity";
     private static DBhandler dbhandler = new DBhandler();

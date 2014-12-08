@@ -44,6 +44,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+/**
+ * CreateBill activity:
+ * - interface to create a new bill
+ */
 public class CreateBillActivity extends Activity implements RadioGroup.OnCheckedChangeListener, View.OnClickListener, LocationListener {
     static final String TAG = "CreateBillActivity";
     private static DBhandler dbhandler = new DBhandler();

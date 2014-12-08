@@ -18,7 +18,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by jalmasde on 11/11/14.
+ * BillsTab activity:
+ * - shows all group's bills
+ * - create bill option
  */
 public class BillsTab extends Activity implements View.OnClickListener, AdapterView.OnItemClickListener {
     static final String TAG = "BillsTab";

@@ -18,7 +18,10 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
-
+/**
+ * NotificationsTab activity:
+ * - shows all group's notifications
+ */
 public class NotificationsTab extends Activity {
     static final String TAG = "NotificationsTab";
     private static DBhandler dbhandler = new DBhandler();

@@ -21,7 +21,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by jalmasde on 11/11/14.
+ * MembersTab activity:
+ * - shows all group's members
+ * - add member option
  */
 public class MembersTab extends Activity implements View.OnClickListener, AdapterView.OnItemClickListener {
 	static final String TAG = "MembersTab";
@@ -82,7 +84,7 @@ public class MembersTab extends Activity implements View.OnClickListener, Adapte
     public void createAddUserDialog() {
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
-        alert.setTitle("Edit userEmail");
+        alert.setTitle(getResources().getString(R.string.members_tab_add_member));
 
         final EditText newMemberInput = new EditText(this);
         newMemberInput.setHint(getResources().getString(R.string.create_group_email_hint));

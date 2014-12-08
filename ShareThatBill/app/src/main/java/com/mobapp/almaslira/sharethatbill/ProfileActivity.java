@@ -19,7 +19,11 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * Profile activity:
+ * - shows user's groups
+ * - option to create new group
+ */
 public class ProfileActivity extends Activity implements View.OnClickListener, AdapterView.OnItemClickListener {
 	static final String TAG = "ProfileActivity";
 

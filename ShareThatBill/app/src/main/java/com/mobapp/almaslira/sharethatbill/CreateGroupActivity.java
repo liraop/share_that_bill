@@ -29,6 +29,10 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * CreateGroup activity:
+ * - interface to create a new group.
+ */
 
 public class CreateGroupActivity extends Activity implements View.OnClickListener, AdapterView.OnItemClickListener {
 	static final String TAG = "CreateGroupActivity";
@@ -207,7 +211,7 @@ public class CreateGroupActivity extends Activity implements View.OnClickListene
 
 		AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
-		alert.setTitle("Edit userEmail");
+		alert.setTitle(getResources().getString(R.string.create_group_edit_email));
 
 		final EditText newEmail = new EditText(this);
 		newEmail.setText(this.membersListStrings.get(index));

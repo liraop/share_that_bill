@@ -10,8 +10,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 /**
- * Adapted from https://guides.codepath.com/android/Using-an-ArrayAdapter-with-ListView
- *
+ * ListView Adapter for the TwoStringsClass class.
+ * Adapted based on the code found at https://guides.codepath.com/android/Using-an-ArrayAdapter-with-ListView
  */
 public class CustomTwoItemAdapter extends ArrayAdapter<TwoStringsClass> {
 

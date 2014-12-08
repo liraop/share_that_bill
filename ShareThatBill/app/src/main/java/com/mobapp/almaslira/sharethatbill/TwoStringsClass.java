@@ -1,7 +1,7 @@
 package com.mobapp.almaslira.sharethatbill;
 
 /**
- * Created by jeajjr on 11/17/14.
+ * Class used to fill ListViews.
  */
 public class TwoStringsClass {
     public String first;

@@ -7,7 +7,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 /**
- * Created by jeajjr on 11/17/14.
+ * This class is used to pack together information about a Bill.
  */
 public class Bill {
     String billName;

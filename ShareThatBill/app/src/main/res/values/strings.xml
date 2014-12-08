@@ -56,6 +56,7 @@
     <string name="tabs_members_add">Add new member: </string>
     <string name="tabs_bills_add">Add new bill: </string>
     <string name="members_tab_you">(you)</string>
+    <string name="members_tab_add_member">Add new member</string>
     <string name="title_activity_view_bill">ViewBillActivity</string>
     <string name="view_bill_bill">Bill:</string>
     <string name="view_bill_total">Total: $</string>

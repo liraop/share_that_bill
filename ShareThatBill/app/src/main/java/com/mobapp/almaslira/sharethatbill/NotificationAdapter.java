@@ -11,8 +11,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 /**
- * Adapted from https://guides.codepath.com/android/Using-an-ArrayAdapter-with-ListView
- *
+ * ListView Adapter for the Notification class.
+ * Adapted based on the code found at https://guides.codepath.com/android/Using-an-ArrayAdapter-with-ListView
  */
 public class NotificationAdapter extends ArrayAdapter<Notification> {
     static final String TAG = "NotificationAdapter";

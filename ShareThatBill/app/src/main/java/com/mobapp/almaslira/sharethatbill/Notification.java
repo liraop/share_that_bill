@@ -3,7 +3,7 @@ package com.mobapp.almaslira.sharethatbill;
 import java.util.Calendar;
 
 /**
- * Created by liraop on 12/7/14.
+ * This class is used to pack information of a notification.
  */
 public class Notification {
     public static final int BILL_CREATED = 1;

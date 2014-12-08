@@ -86,7 +86,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 				{
 					Log.d(TAG, "logging in");
 
-                sendLoginRequest("user1@test.com","123456");//emailString, passwordString);
+                sendLoginRequest(emailString, passwordString);
 				}
 
 				break;

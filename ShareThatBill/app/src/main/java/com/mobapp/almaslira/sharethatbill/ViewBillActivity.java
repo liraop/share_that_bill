@@ -26,7 +26,14 @@ import android.widget.Toast;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
-
+/**
+ * ViewBill activity:
+ * - visualises a bill
+ * - opens Maps if bill location is available
+ * - opens image viewer if a bill picture is available
+ * - option to edit the bill
+ * - option to delete the bill
+ */
 public class ViewBillActivity extends Activity implements View.OnClickListener {
     static final String TAG = "ViewBillActivity";
     private static DBhandler dbhandler = new DBhandler();

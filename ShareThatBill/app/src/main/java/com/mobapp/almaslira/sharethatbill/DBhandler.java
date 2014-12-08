@@ -10,6 +10,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+/**
+ * Class that will handle database connections and requests.
+ */
 public class DBhandler {
     private static final String TAG = "DBHANDLER debug";
     private static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";

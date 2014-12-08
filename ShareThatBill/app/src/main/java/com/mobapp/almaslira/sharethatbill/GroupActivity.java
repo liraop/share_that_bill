@@ -15,6 +15,10 @@ import org.w3c.dom.Text;
 
 import java.util.List;
 
+/**
+ * Login activity:
+ * - interface for the user to log in their account.
+ */
 
 public class GroupActivity extends TabActivity {
 	static final String TAG = "GroupActivity";
