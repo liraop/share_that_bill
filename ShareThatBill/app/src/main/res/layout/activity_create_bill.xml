@@ -256,6 +256,19 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginBottom="5dp" />
 
+            <ProgressBar
+                android:id="@+id/progressBarCreateBillLocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:indeterminate="true"
+                android:visibility="invisible"
+                android:layout_alignTop="@+id/buttonCreateBillLocation"
+                android:layout_toLeftOf="@+id/buttonCreateBillLocation"
+                android:layout_toStartOf="@+id/buttonCreateBillLocation"
+                android:layout_marginRight="8dp" />
+
+
+
 
         </RelativeLayout>.
     </ScrollView>

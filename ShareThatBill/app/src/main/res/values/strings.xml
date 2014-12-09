@@ -89,6 +89,8 @@
     <string name="create_bill_set_picture">Take picture</string>
     <string name="create_bill_set_date_format">MM/DD/YYYY</string>
     <string name="create_bill_created">Bill successfully created.</string>
+    <string name="create_bill_getting_location">Getting current location</string>
+    <string name="create_bill_warning_location_disabled">Location services are disabled on this device. Do you want to enabled it?</string>
     <string name="view_bill_check_map">Check map</string>
     <string name="view_bill_check_picture">Take a look</string>
     <string name="view_bill_no_picture">No picture attached</string>

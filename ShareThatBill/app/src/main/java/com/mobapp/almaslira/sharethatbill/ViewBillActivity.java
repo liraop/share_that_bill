@@ -67,6 +67,10 @@ public class ViewBillActivity extends Activity implements View.OnClickListener {
             userName = extras.getString("user_name");
         }
 
+        billName = "Bus tickets";
+        groupName = "NYC trip";
+        userName = "user1@test.com";
+
         ImageButton mapButton = (ImageButton) findViewById(R.id.imageButtonViewBillMap);
         mapButton.setOnClickListener(this);
 
@@ -75,6 +79,9 @@ public class ViewBillActivity extends Activity implements View.OnClickListener {
 
         ImageButton deleteButton = (ImageButton) findViewById(R.id.imageButtonViewBillDelete);
         deleteButton.setOnClickListener(this);
+
+        ImageView picture = (ImageView) findViewById(R.id.imageViewViewBillThumbnail);
+        picture.setVisibility(View.INVISIBLE);
 
         progressDialog = new ProgressDialog(ViewBillActivity.this);
         progressDialog.setMessage(getResources().getString(R.string.warning_loading));

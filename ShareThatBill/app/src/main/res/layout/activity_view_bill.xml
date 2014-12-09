@@ -139,6 +139,16 @@
                 android:scaleType="fitXY"
                 android:adjustViewBounds="true"/>
 
+            <ProgressBar
+                android:id="@+id/progressBarViewBillPicture"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:indeterminate="true"
+                android:layout_alignTop="@+id/imageViewViewBillThumbnail"
+                android:layout_alignRight="@+id/imageViewViewBillThumbnail"
+                android:layout_alignEnd="@+id/imageViewViewBillThumbnail"
+                android:layout_marginTop="-5dp" />
+
         </RelativeLayout>
     </ScrollView>
 
@@ -163,4 +173,6 @@
         android:layout_alignParentEnd="true"
         android:src="@drawable/x_button"
         android:layout_alignBottom="@+id/textViewViewBillTitle" />
+
+
 </RelativeLayout>

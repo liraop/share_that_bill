@@ -30,6 +30,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.NumberPicker;
+import android.widget.ProgressBar;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -175,8 +176,6 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
     @Override
     public void onLocationChanged(Location location) {
 
-        //Log.d(TAG,"Latitude:" + location.getLatitude() + ", Longitude:" + location.getLongitude() + ", Accuracy: "  + location.getAccuracy());
-
         if (getLocation == true) {
             Log.d(TAG, "getting location");
 
@@ -192,6 +191,9 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
 
             ImageButton deleteLocation = (ImageButton) findViewById(R.id.imageButtonCreateBillDeleteLocation);
             deleteLocation.setVisibility(View.VISIBLE);
+
+            ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBarCreateBillLocation);
+            progressBar.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -262,7 +264,22 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
 
             case R.id.buttonCreateBillLocation:
                 Log.d(TAG, "getLocationButton");
-                getLocation = true;
+
+                if (locationServicesEnabled()) {
+                    Log.d(TAG, "location services are enabled");
+
+                    ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBarCreateBillLocation);
+                    progressBar.setVisibility(View.VISIBLE);
+
+                    Toast.makeText(this, getResources().getString(R.string.create_bill_getting_location), Toast.LENGTH_SHORT).show();
+
+                    getLocation = true;
+                }
+                else {
+                    Log.d(TAG, "location services are disabled");
+
+                    createLocationWarningDialog();
+                }
                 break;
 
             case R.id.imageViewCreateBillMap:
@@ -292,6 +309,41 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
                 deleteLocation.setVisibility(View.GONE);
                 break;
         }
+    }
+
+    private void createLocationWarningDialog() {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(CreateBillActivity.this);
+
+        alertDialogBuilder.setTitle(getResources().getString(R.string.warning_error));
+        alertDialogBuilder.setMessage(getResources().getString(R.string.create_bill_warning_location_disabled));
+
+        alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog,int id) {
+                Intent gpsOptionsIntent = new Intent(
+                        android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                startActivity(gpsOptionsIntent);
+            }
+        });
+
+        alertDialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog,int id) {
+            }
+        });
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+    }
+
+    private boolean locationServicesEnabled() {
+        boolean gpsEnabled = false, networkEnabled = false;
+        try{
+            gpsEnabled = locationManagerGPS.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        }catch(Exception ex){}
+        try{
+            networkEnabled = locationManagerNetwork.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+        }catch(Exception ex){}
+
+        return gpsEnabled || networkEnabled;
     }
 
     static final int REQUEST_IMAGE_CAPTURE = 1;

@@ -6,6 +6,8 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -19,6 +21,8 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+
+import java.io.ByteArrayOutputStream;
 
 
 public class LoginActivity extends Activity implements View.OnClickListener {
@@ -47,9 +51,6 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         progressDialog = new ProgressDialog(LoginActivity.this);
         progressDialog.setMessage(getResources().getString(R.string.warning_loading));
         progressDialog.setCancelable(false);
-
-
-
     }
 
 
