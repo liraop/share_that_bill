@@ -16,8 +16,8 @@ import org.w3c.dom.Text;
 import java.util.List;
 
 /**
- * Login activity:
- * - interface for the user to log in their account.
+ * Group activity:
+ * - interface to interact in a group.
  */
 
 public class GroupActivity extends TabActivity {
@@ -42,6 +42,9 @@ public class GroupActivity extends TabActivity {
             thisUserName = extras.getString("user_name");
 			thisGroupName = extras.getString("group_name");
 		}
+
+        thisUserName = "user1@test.com";
+        thisGroupName = "House bills";
 
 		TextView title = (TextView) findViewById(R.id.textViewGroupTitle);
 

@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -18,14 +17,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * MembersTab activity:
  * - shows all group's members
  * - add member option
  */
-public class MembersTab extends Activity implements View.OnClickListener, AdapterView.OnItemClickListener {
+public class MembersTab extends Activity implements View.OnClickListener {
 	static final String TAG = "MembersTab";
     private static DBhandler dbhandler = new DBhandler();
 
@@ -180,11 +178,9 @@ public class MembersTab extends Activity implements View.OnClickListener, Adapte
         alertDialog.show();
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-    }
-
+    /**
+     * Download member list of the group.
+     */
     void updateMembers() {
         runOnUiThread(new Runnable() {
             public void run() {
@@ -201,6 +197,11 @@ public class MembersTab extends Activity implements View.OnClickListener, Adapte
                 Log.d(TAG, "list size " + membersBalanceList.size());
                 runOnUiThread(new Runnable(){
                     public void run() {
+
+                        TwoStringsClass thisUserTemp = removeThisUserFromMembersList();
+                        thisUserTemp.first += " " + getResources().getString(R.string.members_tab_you);
+                        membersBalanceList.add(0, thisUserTemp);
+
                         arrayAdapter = new CustomTwoItemAdapter(MembersTab.this, membersBalanceList);
                         membersList.setAdapter(arrayAdapter);
                         arrayAdapter.notifyDataSetChanged();
@@ -211,42 +212,21 @@ public class MembersTab extends Activity implements View.OnClickListener, Adapte
             }
         }.start();
     }
-/*
-    void removeThisUserFromMembersList() {
-        Log.d(TAG, "removing user: " + thisUserName +  ",size: " + memberNamesList.size());
 
-        for (int i = 0; i < memberNamesList.size(); ++i) {
-            if (memberNamesList.get(i).compareTo(thisUserName) == 0) {
-                memberNamesList.remove(i);
-                return;
+    TwoStringsClass removeThisUserFromMembersList() {
+        Log.d(TAG, "removing user: " + thisUserName +  ",size: " + membersBalanceList.size());
+
+        for (int i = 0; i < membersBalanceList.size(); ++i) {
+            if (membersBalanceList.get(i).first.compareTo(thisUserName) == 0) {
+                TwoStringsClass toReturn;
+                toReturn = membersBalanceList.get(i);
+                membersBalanceList.remove(i);
+                return toReturn;
             }
         }
+        return null;
     }
-    */
-/*
-    void updateList() {
-        membersBalanceList = dbhandler.getUserGroupBalance("group1", dbhandler.getGroupMembers("group1"),dbhandler.getGroupBills("group1"));
-        Log.d(TAG, "TAMANHO DA PICA "+membersBalanceList.size());
 
-
-        membersList = (ListView) findViewById(R.id.listViewTabsList);
-
-
-        arrayAdapter = new CustomTwoItemAdapter(this, membersBalanceList);
-        membersList.setAdapter(arrayAdapter);
-        arrayAdapter.notifyDataSetChanged();
-
-
-        arrayAdapter = new ArrayAdapter<String>(
-                this,
-                android.R.layout.simple_list_item_1,
-                memberNamesList);
-
-        membersList.setAdapter(arrayAdapter);
-        arrayAdapter.notifyDataSetChanged();
-
-    }
-*/
     @Override
     protected void onResume() {
         super.onResume();

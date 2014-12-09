@@ -24,7 +24,11 @@ import android.widget.EditText;
 
 import java.io.ByteArrayOutputStream;
 
-
+/**
+ * Login activity:
+ * - interface for the user to login to the system.
+ * - offers the option to create a new account.
+ */
 public class LoginActivity extends Activity implements View.OnClickListener {
 	static final String TAG = "LoginActivity";
     private static DBhandler dbhandler = new DBhandler();

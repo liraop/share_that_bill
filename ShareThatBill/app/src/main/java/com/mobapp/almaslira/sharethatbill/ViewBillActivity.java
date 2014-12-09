@@ -66,7 +66,7 @@ public class ViewBillActivity extends Activity implements View.OnClickListener {
             groupName = extras.getString("group_name");
             userName = extras.getString("user_name");
         }
-
+        //TODO
         billName = "Bus tickets";
         groupName = "NYC trip";
         userName = "user1@test.com";
@@ -90,6 +90,9 @@ public class ViewBillActivity extends Activity implements View.OnClickListener {
         fetchBillData();
     }
 
+    /**
+     * Downloads all the bill's data from the database.
+     */
     public void fetchBillData() {
         progressDialog.show();
 
@@ -132,6 +135,9 @@ public class ViewBillActivity extends Activity implements View.OnClickListener {
         }.start();
     }
 
+    /**
+     * Sets up the listViews of who paid and who owes to the bill.
+     */
     public void setUpTables() {
         Log.d(TAG, "setUpTables");
 
@@ -253,6 +259,9 @@ public class ViewBillActivity extends Activity implements View.OnClickListener {
         }
     }
 
+    /**
+     * Creates an alertDialog to confirm the deletion of a bill.
+     */
     private void createDeleteBillAlert () {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ViewBillActivity.this);
 

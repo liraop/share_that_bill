@@ -46,8 +46,10 @@ public class CreateAccountActivity extends Activity implements View.OnClickListe
         progressDialog.setCancelable(false);
     }
 
+    /**
+     * Done trying to create account. Will show a dialog if it succeeded or failed.
+     */
 	public void done() {
-
         Log.d(TAG, "done");
 
         if (successCreating) {
@@ -60,10 +62,20 @@ public class CreateAccountActivity extends Activity implements View.OnClickListe
         }
 
 	}
+
+    /**
+     * Checks if target is in a valid email format.
+     */
 	public final static boolean isValidEmail(CharSequence target) {
 		return !TextUtils.isEmpty(target) && android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
 	}
 
+    /**
+     * Creates an AlertDialog.
+     * @param title: title of the dialog.
+     * @param warning: warning message of the dialog.
+     * @param terminate: sets if the Activity should terminate after dialog is closed.
+     */
 	private void createWarningAlert (String title, String warning, final boolean terminate) {
 		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(CreateAccountActivity.this);
 
@@ -128,6 +140,11 @@ public class CreateAccountActivity extends Activity implements View.OnClickListe
 		}
 	}
 
+    /**
+     * Sends request to database to create an account.
+     * @param email: account email
+     * @param password: account password
+     */
 	public void sendCreateAccountRequest(final String email, final String password) {
 		Log.d(TAG, "sendCreateAccountRequest");
 

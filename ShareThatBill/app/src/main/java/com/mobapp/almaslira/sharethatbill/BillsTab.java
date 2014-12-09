@@ -95,6 +95,7 @@ public class BillsTab extends Activity implements View.OnClickListener, AdapterV
         }
     }
 
+
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Log.d(TAG, "onItemClick");
@@ -106,6 +107,9 @@ public class BillsTab extends Activity implements View.OnClickListener, AdapterV
         startActivity(intent);
     }
 
+    /**
+     * Download all bills of the group.
+     */
     void updateBills() {
         progressDialog.show();
 
@@ -128,6 +132,9 @@ public class BillsTab extends Activity implements View.OnClickListener, AdapterV
         }.start();
     }
 
+    /**
+     * Updates bills listView.
+     */
     void updateList() {
         arrayAdapter = new ArrayAdapter<String>(
                 this,
