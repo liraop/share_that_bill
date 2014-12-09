@@ -317,7 +317,7 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
         alertDialogBuilder.setTitle(getResources().getString(R.string.warning_error));
         alertDialogBuilder.setMessage(getResources().getString(R.string.create_bill_warning_location_disabled));
 
-        alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        alertDialogBuilder.setPositiveButton(getResources().getString(R.string.dialog_yes), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog,int id) {
                 Intent gpsOptionsIntent = new Intent(
                         android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
@@ -325,7 +325,7 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
             }
         });
 
-        alertDialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        alertDialogBuilder.setNegativeButton(getResources().getString(R.string.dialog_cancel), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog,int id) {
             }
         });
@@ -456,7 +456,7 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
         alertDialogBuilder.setTitle(title);
         alertDialogBuilder.setMessage(warning);
 
-        alertDialogBuilder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+        alertDialogBuilder.setPositiveButton(getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog,int id) {
             }
         });
@@ -532,7 +532,7 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
         builder.setMessage(getResources().getString(R.string.create_bill_set_date_format))
                 .setView(dialogView)
                 .setCancelable(false)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                .setPositiveButton(getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         Log.d(TAG,  "month:" + month.getValue() +
                                     " day: " + day.getValue() +
@@ -543,7 +543,7 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
                         updateDateTime();
                     }
                 })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                .setNegativeButton(getResources().getString(R.string.dialog_cancel), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
                     }
@@ -566,7 +566,7 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
         builder.setTitle(getResources().getString(R.string.create_bill_set_time))
                 .setView(dialogView)
                 .setCancelable(false)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                .setPositiveButton(getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
 
                         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy");
@@ -581,7 +581,7 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
                         updateDateTime();
                     }
                 })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                .setNegativeButton(getResources().getString(R.string.dialog_cancel), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
                     }
@@ -800,7 +800,7 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
         newValueInput.setText(this.whoPaidTwoStringsList.get(index).second);
         alert.setView(newValueInput);
 
-        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+        alert.setPositiveButton(getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 String newValue = newValueInput.getText().toString();
 
@@ -814,7 +814,7 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
             }
         });
 
-        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        alert.setNegativeButton(getResources().getString(R.string.dialog_cancel), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 Log.d(TAG, "alert cancelled");
             }
@@ -836,7 +836,7 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
         newValueInput.setText(this.whoOwesTwoStringsList.get(index).second);
         alert.setView(newValueInput);
 
-        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+        alert.setPositiveButton(getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 String newValue = newValueInput.getText().toString();
 
@@ -847,7 +847,7 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
             }
         });
 
-        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        alert.setNegativeButton(getResources().getString(R.string.dialog_cancel), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 Log.d(TAG, "alert cancelled");
             }

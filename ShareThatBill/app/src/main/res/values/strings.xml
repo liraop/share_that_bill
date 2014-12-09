@@ -107,5 +107,9 @@
     <string name="notification_adapter_hours_ago">hours ago</string>
     <string name="notification_adapter_days_ago">days ago</string>
     <string name="notification_adapter_weeks_ago">weeks ago</string>
-
+    <string name="dialog_yes">Yes</string>
+    <string name="dialog_no">No</string>
+    <string name="dialog_cancel">Cancel</string>
+    <string name="dialog_ok">Ok</string>
+    <string name="dialog_remove">Remove</string>
 </resources>

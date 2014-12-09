@@ -70,7 +70,7 @@ public class CreateAccountActivity extends Activity implements View.OnClickListe
 		alertDialogBuilder.setTitle(title);
 		alertDialogBuilder.setMessage(warning);
 
-		alertDialogBuilder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+		alertDialogBuilder.setPositiveButton(getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog,int id) {
 				if (terminate)
 					finish();
@@ -116,8 +116,8 @@ public class CreateAccountActivity extends Activity implements View.OnClickListe
 				}
 				else {
 					Log.d(TAG, "creating account:");
-					Log.d(TAG, emailString.toString());
-					Log.d(TAG, passwordString.toString());
+					Log.d(TAG, emailString);
+					Log.d(TAG, passwordString);
 
 					progressDialog.show();
 

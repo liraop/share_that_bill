@@ -183,7 +183,7 @@ public class CreateGroupActivity extends Activity implements View.OnClickListene
 		alertDialogBuilder.setTitle(title);
 		alertDialogBuilder.setMessage(warning);
 
-		alertDialogBuilder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+		alertDialogBuilder.setPositiveButton(getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog,int id) {
 			}
 		});
@@ -217,7 +217,7 @@ public class CreateGroupActivity extends Activity implements View.OnClickListene
 		newEmail.setText(this.membersListStrings.get(index));
 		alert.setView(newEmail);
 
-		alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+		alert.setPositiveButton(getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int whichButton) {
 				String newValue = newEmail.getText().toString();
 
@@ -229,7 +229,7 @@ public class CreateGroupActivity extends Activity implements View.OnClickListene
 			}
 		});
 
-		alert.setNeutralButton("Remove", new DialogInterface.OnClickListener() {
+		alert.setNeutralButton(getResources().getString(R.string.dialog_remove), new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int whichButton) {
 				String value1 = newEmail.getText().toString();
 
@@ -240,7 +240,7 @@ public class CreateGroupActivity extends Activity implements View.OnClickListene
 			}
 		});
 
-		alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+		alert.setNegativeButton(getResources().getString(R.string.dialog_cancel), new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int whichButton) {
 				Log.d(TAG, "alert cancelled");
 			}
