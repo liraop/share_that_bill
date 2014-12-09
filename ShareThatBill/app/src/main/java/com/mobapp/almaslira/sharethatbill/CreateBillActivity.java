@@ -1,3 +1,16 @@
+/**
+ *
+ * ShareThatBill
+ *
+ * CSE444 - Mobile Application Development
+ * Prof. Robert J. Irwin
+ *
+ * Team:
+ * Jose E. Almas de Jesus Junior - jeajjr@gmail.com
+ * Pedro de Oliveira Lira - pedulira@gmail.com
+ *
+ */
+
 package com.mobapp.almaslira.sharethatbill;
 
 import android.app.Activity;
@@ -17,8 +30,6 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.InputType;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;

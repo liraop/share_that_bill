@@ -1,10 +1,19 @@
+/**
+ *
+ * ShareThatBill
+ *
+ * CSE444 - Mobile Application Development
+ * Prof. Robert J. Irwin
+ *
+ * Team:
+ * Jose E. Almas de Jesus Junior - jeajjr@gmail.com
+ * Pedro de Oliveira Lira - pedulira@gmail.com
+ *
+ */
+
 package com.mobapp.almaslira.sharethatbill;
 
-import android.graphics.Picture;
-import android.location.Location;
-
 import java.util.Calendar;
-import java.util.Date;
 
 /**
  * This class is used to pack together information about a Bill.

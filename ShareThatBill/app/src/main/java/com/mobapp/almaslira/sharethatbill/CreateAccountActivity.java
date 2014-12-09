@@ -1,3 +1,16 @@
+/**
+ *
+ * ShareThatBill
+ *
+ * CSE444 - Mobile Application Development
+ * Prof. Robert J. Irwin
+ *
+ * Team:
+ * Jose E. Almas de Jesus Junior - jeajjr@gmail.com
+ * Pedro de Oliveira Lira - pedulira@gmail.com
+ *
+ */
+
 package com.mobapp.almaslira.sharethatbill;
 
 import android.app.Activity;
@@ -7,8 +20,6 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -168,19 +179,4 @@ public class CreateAccountActivity extends Activity implements View.OnClickListe
 			}
 		}.start();
 	}
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.create_account, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 }

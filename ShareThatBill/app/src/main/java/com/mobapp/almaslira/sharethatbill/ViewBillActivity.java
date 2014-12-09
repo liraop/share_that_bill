@@ -1,3 +1,16 @@
+/**
+ *
+ * ShareThatBill
+ *
+ * CSE444 - Mobile Application Development
+ * Prof. Robert J. Irwin
+ *
+ * Team:
+ * Jose E. Almas de Jesus Junior - jeajjr@gmail.com
+ * Pedro de Oliveira Lira - pedulira@gmail.com
+ *
+ */
+
 package com.mobapp.almaslira.sharethatbill;
 
 import android.app.Activity;
@@ -9,13 +22,10 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -299,27 +309,5 @@ public class ViewBillActivity extends Activity implements View.OnClickListener {
 
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_view_bill, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 }
