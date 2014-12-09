@@ -45,7 +45,7 @@ public class ViewBillActivity extends Activity implements View.OnClickListener {
     Bill thisBill;
 
     ArrayList<TwoStringsClass> whoPaidTwoStringsList;
-    ArrayList<TwoStringsClass> whoOwnsTwoStringList;
+    ArrayList<TwoStringsClass> whoOwesTwoStringList;
 
     ProgressDialog progressDialog;
 
@@ -118,8 +118,8 @@ public class ViewBillActivity extends Activity implements View.OnClickListener {
                 Log.d(TAG, "get who paid");
                 whoPaidTwoStringsList = dbhandler.getWhoPaidBill(billName);
 
-                Log.d(TAG, "get who owns");
-                whoOwnsTwoStringList = dbhandler.getWhoOwnsBill(billName);
+                Log.d(TAG, "get who owes");
+                whoOwesTwoStringList = dbhandler.getWhoOwesBill(billName);
 
                 runOnUiThread(new Runnable(){
                     public void run() {
@@ -179,26 +179,26 @@ public class ViewBillActivity extends Activity implements View.OnClickListener {
         whoPaidListView.requestLayout();
 
 
-        // ** Who owns list **
+        // ** Who owes list **
 
-        ListView whoOwnsListView = (ListView) findViewById(R.id.listViewViewBillWhoOwns);
+        ListView whoOwesListView = (ListView) findViewById(R.id.listViewViewBillWhoOwes);
 
-        CustomTwoItemAdapter whoOwnsArrayAdapter = new CustomTwoItemAdapter(this, whoOwnsTwoStringList);
+        CustomTwoItemAdapter whoOwesArrayAdapter = new CustomTwoItemAdapter(this, whoOwesTwoStringList);
 
-        whoOwnsListView.setAdapter(whoOwnsArrayAdapter);
-        whoOwnsArrayAdapter.notifyDataSetChanged();
+        whoOwesListView.setAdapter(whoOwesArrayAdapter);
+        whoOwesArrayAdapter.notifyDataSetChanged();
 
         totalHeight = 0;
-        for (int i = 0; i < whoOwnsArrayAdapter.getCount(); i++) {
-            View listItem = whoOwnsArrayAdapter.getView(i, null, whoOwnsListView);
+        for (int i = 0; i < whoOwesArrayAdapter.getCount(); i++) {
+            View listItem = whoOwesArrayAdapter.getView(i, null, whoOwesListView);
             listItem.measure(0, 0);
             totalHeight += listItem.getMeasuredHeight();
         }
 
-        params = whoOwnsListView.getLayoutParams();
-        params.height = totalHeight + (whoOwnsListView.getDividerHeight() * (whoOwnsArrayAdapter.getCount() - 1));
-        whoOwnsListView.setLayoutParams(params);
-        whoOwnsListView.requestLayout();
+        params = whoOwesListView.getLayoutParams();
+        params.height = totalHeight + (whoOwesListView.getDividerHeight() * (whoOwesArrayAdapter.getCount() - 1));
+        whoOwesListView.setLayoutParams(params);
+        whoOwesListView.requestLayout();
 
         ScrollView scrollView = (ScrollView) findViewById(R.id.scrollViewViewBill);
         scrollView.scrollTo(0, scrollView.getTop());

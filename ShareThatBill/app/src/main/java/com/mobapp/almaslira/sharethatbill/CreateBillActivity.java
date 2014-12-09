@@ -55,10 +55,10 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
 
     String groupName;
     ArrayList<TwoStringsClass> whoPaidTwoStringsList;
-    ArrayList<TwoStringsClass> whoOwnsTwoStringsList;
+    ArrayList<TwoStringsClass> whoOwesTwoStringsList;
 
     CustomTwoItemAdapter whoPaidArrayAdapter;
-    CustomTwoItemAdapter whoOwnsArrayAdapter;
+    CustomTwoItemAdapter whoOwesArrayAdapter;
 
     boolean dividingEquallyFlag;
     boolean[] dividingEquallyMembers;
@@ -154,8 +154,8 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
             TextView whoPaidText = (TextView) findViewById(R.id.textViewCreateBillWhoPaid);
             whoPaidText.setText(getResources().getString(R.string.view_bill_who_paid));
 
-            TextView whoOwnsText = (TextView) findViewById(R.id.textViewCreateBillHowToSplit);
-            whoOwnsText.setText(getResources().getString(R.string.view_bill_who_owns));
+            TextView whoOwesText = (TextView) findViewById(R.id.textViewCreateBillHowToSplit);
+            whoOwesText.setText(getResources().getString(R.string.view_bill_who_owes));
         }
 
         ImageButton deleteLocation = (ImageButton) findViewById(R.id.imageButtonCreateBillDeleteLocation);
@@ -336,14 +336,14 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
 
     private boolean locationServicesEnabled() {
         boolean gpsEnabled = false, networkEnabled = false;
-        try{
+        try {
             gpsEnabled = locationManagerGPS.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        }catch(Exception ex){}
+        } catch(Exception ex){}
         try{
             networkEnabled = locationManagerNetwork.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-        }catch(Exception ex){}
+        } catch(Exception ex){}
 
-        return gpsEnabled || networkEnabled;
+        return (gpsEnabled || networkEnabled);
     }
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -440,14 +440,14 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
     }
 
     public boolean billValuesMatch() {
-        float totalOwns = 0;
-        for (TwoStringsClass m : whoOwnsTwoStringsList)
-            totalOwns += Float.parseFloat(m.second);
+        float totalOwes = 0;
+        for (TwoStringsClass m : whoOwesTwoStringsList)
+            totalOwes += Float.parseFloat(m.second);
 
-        Log.d(TAG, "totalOwns: " + totalOwns);
+        Log.d(TAG, "totalOwes: " + totalOwes);
         Log.d(TAG, "totalBillValue: " + totalBillValue());
 
-        return ( Math.abs(totalOwns - totalBillValue()) < 0.02f);
+        return ( Math.abs(totalOwes - totalBillValue()) < 0.02f);
     }
 
     private void createWarningAlert (String title, String warning) {
@@ -480,13 +480,13 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
                 Log.d(TAG, "creating bill");
 
                 for (int i = 0; i < whoPaidTwoStringsList.size(); i++) {
-                    if (Float.parseFloat(whoPaidTwoStringsList.get(i).second) > 0 || Float.parseFloat(whoOwnsTwoStringsList.get(i).second) > 0) {
+                    if (Float.parseFloat(whoPaidTwoStringsList.get(i).second) > 0 || Float.parseFloat(whoOwesTwoStringsList.get(i).second) > 0) {
                         Log.d(TAG, "user " + whoPaidTwoStringsList.get(i).first +
-                                " owns " + Float.parseFloat(whoOwnsTwoStringsList.get(i).second) +
+                                " owes " + Float.parseFloat(whoOwesTwoStringsList.get(i).second) +
                                 " and paid " + Float.parseFloat(whoPaidTwoStringsList.get(i).second));
 
                         dbhandler.createUserBillRelation(whoPaidTwoStringsList.get(i).first, thisBill.billName,
-                                Float.parseFloat(whoOwnsTwoStringsList.get(i).second),
+                                Float.parseFloat(whoOwesTwoStringsList.get(i).second),
                                 Float.parseFloat(whoPaidTwoStringsList.get(i).second));
 
                     }
@@ -598,11 +598,11 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
                 ArrayList<String> members = dbhandler.getGroupMembers(groupName);
 
                 whoPaidTwoStringsList = new ArrayList<TwoStringsClass>();
-                whoOwnsTwoStringsList = new ArrayList<TwoStringsClass>();
+                whoOwesTwoStringsList = new ArrayList<TwoStringsClass>();
 
                 for (String m : members) {
                     whoPaidTwoStringsList.add(new TwoStringsClass(m, "0.00"));
-                    whoOwnsTwoStringsList.add(new TwoStringsClass(m, "0.00"));
+                    whoOwesTwoStringsList.add(new TwoStringsClass(m, "0.00"));
                     Log.d(TAG, "Adding member to lists: " + m);
                 }
 
@@ -619,13 +619,13 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
                         }
                     }
 
-                    Log.d(TAG, "get who owns");
-                    ArrayList<TwoStringsClass> whoOweTemp = dbhandler.getWhoOwnsBill(thisBill.billName);
+                    Log.d(TAG, "get who owes");
+                    ArrayList<TwoStringsClass> whoOweTemp = dbhandler.getWhoOwesBill(thisBill.billName);
 
                     for (int i = 0; i < members.size(); ++i) {
                         for (int j = 0; j < whoOweTemp.size(); ++j) {
                             if (members.get(i).compareTo(whoOweTemp.get(j).first) == 0)
-                                whoOwnsTwoStringsList.get(i).second = whoOweTemp.get(j).second;
+                                whoOwesTwoStringsList.get(i).second = whoOweTemp.get(j).second;
                         }
                     }
 
@@ -704,32 +704,32 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
             }
         });
 
-        // ** Who owns list **
+        // ** Who owes list **
 
-        ListView whoOwnsListView = (ListView) findViewById(R.id.listViewCreateBillWhoOwns);
+        ListView whoOwesListView = (ListView) findViewById(R.id.listViewCreateBillWhoOwes);
 
-        whoOwnsArrayAdapter = new CustomTwoItemAdapter(this, whoOwnsTwoStringsList);
+        whoOwesArrayAdapter = new CustomTwoItemAdapter(this, whoOwesTwoStringsList);
 
-        whoOwnsListView.setAdapter(whoOwnsArrayAdapter);
-        whoOwnsArrayAdapter.notifyDataSetChanged();
+        whoOwesListView.setAdapter(whoOwesArrayAdapter);
+        whoOwesArrayAdapter.notifyDataSetChanged();
 
         totalHeight = 0;
-        for (int i = 0; i < whoOwnsArrayAdapter.getCount(); i++) {
-            View listItem = whoOwnsArrayAdapter.getView(i, null, whoOwnsListView);
+        for (int i = 0; i < whoOwesArrayAdapter.getCount(); i++) {
+            View listItem = whoOwesArrayAdapter.getView(i, null, whoOwesListView);
             listItem.measure(0, 0);
             totalHeight += listItem.getMeasuredHeight();
         }
 
-        params = whoOwnsListView.getLayoutParams();
-        params.height = totalHeight + (whoOwnsListView.getDividerHeight() * (whoOwnsArrayAdapter.getCount() - 1));
-        whoOwnsListView.setLayoutParams(params);
-        whoOwnsListView.requestLayout();
-        whoOwnsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        params = whoOwesListView.getLayoutParams();
+        params.height = totalHeight + (whoOwesListView.getDividerHeight() * (whoOwesArrayAdapter.getCount() - 1));
+        whoOwesListView.setLayoutParams(params);
+        whoOwesListView.requestLayout();
+        whoOwesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.d(TAG, "tapped whoOwnsList on " + position);
+                Log.d(TAG, "tapped whoOwesList on " + position);
 
-                WhoOwnsListViewOnItemClickListener(position);
+                WhoOwesListViewOnItemClickListener(position);
             }
         });
     }
@@ -746,20 +746,20 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
         time.setText(getResources().getText(R.string.create_bill_time) + "  " + dateFormat.format(thisBill.billDate.getTime()));
     }
 
-    void WhoOwnsListViewOnItemClickListener(int position) {
+    void WhoOwesListViewOnItemClickListener(int position) {
 
         if (dividingEquallyFlag && !editingBill) {
             dividingEquallyMembers[position] = !dividingEquallyMembers[position];
-            updateWhoOwnsValues();
+            updateWhoOwesValues();
         }
         else {
-            createUpdateWhoOwnsDialog(position);
+            createUpdateWhoOwesDialog(position);
         }
     }
 
-    void updateWhoOwnsValues() {
+    void updateWhoOwesValues() {
         int totalPaying = 0;
-        for (int i=0; i < whoOwnsTwoStringsList.size(); ++i)
+        for (int i=0; i < whoOwesTwoStringsList.size(); ++i)
             if (dividingEquallyMembers[i])
                 totalPaying++;
 
@@ -767,17 +767,17 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
             float billTotal = totalBillValue();
             float totalDivided = billTotal/totalPaying;
 
-            for (int i=0; i < whoOwnsTwoStringsList.size(); ++i)
+            for (int i=0; i < whoOwesTwoStringsList.size(); ++i)
                 if (dividingEquallyMembers[i])
-                    whoOwnsTwoStringsList.get(i).second = String.format("%.2f", totalDivided);
+                    whoOwesTwoStringsList.get(i).second = String.format("%.2f", totalDivided);
                 else
-                    whoOwnsTwoStringsList.get(i).second = new String("0.00");
+                    whoOwesTwoStringsList.get(i).second = new String("0.00");
         }
         else {
-            for (TwoStringsClass m : whoOwnsTwoStringsList)
+            for (TwoStringsClass m : whoOwesTwoStringsList)
                 m.second = new String("0.00");
         }
-        whoOwnsArrayAdapter.notifyDataSetChanged();
+        whoOwesArrayAdapter.notifyDataSetChanged();
     }
 
     public float totalBillValue() {
@@ -824,8 +824,8 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
         alertDialog.show();
     }
 
-    void createUpdateWhoOwnsDialog (final int index) {
-        Log.d(TAG, "createUpdateWhoOwnsDialog");
+    void createUpdateWhoOwesDialog (final int index) {
+        Log.d(TAG, "createUpdateWhoOwesDialog");
 
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
@@ -833,7 +833,7 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
 
         final EditText newValueInput = new EditText(this);
         newValueInput.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
-        newValueInput.setText(this.whoOwnsTwoStringsList.get(index).second);
+        newValueInput.setText(this.whoOwesTwoStringsList.get(index).second);
         alert.setView(newValueInput);
 
         alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
@@ -842,8 +842,8 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
 
                 Log.d(TAG, "Ok to edit to " + newValue);
 
-                whoOwnsTwoStringsList.get(index).second = String.format("%.2f", Float.parseFloat(newValue));
-                whoOwnsArrayAdapter.notifyDataSetChanged();
+                whoOwesTwoStringsList.get(index).second = String.format("%.2f", Float.parseFloat(newValue));
+                whoOwesArrayAdapter.notifyDataSetChanged();
             }
         });
 
@@ -896,9 +896,9 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
                 break;
         }
 
-        for (TwoStringsClass m : whoOwnsTwoStringsList)
+        for (TwoStringsClass m : whoOwesTwoStringsList)
             m.second = new String("0.00");
 
-        whoOwnsArrayAdapter.notifyDataSetChanged();
+        whoOwesArrayAdapter.notifyDataSetChanged();
     }
 }

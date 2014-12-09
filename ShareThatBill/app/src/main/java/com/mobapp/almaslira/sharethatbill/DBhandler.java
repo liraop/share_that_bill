@@ -346,7 +346,7 @@ public class DBhandler {
             connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
 
             this.statement = connect.createStatement();
-            query = "SELECT usersAndGroups.uid,SUM(valuePaid)-SUM(valueOwn) FROM usersAndGroups INNER JOIN usersAndBills WHERE usersAndGroups.gid='"+groupName+"' AND usersAndBills.uid=usersAndGroups.uid GROUP BY usersAndGroups.uid";
+            query = "SELECT usersAndGroups.uid,SUM(valuePaid)-SUM(valueOwe) FROM usersAndGroups INNER JOIN usersAndBills WHERE usersAndGroups.gid='"+groupName+"' AND usersAndBills.uid=usersAndGroups.uid GROUP BY usersAndGroups.uid";
             this.resultSet = statement.executeQuery(query);
 
             while(resultSet.next()){
@@ -472,13 +472,13 @@ public class DBhandler {
      * @param billName
      * @param value
      */
-    public void createUserBillRelation(String user, String billName, float valueOwn, float valuePaid){
+    public void createUserBillRelation(String user, String billName, float valueOwe, float valuePaid){
 
         try {
             connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
 
             this.statement = connect.createStatement();
-            String query = "INSERT INTO `usersAndBills`(`uid`, `bid`, `valueOwn`, `valuePaid`) VALUES ('"+user+"','"+billName+"','"+valueOwn+"','"+valuePaid+"')";
+            String query = "INSERT INTO `usersAndBills`(`uid`, `bid`, `valueOwn`, `valuePaid`) VALUES ('"+user+"','"+billName+"','"+valueOwe+"','"+valuePaid+"')";
             statement.executeUpdate(query);
             connect.close();
 
@@ -536,9 +536,9 @@ public class DBhandler {
     /**
      * Method to get users that have not paid the bill
      * @param billName
-     * @return ArrayList<TwoStringsClass> owns bill
+     * @return ArrayList<TwoStringsClass> owes bill
      */
-    public ArrayList<TwoStringsClass> getWhoOwnsBill(String billName){
+    public ArrayList<TwoStringsClass> getWhoOwesBill(String billName){
 
         ArrayList<TwoStringsClass> result = new ArrayList<TwoStringsClass>();
 
