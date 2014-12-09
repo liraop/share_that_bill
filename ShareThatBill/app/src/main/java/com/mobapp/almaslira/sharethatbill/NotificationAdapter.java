@@ -1,3 +1,16 @@
+/**
+ *
+ * ShareThatBill
+ *
+ * CSE444 - Mobile Application Development
+ * Prof. Robert J. Irwin
+ *
+ * Team:
+ * Jose E. Almas de Jesus Junior - jeajjr@gmail.com
+ * Pedro de Oliveira Lira - pedulira@gmail.com
+ *
+ */
+
 package com.mobapp.almaslira.sharethatbill;
 
 import android.content.Context;
@@ -12,7 +25,7 @@ import java.util.Calendar;
 
 /**
  * ListView Adapter for the Notification class.
- * Adapted based on the code found at https://guides.codepath.com/android/Using-an-ArrayAdapter-with-ListView
+ * Adapter based on the code found at https://guides.codepath.com/android/Using-an-ArrayAdapter-with-ListView
  */
 public class NotificationAdapter extends ArrayAdapter<Notification> {
     static final String TAG = "NotificationAdapter";

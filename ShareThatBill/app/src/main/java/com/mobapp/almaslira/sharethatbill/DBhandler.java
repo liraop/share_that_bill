@@ -1,10 +1,11 @@
 package com.mobapp.almaslira.sharethatbill;
 
-import android.database.Cursor;
-import android.graphics.Picture;
-import android.location.Location;
-import android.util.Log;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

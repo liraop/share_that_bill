@@ -1,3 +1,16 @@
+/**
+ *
+ * ShareThatBill
+ *
+ * CSE444 - Mobile Application Development
+ * Prof. Robert J. Irwin
+ *
+ * Team:
+ * Jose E. Almas de Jesus Junior - jeajjr@gmail.com
+ * Pedro de Oliveira Lira - pedulira@gmail.com
+ *
+ */
+
 package com.mobapp.almaslira.sharethatbill;
 
 import android.app.Activity;
@@ -17,8 +30,6 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.InputType;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -47,7 +58,11 @@ import java.util.Date;
 
 /**
  * CreateBill activity:
- * - interface to create a new bill
+ * - interface to create a new bill OR
+ * - interface to edit a bill
+ *
+ * To change its behave accordingly to which task above it is performing, this Activity uses
+ * the boolean editingBill throughout its execution.
  */
 public class CreateBillActivity extends Activity implements RadioGroup.OnCheckedChangeListener, View.OnClickListener, LocationListener {
     static final String TAG = "CreateBillActivity";
@@ -173,6 +188,9 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
         fetchMembersList();
     }
 
+    /**
+     * This method is called when the device location changes and is related to the locationManagers.
+     */
     @Override
     public void onLocationChanged(Location location) {
 
@@ -311,6 +329,10 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
         }
     }
 
+    /**
+     * Creates an alertDialog warning the user that the device location service is turned off
+     * and offers the option to open the location settings menu.
+     */
     private void createLocationWarningDialog() {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(CreateBillActivity.this);
 
@@ -334,6 +356,9 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
         alertDialog.show();
     }
 
+    /**
+     * Checks if any location service is enabled on the device.
+     */
     private boolean locationServicesEnabled() {
         boolean gpsEnabled = false, networkEnabled = false;
         try {
@@ -348,6 +373,9 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
 
+    /**
+     * Sends an intent to capture a picture.
+     */
     private void takePicture() {
         Log.d(TAG, "calling camera");
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -373,6 +401,9 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
             Log.d(TAG, "error checking camera activity");
     }
 
+    /**
+     * Creates a File for the picture to be stored.
+     */
     private File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -391,10 +422,15 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
         return image;
     }
 
+    /**
+     * Called when the camera activity finishes. If the task was successful, it sets the picture's
+     * thumbnail in the interface's ImageView.
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.d(TAG, "returned from camera");
         File f = new File(thisBill.billPicturePath);
+
         if(f.exists() && !f.isDirectory())
             Log.d(TAG, "image exists");
         else
@@ -410,6 +446,7 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
     }
 
     /**
+     *
      * http://developer.android.com/training/camera/photobasics.html
      */
     public Bitmap compressBitmap (String photoPath, int targetW, int targetH) {
@@ -439,6 +476,9 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
         return Uri.parse(path);
     }
 
+    /**
+     * Returns if the total value paid in the bill matches the total value owed.
+     */
     public boolean billValuesMatch() {
         float totalOwes = 0;
         for (TwoStringsClass m : whoOwesTwoStringsList)
@@ -450,6 +490,11 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
         return ( Math.abs(totalOwes - totalBillValue()) < 0.02f);
     }
 
+    /**
+     * Create a generic alertDialog with an OK button.
+     * @param title: title of the dialog
+     * @param warning: message of the dialog
+     */
     private void createWarningAlert (String title, String warning) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(CreateBillActivity.this);
 
@@ -465,6 +510,9 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
         alertDialog.show();
     }
 
+    /**
+     * Send request to save the bill on the database.
+     */
     public void sendCreateBillRequest() {
         Log.d(TAG, "sendCreateBillRequest");
         progressDialog.show();
@@ -505,6 +553,9 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
         }.start();
     }
 
+    /**
+     * Creates a dialog with a custom datePicker dialog to get the bill's date.
+     */
     public void createGetDateDialog () {
 
         View dialogView = View.inflate(this, R.layout.layout_date_picker, null);
@@ -550,6 +601,9 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
                 }).show();
     }
 
+    /**
+     * Create a dialog with a timePicker to get the bill's time.
+     */
     public void createGetTimeDialog () {
 
         View dialogView = View.inflate(this, R.layout.layout_time_picker, null);
@@ -588,6 +642,9 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
                 }).show();
     }
 
+    /**
+     * Downloads the group members list.
+     */
     public void fetchMembersList() {
         Log.d(TAG, "fetchMembersList");
 
@@ -671,6 +728,9 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
         }.start();
     }
 
+    /**
+     * Sets up the listViews to get who paid and who owes to the bill.
+     */
     public void setUpTables() {
         updateDateTime();
 
@@ -734,6 +794,9 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
         });
     }
 
+    /**
+     * Updates the date and time text fields according to user input.
+     */
     private void updateDateTime() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
 
@@ -746,6 +809,11 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
         time.setText(getResources().getText(R.string.create_bill_time) + "  " + dateFormat.format(thisBill.billDate.getTime()));
     }
 
+    /**
+     * Method to handle onItemClick of the WhoOwes listView. If the "divide bill equally" option is
+     * selected, it will take the bill's total amount and split between the selected users. If not,
+     * it will prompt the user for the amount the clicked user owes.
+     */
     void WhoOwesListViewOnItemClickListener(int position) {
 
         if (dividingEquallyFlag && !editingBill) {
@@ -757,6 +825,10 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
         }
     }
 
+    /**
+     * Calculates how much each selected members owes. This method is only called when the bill is
+     * being split equally.
+     */
     void updateWhoOwesValues() {
         int totalPaying = 0;
         for (int i=0; i < whoOwesTwoStringsList.size(); ++i)
@@ -780,6 +852,9 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
         whoOwesArrayAdapter.notifyDataSetChanged();
     }
 
+    /**
+     * @return: the total paid value of the bill
+     */
     public float totalBillValue() {
         float total = 0;
         for (TwoStringsClass m : whoPaidTwoStringsList)
@@ -788,6 +863,9 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
         return total;
     }
 
+    /**
+     * Creates a dialog to get the amount paid by the clicked user.
+     */
     void createUpdateWhoPaidDialog (final int index) {
         Log.d(TAG, "createUpdateWhoPaidDialog");
 
@@ -824,6 +902,9 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
         alertDialog.show();
     }
 
+    /**
+     * Creates a dialog to get the amount owed by the clicked user.
+     */
     void createUpdateWhoOwesDialog (final int index) {
         Log.d(TAG, "createUpdateWhoOwesDialog");
 
@@ -857,7 +938,7 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
         AlertDialog alertDialog = alert.create();
         alertDialog.show();
     }
-
+/*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -879,7 +960,10 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
 
         return super.onOptionsItemSelected(item);
     }
-
+*/
+    /**
+     * Handles change of selection on the RadioGroup.
+     */
     @Override
     public void onCheckedChanged(RadioGroup radioGroup, int i) {
         Log.d(TAG, "onCheckedChanged ");

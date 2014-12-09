@@ -1,3 +1,16 @@
+/**
+ *
+ * ShareThatBill
+ *
+ * CSE444 - Mobile Application Development
+ * Prof. Robert J. Irwin
+ *
+ * Team:
+ * Jose E. Almas de Jesus Junior - jeajjr@gmail.com
+ * Pedro de Oliveira Lira - pedulira@gmail.com
+ *
+ */
+
 package com.mobapp.almaslira.sharethatbill;
 
 import android.app.Activity;
@@ -7,8 +20,6 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -46,8 +57,10 @@ public class CreateAccountActivity extends Activity implements View.OnClickListe
         progressDialog.setCancelable(false);
     }
 
+    /**
+     * Done trying to create account. Will show a dialog if it succeeded or failed.
+     */
 	public void done() {
-
         Log.d(TAG, "done");
 
         if (successCreating) {
@@ -60,10 +73,20 @@ public class CreateAccountActivity extends Activity implements View.OnClickListe
         }
 
 	}
+
+    /**
+     * Checks if target is in a valid email format.
+     */
 	public final static boolean isValidEmail(CharSequence target) {
 		return !TextUtils.isEmpty(target) && android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
 	}
 
+    /**
+     * Creates an AlertDialog.
+     * @param title: title of the dialog.
+     * @param warning: warning message of the dialog.
+     * @param terminate: sets if the Activity should terminate after dialog is closed.
+     */
 	private void createWarningAlert (String title, String warning, final boolean terminate) {
 		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(CreateAccountActivity.this);
 
@@ -128,6 +151,11 @@ public class CreateAccountActivity extends Activity implements View.OnClickListe
 		}
 	}
 
+    /**
+     * Sends request to database to create an account.
+     * @param email: account email
+     * @param password: account password
+     */
 	public void sendCreateAccountRequest(final String email, final String password) {
 		Log.d(TAG, "sendCreateAccountRequest");
 
@@ -151,19 +179,4 @@ public class CreateAccountActivity extends Activity implements View.OnClickListe
 			}
 		}.start();
 	}
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.create_account, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 }

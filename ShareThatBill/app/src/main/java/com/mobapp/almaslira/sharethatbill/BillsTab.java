@@ -1,3 +1,16 @@
+/**
+ *
+ * ShareThatBill
+ *
+ * CSE444 - Mobile Application Development
+ * Prof. Robert J. Irwin
+ *
+ * Team:
+ * Jose E. Almas de Jesus Junior - jeajjr@gmail.com
+ * Pedro de Oliveira Lira - pedulira@gmail.com
+ *
+ */
+
 package com.mobapp.almaslira.sharethatbill;
 
 import android.app.Activity;
@@ -36,7 +49,7 @@ public class BillsTab extends Activity implements View.OnClickListener, AdapterV
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.d(TAG, "onCreate");
+        Log.d(TAG, "onCreate")
         super.onCreate(savedInstanceState);
 
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -95,6 +108,7 @@ public class BillsTab extends Activity implements View.OnClickListener, AdapterV
         }
     }
 
+
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Log.d(TAG, "onItemClick");
@@ -106,6 +120,9 @@ public class BillsTab extends Activity implements View.OnClickListener, AdapterV
         startActivity(intent);
     }
 
+    /**
+     * Download all bills of the group.
+     */
     void updateBills() {
         progressDialog.show();
 
@@ -128,6 +145,9 @@ public class BillsTab extends Activity implements View.OnClickListener, AdapterV
         }.start();
     }
 
+    /**
+     * Updates bills listView.
+     */
     void updateList() {
         arrayAdapter = new ArrayAdapter<String>(
                 this,
