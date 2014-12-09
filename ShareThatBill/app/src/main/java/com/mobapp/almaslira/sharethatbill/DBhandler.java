@@ -10,9 +10,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-/**
- * Class that will handle database connections and requests.
- */
 public class DBhandler {
     private static final String TAG = "DBHANDLER debug";
     private static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
@@ -346,7 +343,7 @@ public class DBhandler {
             connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
 
             this.statement = connect.createStatement();
-            query = "SELECT usersAndGroups.uid,SUM(valuePaid)-SUM(valueOwe) FROM usersAndGroups INNER JOIN usersAndBills WHERE usersAndGroups.gid='"+groupName+"' AND usersAndBills.uid=usersAndGroups.uid GROUP BY usersAndGroups.uid";
+            query = "SELECT uid,SUM(valuePaid)-SUM(valueOwn) FROM bills INNER JOIN groups AS billsAndGroups ON bills.gid = billsAndGroups.name AND bills.gid = '"+groupName+"' INNER JOIN usersAndBills ON usersAndBills.bid = bills.id GROUP BY usersAndBills.uid";
             this.resultSet = statement.executeQuery(query);
 
             while(resultSet.next()){
@@ -472,13 +469,13 @@ public class DBhandler {
      * @param billName
      * @param value
      */
-    public void createUserBillRelation(String user, String billName, float valueOwe, float valuePaid){
+    public void createUserBillRelation(String user, String billName, float valueOwn, float valuePaid){
 
         try {
             connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
 
             this.statement = connect.createStatement();
-            String query = "INSERT INTO `usersAndBills`(`uid`, `bid`, `valueOwn`, `valuePaid`) VALUES ('"+user+"','"+billName+"','"+valueOwe+"','"+valuePaid+"')";
+            String query = "INSERT INTO `usersAndBills`(`uid`, `bid`, `valueOwn`, `valuePaid`) VALUES ('"+user+"','"+billName+"','"+valueOwn+"','"+valuePaid+"')";
             statement.executeUpdate(query);
             connect.close();
 
@@ -536,7 +533,7 @@ public class DBhandler {
     /**
      * Method to get users that have not paid the bill
      * @param billName
-     * @return ArrayList<TwoStringsClass> owes bill
+     * @return ArrayList<TwoStringsClass> owns bill
      */
     public ArrayList<TwoStringsClass> getWhoOwesBill(String billName){
 
