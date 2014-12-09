@@ -7,15 +7,9 @@
 	se não estiver cadastrado, só mostrar email 
 	invite de grupo
 	convites pendentes
-*	exibir membros {
-	quando nao tem nenhuma bill criada
-	
-}
 
 - profile
 	notificação de convite para grupo
 
 - botao de logout
 
-- system evolution
-	facebook
