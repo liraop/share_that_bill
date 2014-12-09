@@ -338,6 +338,7 @@ public class DBhandler {
      */
     public ArrayList<TwoStringsClass> getUserGroupBalance(String groupName){
         ArrayList<TwoStringsClass> result = new ArrayList<TwoStringsClass>();
+        ArrayList<String> parcialMem = new ArrayList<String>();
         String query = "";
 
         try {
@@ -349,12 +350,22 @@ public class DBhandler {
 
             while(resultSet.next()){
                 result.add(new TwoStringsClass(resultSet.getString(1),resultSet.getString(2)));
+                parcialMem.add(resultSet.getString(1));
             }
             connect.close();
         }
         catch (SQLException e) {
             //do something with sql exception
         }
+
+        ArrayList<String> members = this.getGroupMembers(groupName);
+
+        for (int i = 0; i < members.size(); i++){
+            if (!parcialMem.contains(members.get(i))){
+                result.add(new TwoStringsClass(members.get(i),"0.0"));
+            }
+        }
+
         return result;
     }
 
@@ -654,4 +665,5 @@ public class DBhandler {
         }
         return result;
     }
+
 }
