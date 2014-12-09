@@ -61,4 +61,14 @@
         </LinearLayout>
     </TabHost>
 
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageButtonGroupLogout"
+        android:layout_alignTop="@+id/textViewGroupTitle"
+        android:layout_alignRight="@android:id/tabhost"
+        android:layout_alignEnd="@android:id/tabhost"
+        android:src="@drawable/logout"
+        android:background="@android:color/transparent" />
+
 </RelativeLayout>

@@ -49,7 +49,7 @@ public class BillsTab extends Activity implements View.OnClickListener, AdapterV
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.d(TAG, "onCreate")
+        Log.d(TAG, "onCreate");
         super.onCreate(savedInstanceState);
 
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);

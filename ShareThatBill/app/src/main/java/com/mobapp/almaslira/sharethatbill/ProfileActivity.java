@@ -16,7 +16,9 @@ package com.mobapp.almaslira.sharethatbill;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -70,6 +72,9 @@ public class ProfileActivity extends Activity implements View.OnClickListener, A
 
 		ImageButton createGroupButton = (ImageButton) findViewById(R.id.imageButtonProfileCreateGroup);
 		createGroupButton.setOnClickListener(this);
+
+        ImageButton logoutButton = (ImageButton) findViewById(R.id.imageButtonProfileLogout);
+        logoutButton.setOnClickListener(this);
 
 		groupsNamesList = new ArrayList<String>();
 
@@ -154,12 +159,19 @@ public class ProfileActivity extends Activity implements View.OnClickListener, A
 	public void onClick(View view) {
 		Log.d(TAG, "onClick");
 
+        Intent intent;
+
 		switch (view.getId()) {
 			case R.id.imageButtonProfileCreateGroup:
-                Intent intent = new Intent(ProfileActivity.this, CreateGroupActivity.class);
+                intent = new Intent(ProfileActivity.this, CreateGroupActivity.class);
                 intent.putExtra("user_name", userName);
                 startActivity(intent);
 				break;
+
+            case R.id.imageButtonProfileLogout:
+                intent = new Intent(ProfileActivity.this, LoginActivity.class);
+                startActivity(intent);
+                break;
 		}
 	}
 
@@ -178,4 +190,11 @@ public class ProfileActivity extends Activity implements View.OnClickListener, A
 			}
 		}.start();
 	}
+
+    @Override
+    protected void onPause() {
+        Log.d(TAG, "onPause");
+        super.onPause();
+        finish();
+    }
 }

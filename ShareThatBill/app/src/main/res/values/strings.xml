@@ -91,11 +91,11 @@
     <string name="create_bill_created">Bill successfully created.</string>
     <string name="create_bill_getting_location">Getting current location</string>
     <string name="create_bill_warning_location_disabled">Location services are disabled on this device. Do you want to enabled it?</string>
+    <string name="create_bill_save">Save</string>
     <string name="view_bill_check_map">Check map</string>
     <string name="view_bill_check_picture">Take a look</string>
     <string name="view_bill_no_picture">No picture attached</string>
     <string name="view_bill_warning_no_location">No location available for this bill</string>
-    <string name="create_bill_save">Save</string>
     <string name="title_activity_notifications_tab">NotificationsTab</string>
     <string name="notification_adapter_bill_created">created the bill</string>
     <string name="notification_adapter_bill_edited">edited the bill</string>

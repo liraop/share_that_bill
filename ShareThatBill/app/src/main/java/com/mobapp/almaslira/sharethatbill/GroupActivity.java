@@ -17,8 +17,10 @@ import android.app.TabActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageButton;
 import android.widget.TabHost;
 import android.widget.TextView;
 
@@ -27,7 +29,7 @@ import android.widget.TextView;
  * - interface to interact in a group.
  */
 
-public class GroupActivity extends TabActivity {
+public class GroupActivity extends TabActivity implements View.OnClickListener {
 	static final String TAG = "GroupActivity";
 
     String thisUserName;
@@ -82,5 +84,30 @@ public class GroupActivity extends TabActivity {
         tabHost.addTab(notificationsTabSpec);
         tabHost.addTab(billsTabSpec);
 		tabHost.addTab(membersTabSpec);
+
+        ImageButton logoutButton = (ImageButton) findViewById(R.id.imageButtonGroupLogout);
+        logoutButton.setOnClickListener(this);
+
 	}
+
+    @Override
+    public void onClick(View view) {
+        Log.d(TAG, "onClick");
+
+        Intent intent;
+
+        switch (view.getId()) {
+            case R.id.imageButtonGroupLogout:
+                intent = new Intent(GroupActivity.this, LoginActivity.class);
+                startActivity(intent);
+                break;
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        Log.d(TAG, "onPause");
+        super.onPause();
+        finish();
+    }
 }

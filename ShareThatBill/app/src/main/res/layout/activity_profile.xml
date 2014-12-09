@@ -65,4 +65,15 @@
         android:layout_marginTop="20dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageButtonProfileLogout"
+        android:layout_alignTop="@+id/textViewProfileTitle"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:src="@drawable/logout"
+        android:background="@android:color/transparent"
+        android:layout_marginRight="20dp" />
 </RelativeLayout>

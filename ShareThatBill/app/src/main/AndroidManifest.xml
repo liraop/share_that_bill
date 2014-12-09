@@ -13,12 +13,17 @@
     <application
         android:name="com.mobapp.almaslira.sharethatbill.ShareThatBillApp"
         android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@drawable/icon"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
             android:name="com.mobapp.almaslira.sharethatbill.LoginActivity"
             android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name="com.mobapp.almaslira.sharethatbill.CreateAccountActivity"
@@ -35,11 +40,6 @@
         <activity
             android:name="com.mobapp.almaslira.sharethatbill.GroupActivity"
             android:label="GroupActivity" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name="com.mobapp.almaslira.sharethatbill.MembersTab"
