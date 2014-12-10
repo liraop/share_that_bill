@@ -177,7 +177,7 @@ public class DBhandler {
      * Method to add an user to a group.
      * User and group are added on usersAndGroups table.
      *
-     * @param 
+     * @param
      * @param groupName
      * @return
      */
