@@ -29,6 +29,6 @@ public class Bill {
     Float billLocationLongitude = 0.0f;
     boolean locationIsSet = false;
     String billPicturePath;
-    Bitmap picture;
+    Bitmap billPicture;
 
 }

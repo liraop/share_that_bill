@@ -2,6 +2,7 @@ package com.mobapp.almaslira.sharethatbill;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
 import java.sql.Connection;
@@ -401,7 +402,7 @@ public class DBhandler {
 
     /**
      * Method to get a bill from db.
-     * TODO: implement picture request
+     * TODO: implement billPicture request
      *
      * @param billID
      * @return the Bill
@@ -447,7 +448,7 @@ public class DBhandler {
             connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
 
             this.statement = connect.createStatement();
-            String query = "SELECT picture FROM bills WHERE bid = '"+bill.billName+"'";
+            String query = "SELECT billPicture FROM bills WHERE bid = '"+bill.billName+"'";
             this.resultSet = statement.executeQuery(query);
 
             while (resultSet.next()) {
@@ -499,25 +500,27 @@ public class DBhandler {
         }
     }
 
-    public void addPictureToBill(Bill bill){
+    public void addPictureToBill(final Bill bill){
 
         new Thread() {
-            public void run(Bill bill) {
+            public void run() {
 
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                bill.picture.compress(Bitmap.CompressFormat.PNG, 13, stream);
+                bill.billPicture.compress(Bitmap.CompressFormat.PNG, 13, stream);
                 byte[] byteArray = stream.toByteArray();
 
                 try
                 {
                     connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
 
-                    String query = "INSERT INTO `bills`(`picture`) VALUES (?) WHERE '" + bill.billName + "' = bills.id";
+                    String query = "INSERT INTO `bills`(`billPicture`) VALUES (?) WHERE '" + bill.billName + "' = bills.id";
                     PreparedStatement psmtm = connect.prepareStatement(query);
                     psmtm.setBytes(1, byteArray);
                     psmtm.execute();
 
                     connect.close();
+
+                    Log.d(TAG, "picture added");
                 } catch (
                         SQLException e
                         )

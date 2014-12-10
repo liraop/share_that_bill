@@ -66,7 +66,6 @@ import java.util.Date;
  */
 public class CreateBillActivity extends Activity implements RadioGroup.OnCheckedChangeListener, View.OnClickListener, LocationListener {
     static final String TAG = "CreateBillActivity";
-    private static DBhandler dbhandler = new DBhandler();
 
     String groupName;
     ArrayList<TwoStringsClass> whoPaidTwoStringsList;
@@ -82,6 +81,10 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
 
     boolean getLocation;
 
+    boolean hasPicture;
+    String picturePath;
+    boolean downloadPicture; // in case the bill has a billPicture and it could not be downloaded by ViewBill
+    boolean pictureReady;
     ProgressDialog progressDialog;
 
     boolean editingBill;
@@ -106,21 +109,47 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
 
         thisBill = new Bill();
 
+        pictureReady = false;
+
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             groupName = extras.getString("group_name");
             editingBill = extras.getBoolean("editing");
             userName = extras.getString("user_name");
 
-            Log.d(TAG, "received userName " + userName);
+            hasPicture = extras.getBoolean("has_picture");
 
             if (editingBill) {
                 thisBill.billName = extras.getString("bill_name");
                 billOriginalName = thisBill.billName;
 
+                if (hasPicture)
+                    picturePath = extras.getString("picture_path");
+                else
+                    picturePath = null;
+
+                if (picturePath != null) {
+                    pictureReady = true;
+                }
+                else {
+                    if (hasPicture)
+                        downloadPicture = true;
+                    else
+                        downloadPicture = false;
+                }
                 Log.d(TAG, "editing bill " + billOriginalName + " from group " + groupName);
             }
         }
+/*
+        //TODO
+        groupName ="House bills";
+        editingBill = false;
+        userName = "user1@test.com";
+        hasPicture = true;
+        picturePath = null;//"/storage/emulated/0/Pictures/JPEG__bill_20141210_021949-1430263900.jpg";
+        downloadPicture = true;
+        pictureReady = false;
+        */
 
         progressDialog = new ProgressDialog(CreateBillActivity.this);
         progressDialog.setMessage(getResources().getString(R.string.warning_loading));
@@ -161,8 +190,10 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
         mapImage.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.map_image_faded));
         mapImage.setOnClickListener(this);
 
-        if (editingBill)
-        {
+        ImageView pictureThumbnail = (ImageView) findViewById(R.id.imageViewCreateBillThumbnail);
+        pictureThumbnail.setOnClickListener(this);
+
+        if (editingBill) {
             EditText billNameEditText = (EditText) findViewById(R.id.editTextCreateBillBillName);
             billNameEditText.setText(thisBill.billName);
 
@@ -173,9 +204,18 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
             whoOwesText.setText(getResources().getString(R.string.view_bill_who_owes));
         }
 
+        if (downloadPicture) {
+            ProgressBar imageProgressBar = (ProgressBar) findViewById(R.id.progressBarCreateBillPicture);
+            imageProgressBar.setVisibility(View.VISIBLE);
+        }
+
         ImageButton deleteLocation = (ImageButton) findViewById(R.id.imageButtonCreateBillDeleteLocation);
         deleteLocation.setOnClickListener(this);
-        deleteLocation.setVisibility(View.GONE);
+        deleteLocation.setVisibility(View.INVISIBLE);
+
+        ImageButton deletePicture = (ImageButton) findViewById(R.id.imageButtonCreateBillDeletePicture);
+        deletePicture.setOnClickListener(this);
+        deletePicture.setVisibility(View.INVISIBLE);
 
         getLocation = false;
 
@@ -185,7 +225,7 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
         locationManagerNetwork = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         locationManagerNetwork.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
 
-        fetchMembersList();
+        fetchBillInformation();
     }
 
     /**
@@ -194,7 +234,7 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
     @Override
     public void onLocationChanged(Location location) {
 
-        if (getLocation == true) {
+        if (getLocation) {
             Log.d(TAG, "getting location");
 
             thisBill.billLocationLatitute = (float) location.getLatitude();
@@ -267,17 +307,20 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
                 break;
 
             case R.id.buttonCreateBillPicture:
-                Log.d(TAG, "take picture button");
+                Log.d(TAG, "take billPicture button");
                 takePicture();
                 break;
 
             case R.id.imageViewCreateBillThumbnail:
                 Log.d(TAG, "touched image");
 
-                intent = new Intent(Intent.ACTION_VIEW);
-                intent.setDataAndType(Uri.parse("file://" + thisBill.billPicturePath),"image/jpg");
-                startActivity(intent);
-
+                if (pictureReady) {
+                    intent = new Intent(Intent.ACTION_VIEW);
+                    intent.setDataAndType(Uri.parse("file://" + picturePath), "image/jpg");
+                    startActivity(intent);
+                }
+                else
+                    Toast.makeText(this, getResources().getString(R.string.create_bill_warning_picture_unavailable), Toast.LENGTH_SHORT).show();
                 break;
 
             case R.id.buttonCreateBillLocation:
@@ -325,6 +368,14 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
 
                 ImageButton deleteLocation = (ImageButton) findViewById(R.id.imageButtonCreateBillDeleteLocation);
                 deleteLocation.setVisibility(View.GONE);
+                break;
+
+            case R.id.imageButtonCreateBillDeletePicture:
+
+                thisBill.billPicture = null;
+                picturePath = null;
+                pictureReady = false;
+
                 break;
         }
     }
@@ -374,7 +425,7 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
     static final int REQUEST_IMAGE_CAPTURE = 1;
 
     /**
-     * Sends an intent to capture a picture.
+     * Sends an intent to capture a billPicture.
      */
     private void takePicture() {
         Log.d(TAG, "calling camera");
@@ -402,12 +453,12 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
     }
 
     /**
-     * Creates a File for the picture to be stored.
+     * Creates a File for the billPicture to be stored.
      */
     private File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + groupName + "_bill_" + timeStamp;
+        String imageFileName = "JPEG_" + "_bill_" + timeStamp;
         File storageDir = Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
@@ -417,56 +468,41 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
         );
 
         // Save a file: path for use with ACTION_VIEW intents
-        thisBill.billPicturePath = /*"file:" + */image.getAbsolutePath();
-        Log.d(TAG, "image save path created: " + thisBill.billPicturePath);
+        picturePath =/* "file:" + */ image.getAbsolutePath();
+        Log.d(TAG, "image save path created: " + picturePath);
         return image;
+
     }
 
     /**
-     * Called when the camera activity finishes. If the task was successful, it sets the picture's
+     * Called when the camera activity finishes. If the task was successful, it sets the billPicture's
      * thumbnail in the interface's ImageView.
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.d(TAG, "returned from camera");
-        File f = new File(thisBill.billPicturePath);
+        File f = new File(picturePath);
 
         if(f.exists() && !f.isDirectory())
-            Log.d(TAG, "image exists");
+            Log.d(TAG, "image exists, size" + f.length());
         else
             Log.d(TAG, "image does not exist");
 
         Log.d(TAG, "result ok: " + (resultCode == RESULT_OK));
 
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            ImageView mImageView = (ImageView) findViewById(R.id.imageViewCreateBillThumbnail);
-            mImageView.setImageBitmap(BitmapFactory.decodeFile(thisBill.billPicturePath));
-            mImageView.setOnClickListener(this);
+            thisBill.billPicture = BitmapFactory.decodeFile(picturePath);
+
+            if (thisBill.billPicture == null)
+                Log.d(TAG, "bill billPicture null");
+            else
+                Log.d(TAG, "bill billPicture not null");
+
+            ImageButton deleteLocation = (ImageButton) findViewById(R.id.imageButtonCreateBillDeletePicture);
+            deleteLocation.setVisibility(View.VISIBLE);
+
+            pictureReady = true;
         }
-    }
-
-    /**
-     *
-     * http://developer.android.com/training/camera/photobasics.html
-     */
-    public Bitmap compressBitmap (String photoPath, int targetW, int targetH) {
-
-        // Get the dimensions of the bitmap
-        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-        bmOptions.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(photoPath, bmOptions);
-        int photoW = bmOptions.outWidth;
-        int photoH = bmOptions.outHeight;
-
-        // Determine how much to scale down the image
-        int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
-
-        // Decode the image file into a Bitmap sized to fill the View
-        bmOptions.inJustDecodeBounds = false;
-        bmOptions.inSampleSize = scaleFactor;
-        bmOptions.inPurgeable = true;
-
-        return BitmapFactory.decodeFile(photoPath, bmOptions);
     }
 
     public Uri getImageUri(Context inContext, Bitmap inImage) {
@@ -521,10 +557,11 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
             public void run() {
 
                 if (editingBill)
-                    dbhandler.editBill(thisBill, billOriginalName, userName);
+                    ((ShareThatBillApp) getApplication()).dBhandler.editBill(thisBill, billOriginalName, userName);
                 else
-                    dbhandler.createBill(thisBill, userName);
-                    dbhandler.addPictureToBill(thisBill);
+                    ((ShareThatBillApp) getApplication()).dBhandler.createBill(thisBill, userName);
+
+                ((ShareThatBillApp) getApplication()).dBhandler.addPictureToBill(thisBill);
                 Log.d(TAG, "creating bill");
 
                 for (int i = 0; i < whoPaidTwoStringsList.size(); i++) {
@@ -533,12 +570,15 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
                                 " owes " + Float.parseFloat(whoOwesTwoStringsList.get(i).second) +
                                 " and paid " + Float.parseFloat(whoPaidTwoStringsList.get(i).second));
 
-                        dbhandler.createUserBillRelation(whoPaidTwoStringsList.get(i).first, thisBill.billName,
+                        ((ShareThatBillApp) getApplication()).dBhandler.createUserBillRelation(whoPaidTwoStringsList.get(i).first, thisBill.billName,
                                 Float.parseFloat(whoOwesTwoStringsList.get(i).second),
                                 Float.parseFloat(whoPaidTwoStringsList.get(i).second));
 
                     }
                 }
+
+                Log.d(TAG, "saving picture");
+                ((ShareThatBillApp) getApplication()).dBhandler.addPictureToBill(thisBill);
 
                 CreateBillActivity.this.runOnUiThread(new Runnable() {
                     public void run() {
@@ -643,16 +683,16 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
     }
 
     /**
-     * Downloads the group members list.
+     * Downloads bill information.
      */
-    public void fetchMembersList() {
-        Log.d(TAG, "fetchMembersList");
+    public void fetchBillInformation() {
+        Log.d(TAG, "fetchBillInformation");
 
         progressDialog.show();
 
         new Thread() {
             public void run() {
-                ArrayList<String> members = dbhandler.getGroupMembers(groupName);
+                ArrayList<String> members = ((ShareThatBillApp) getApplication()).dBhandler.getGroupMembers(groupName);
 
                 whoPaidTwoStringsList = new ArrayList<TwoStringsClass>();
                 whoOwesTwoStringsList = new ArrayList<TwoStringsClass>();
@@ -664,10 +704,10 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
                 }
 
                 if (editingBill) {
-                    thisBill = dbhandler.getBill(thisBill.billName);
+                    thisBill = ((ShareThatBillApp) getApplication()).dBhandler.getBill(thisBill.billName);
 
                     Log.d(TAG, "get who paid");
-                    ArrayList<TwoStringsClass> whoPaidTemp = dbhandler.getWhoPaidBill(thisBill.billName);
+                    ArrayList<TwoStringsClass> whoPaidTemp = ((ShareThatBillApp) getApplication()).dBhandler.getWhoPaidBill(thisBill.billName);
 
                     for (int i = 0; i < members.size(); ++i) {
                         for (int j = 0; j < whoPaidTemp.size(); ++j) {
@@ -677,7 +717,7 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
                     }
 
                     Log.d(TAG, "get who owes");
-                    ArrayList<TwoStringsClass> whoOweTemp = dbhandler.getWhoOwesBill(thisBill.billName);
+                    ArrayList<TwoStringsClass> whoOweTemp = ((ShareThatBillApp) getApplication()).dBhandler.getWhoOwesBill(thisBill.billName);
 
                     for (int i = 0; i < members.size(); ++i) {
                         for (int j = 0; j < whoOweTemp.size(); ++j) {
@@ -726,6 +766,33 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
                 });
             }
         }.start();
+
+        // Download billPicture in another thread
+        if (downloadPicture) {
+            new Thread() {
+                public void run() {
+                    Log.d(TAG, "fetching picture");
+                    //TODO
+                    thisBill.billPicture = ((ShareThatBillApp) getApplication()).dBhandler.getBillPicture(thisBill);
+                    try {
+                        Thread.sleep(10000);
+                    } catch(Exception e) {}
+
+                    CreateBillActivity.this.runOnUiThread(new Runnable() {
+                        public void run() {
+                            //TODO change image
+                            ImageView pictureThumbnail = (ImageView) findViewById(R.id.imageViewCreateBillThumbnail);
+
+                            ProgressBar imageProgressBar = (ProgressBar) findViewById(R.id.progressBarCreateBillPicture);
+                            imageProgressBar.setVisibility(View.INVISIBLE);
+                        }
+                    });
+
+                    pictureReady = true;
+                    Log.d(TAG, "picture ready");
+                }
+            }.start();
+        }
     }
 
     /**

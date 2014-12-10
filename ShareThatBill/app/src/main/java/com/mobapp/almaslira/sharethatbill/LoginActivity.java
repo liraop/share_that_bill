@@ -34,7 +34,6 @@ import android.widget.EditText;
  */
 public class LoginActivity extends Activity implements View.OnClickListener {
 	static final String TAG = "LoginActivity";
-    private static DBhandler dbhandler = new DBhandler();
 
     ProgressDialog progressDialog;
 
@@ -59,8 +58,6 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         progressDialog.setMessage(getResources().getString(R.string.warning_loading));
         progressDialog.setCancelable(false);
     }
-
-
 
 	@Override
 	public void onClick(View view) {
@@ -94,7 +91,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 				{
 					Log.d(TAG, "logging in");
 
-                sendLoginRequest(emailString, passwordString);
+                    sendLoginRequest(emailString, passwordString);
 				}
 
 				break;
@@ -117,7 +114,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 			public void run() {
 				Log.d(TAG, "in thread");
 
-                if (!dbhandler.checkLogin(userEmail,userPassword)) {
+                if (!((ShareThatBillApp) getApplication()).dBhandler.checkLogin(userEmail,userPassword)) {
                     Log.d(TAG, "login unsuccessful");
                 } else {
                     Log.d(TAG, "login successful");

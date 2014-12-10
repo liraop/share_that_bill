@@ -229,7 +229,7 @@
                 android:layout_toEndOf="@+id/textViewCreateBillPicture"
                 android:layout_alignBottom="@+id/buttonCreateBillPicture"
                 android:layout_toRightOf="@+id/textViewCreateBillPicture"
-                android:layout_marginLeft="20dp" />
+                android:layout_marginLeft="28dp" />
 
             <ImageButton
                 android:layout_width="wrap_content"
@@ -267,7 +267,26 @@
                 android:layout_toStartOf="@+id/buttonCreateBillLocation"
                 android:layout_marginRight="8dp" />
 
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/progressBarCreateBillPicture"
+                android:indeterminate="false"
+                android:visibility="invisible"
+                android:layout_below="@+id/progressBarCreateBillLocation"
+                android:layout_alignLeft="@+id/progressBarCreateBillLocation"
+                android:layout_alignStart="@+id/progressBarCreateBillLocation" />
 
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageButtonCreateBillDeletePicture"
+                android:background="@android:color/transparent"
+                android:layout_toEndOf="@+id/imageViewCreateBillMap"
+                android:src="@drawable/x_button"
+                android:layout_alignTop="@+id/imageViewCreateBillThumbnail"
+                android:layout_toRightOf="@+id/imageViewCreateBillMap"
+                android:layout_marginLeft="20dp" />
 
 
         </RelativeLayout>.

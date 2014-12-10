@@ -38,7 +38,6 @@ import java.util.ArrayList;
  */
 public class MembersTab extends Activity implements View.OnClickListener {
 	static final String TAG = "MembersTab";
-    private static DBhandler dbhandler = new DBhandler();
 
     String thisUserName;
     String thisGroupName;
@@ -135,7 +134,7 @@ public class MembersTab extends Activity implements View.OnClickListener {
             public void run() {
 
                 if (isValidEmail(newMember)) {
-                    if (dbhandler.addUserToGroup(newMember, thisGroupName,thisUserName)) {
+                    if (((ShareThatBillApp) getApplication()).dBhandler.addUserToGroup(newMember, thisGroupName,thisUserName)) {
                         Log.d(TAG, "user " + newMember + " added");
 
                         runOnUiThread(new Runnable() {
@@ -205,7 +204,7 @@ public class MembersTab extends Activity implements View.OnClickListener {
             public void run() {
                 Log.d(TAG, "in thread updateBills");
 
-                membersBalanceList = dbhandler.getUserGroupBalance(thisGroupName);
+                membersBalanceList = ((ShareThatBillApp) getApplication()).dBhandler.getUserGroupBalance(thisGroupName);
 
                 Log.d(TAG, "list size " + membersBalanceList.size());
                 runOnUiThread(new Runnable(){

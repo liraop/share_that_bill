@@ -36,6 +36,8 @@ public class GroupActivity extends TabActivity implements View.OnClickListener {
 	String thisGroupName;
 	TabHost tabHost;
 
+    boolean logOut;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		Log.d(TAG, "onCreate");
@@ -52,6 +54,7 @@ public class GroupActivity extends TabActivity implements View.OnClickListener {
 			thisGroupName = extras.getString("group_name");
 		}
 
+        //TODO
         thisUserName = "user1@test.com";
         thisGroupName = "House bills";
 
@@ -87,7 +90,6 @@ public class GroupActivity extends TabActivity implements View.OnClickListener {
 
         ImageButton logoutButton = (ImageButton) findViewById(R.id.imageButtonGroupLogout);
         logoutButton.setOnClickListener(this);
-
 	}
 
     @Override
@@ -98,6 +100,8 @@ public class GroupActivity extends TabActivity implements View.OnClickListener {
 
         switch (view.getId()) {
             case R.id.imageButtonGroupLogout:
+                logOut = true;
+
                 intent = new Intent(GroupActivity.this, LoginActivity.class);
                 startActivity(intent);
                 break;
@@ -108,6 +112,8 @@ public class GroupActivity extends TabActivity implements View.OnClickListener {
     protected void onPause() {
         Log.d(TAG, "onPause");
         super.onPause();
-        finish();
+
+        if (logOut)
+            finish();
     }
 }

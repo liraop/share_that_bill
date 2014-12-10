@@ -32,7 +32,6 @@ import java.util.ArrayList;
  */
 public class NotificationsTab extends Activity {
     static final String TAG = "NotificationsTab";
-    private static DBhandler dbhandler = new DBhandler();
 
     String thisGroupName;
     ProgressDialog progressDialog;
@@ -78,7 +77,7 @@ public class NotificationsTab extends Activity {
         new Thread() {
             public void run() {
 
-                notificationList = dbhandler.getGroupNotifications(thisGroupName);
+                notificationList = ((ShareThatBillApp) getApplication()).dBhandler.getGroupNotifications(thisGroupName);
 
                 runOnUiThread(new Runnable() {
                     public void run() {

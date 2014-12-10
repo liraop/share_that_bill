@@ -29,6 +29,7 @@ import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,13 +41,12 @@ import java.util.ArrayList;
  * ViewBill activity:
  * - visualises a bill
  * - opens Maps if bill location is available
- * - opens image viewer if a bill picture is available
+ * - opens image viewer if a bill billPicture is available
  * - option to edit the bill
  * - option to delete the bill
  */
 public class ViewBillActivity extends Activity implements View.OnClickListener {
     static final String TAG = "ViewBillActivity";
-    private static DBhandler dbhandler = new DBhandler();
 
     String billName;
     String groupName;
@@ -110,7 +110,7 @@ public class ViewBillActivity extends Activity implements View.OnClickListener {
             public void run() {
                 Log.d(TAG, "in thread fetchBillData");
 
-                thisBill = dbhandler.getBill(billName);
+                thisBill = ((ShareThatBillApp) getApplication()).dBhandler.getBill(billName);
 
                 if (thisBill.billLocationLatitute != 0 && thisBill.billLocationLongitude != 0) {
                     Log.d(TAG, "bill location is valid");
@@ -129,10 +129,10 @@ public class ViewBillActivity extends Activity implements View.OnClickListener {
                 }
 
                 Log.d(TAG, "get who paid");
-                whoPaidTwoStringsList = dbhandler.getWhoPaidBill(billName);
+                whoPaidTwoStringsList = ((ShareThatBillApp) getApplication()).dBhandler.getWhoPaidBill(billName);
 
                 Log.d(TAG, "get who owes");
-                whoOwesTwoStringList = dbhandler.getWhoOwesBill(billName);
+                whoOwesTwoStringList = ((ShareThatBillApp) getApplication()).dBhandler.getWhoOwesBill(billName);
 
                 runOnUiThread(new Runnable(){
                     public void run() {
@@ -141,6 +141,34 @@ public class ViewBillActivity extends Activity implements View.OnClickListener {
                 });
 
                 progressDialog.dismiss();
+            }
+        }.start();
+
+        // Download billPicture separately
+        new Thread() {
+            public void run() {
+                Log.d(TAG, "in thread fetchBillData - billPicture");
+
+                // get billPicture
+
+                // remove progress bar
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBarViewBillPicture);
+                        progressBar.setVisibility(View.INVISIBLE);
+
+                        ImageView viewPicture = (ImageView) findViewById(R.id.imageViewViewBillThumbnail);
+                        viewPicture.setOnClickListener(ViewBillActivity.this);
+                        viewPicture.setVisibility(View.VISIBLE);
+
+                        if (thisBill.billPicture != null) {
+                            viewPicture.setImageBitmap(thisBill.billPicture);
+                        }
+                    }
+                });
+
+                // Save downloaded billPicture on card for visualization
+
             }
         }.start();
     }
@@ -162,15 +190,6 @@ public class ViewBillActivity extends Activity implements View.OnClickListener {
 
         TextView location = (TextView) findViewById(R.id.textViewViewBillLocation);
         location.setText(getResources().getString(R.string.view_bill_location));
-
-        //TODO: remove this
-        thisBill.billPicturePath = "/storage/emulated/0/Pictures/JPEG_group1_bill_20141120_215058870093638.jpg";
-
-        ImageView viewPicture = (ImageView) findViewById(R.id.imageViewViewBillThumbnail);
-        viewPicture.setOnClickListener(this);
-        if (thisBill.billPicturePath != null)
-            if (thisBill.billPicturePath.length() != 0)
-                viewPicture.setImageBitmap(BitmapFactory.decodeFile(thisBill.billPicturePath));
 
         // ** Who paid list **
 
@@ -228,11 +247,11 @@ public class ViewBillActivity extends Activity implements View.OnClickListener {
 
         switch (view.getId()) {
             case R.id.imageViewViewBillThumbnail:
-
+/*
                 intent = new Intent(Intent.ACTION_VIEW);
                 intent.setDataAndType(Uri.parse("file://" + thisBill.billPicturePath),"image/jpg");
                 startActivity(intent);
-
+*/
                 break;
 
             case R.id.imageButtonViewBillMap:
@@ -286,7 +305,7 @@ public class ViewBillActivity extends Activity implements View.OnClickListener {
                     public void run() {
                         Log.d(TAG, "in thread deleteBill");
 
-                        dbhandler.deleteBill(thisBill.billName, userName, groupName);
+                        ((ShareThatBillApp) getApplication()).dBhandler.deleteBill(thisBill.billName, userName, groupName);
 
                         runOnUiThread(new Runnable() {
                             public void run() {

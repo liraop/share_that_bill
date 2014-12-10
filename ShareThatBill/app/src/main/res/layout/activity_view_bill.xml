@@ -137,7 +137,8 @@
                 android:background="@android:color/transparent"
                 android:maxHeight="100dp"
                 android:scaleType="fitXY"
-                android:adjustViewBounds="true"/>
+                android:adjustViewBounds="true"
+                android:visibility="invisible" />
 
             <ProgressBar
                 android:id="@+id/progressBarViewBillPicture"

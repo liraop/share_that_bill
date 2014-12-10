@@ -37,7 +37,6 @@ import java.util.List;
  */
 public class BillsTab extends Activity implements View.OnClickListener, AdapterView.OnItemClickListener {
     static final String TAG = "BillsTab";
-    private static DBhandler dbhandler = new DBhandler();
 
     String thisUserName;
     String thisGroupName;
@@ -130,7 +129,7 @@ public class BillsTab extends Activity implements View.OnClickListener, AdapterV
             public void run() {
                 Log.d(TAG, "in thread updateBills");
 
-                billsNamesList = dbhandler.getGroupBills(thisGroupName);
+                billsNamesList = ((ShareThatBillApp) getApplication()).dBhandler.getGroupBills(thisGroupName);
 
                 progressDialog.dismiss();
 

@@ -33,7 +33,6 @@ import android.widget.EditText;
  */
 public class CreateAccountActivity extends Activity implements View.OnClickListener {
 	static final String TAG = "CreateAccountActivity";
-    private static DBhandler dbhandler = new DBhandler();
 
 	ProgressDialog progressDialog;
 	boolean successCreating;
@@ -163,7 +162,7 @@ public class CreateAccountActivity extends Activity implements View.OnClickListe
 			public void run() {
 				Log.d(TAG, "in thread");
 
-				successCreating = dbhandler.createUserAccount(email, password);
+				successCreating = ((ShareThatBillApp) getApplication()).dBhandler.createUserAccount(email, password);
 
 				Log.d(TAG, "create account: " + successCreating);
 
