@@ -524,7 +524,7 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
                     dbhandler.editBill(thisBill, billOriginalName, userName);
                 else
                     dbhandler.createBill(thisBill, userName);
-
+                    dbhandler.addPictureToBill(thisBill);
                 Log.d(TAG, "creating bill");
 
                 for (int i = 0; i < whoPaidTwoStringsList.size(); i++) {

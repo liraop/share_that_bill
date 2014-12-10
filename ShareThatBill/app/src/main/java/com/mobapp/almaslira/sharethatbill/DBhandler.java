@@ -1,5 +1,8 @@
 package com.mobapp.almaslira.sharethatbill;
 
+import android.graphics.Bitmap;
+
+import java.io.ByteArrayOutputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -473,6 +476,37 @@ public class DBhandler {
         } catch (SQLException e) {
             //do something with exception
         }
+    }
+
+    public void addPictureToBill(Bill bill){
+
+        new Thread() {
+            public void run(Bill bill) {
+
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                bill.picture.compress(Bitmap.CompressFormat.PNG, 13, stream);
+                byte[] byteArray = stream.toByteArray();
+
+                try
+                {
+                    connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
+
+                    String query = "INSERT INTO `bills`(`picture`) VALUES (?) WHERE '" + bill.billName + "' = bills.id";
+                    PreparedStatement psmtm = connect.prepareStatement(query);
+                    psmtm.setBytes(1, byteArray);
+                    psmtm.execute();
+
+                    connect.close();
+                } catch (
+                        SQLException e
+                        )
+
+                {
+                    //do something with exception
+                }
+            }
+
+        }.start();
     }
 
     /*

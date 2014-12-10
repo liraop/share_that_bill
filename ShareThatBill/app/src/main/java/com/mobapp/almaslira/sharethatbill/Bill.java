@@ -13,6 +13,8 @@
 
 package com.mobapp.almaslira.sharethatbill;
 
+import android.graphics.Bitmap;
+
 import java.util.Calendar;
 
 /**
@@ -27,5 +29,6 @@ public class Bill {
     Float billLocationLongitude = 0.0f;
     boolean locationIsSet = false;
     String billPicturePath;
+    Bitmap picture;
 
 }
