@@ -1,6 +1,7 @@
 package com.mobapp.almaslira.sharethatbill;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 import java.io.ByteArrayOutputStream;
 import java.sql.Connection;
@@ -34,7 +35,6 @@ public class DBhandler {
             System.out.print(e.getMessage());
         }
     }
-
 
     /**
      * Method for check the user credentials on the database.
@@ -109,7 +109,6 @@ public class DBhandler {
         return result;
     }
 
-
     /**
      * Method to get the group's members
      *
@@ -143,8 +142,7 @@ public class DBhandler {
 
     }
 
-
-   /* Method to create a group. It uses groupExists method
+   /** Method to create a group. It uses groupExists method
     * then creates the group or not. Adds the group on the groups table
     *
     * @param userName
@@ -175,8 +173,7 @@ public class DBhandler {
         return false;
     }
 
-
-    /*
+    /**
      * Method to add an user to a group.
      * User and group are added on usersAndGroups table.
      *
@@ -206,7 +203,7 @@ public class DBhandler {
         return false;
     }
 
-    /*
+    /**
      * Method to check if a user is member of a group
      *
      * @param userName
@@ -236,7 +233,6 @@ public class DBhandler {
 
         return false;
     }
-
 
     /**
      * Method to check if the group already exists on the db
@@ -301,12 +297,12 @@ public class DBhandler {
 
     }
 
-    /*
-     * Method to get all the bills for a group.
-     *
-     * @param groupName
-     * @return ArrayList<String> bills ID
-     */
+   /**
+    * Method to get all the bills for a group.
+    *
+    * @param groupName
+    * @return ArrayList<String> bills ID
+    */
     public ArrayList<String> getGroupBills (String groupName){
 
         ArrayList<String> result = new ArrayList<String>();
@@ -333,7 +329,7 @@ public class DBhandler {
         return result;
     }
 
-    /*
+    /**
      * Method to get the users from a group and their respective balance.
      *
      * @param groupName
@@ -444,6 +440,31 @@ public class DBhandler {
         return b;
     }
 
+    public Bitmap getBillPicture(Bill bill){
+        byte[] picbytes = null;
+
+        try {
+            connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
+
+            this.statement = connect.createStatement();
+            String query = "SELECT picture FROM bills WHERE bid = '"+bill.billName+"'";
+            this.resultSet = statement.executeQuery(query);
+
+            while (resultSet.next()) {
+               picbytes = resultSet.getBytes(1);
+            }
+
+            connect.close();
+
+        } catch (SQLException e) {
+            //do something with sql exception
+        }
+
+        Bitmap bitmap = BitmapFactory.decodeByteArray(picbytes, 0, picbytes.length);
+
+        return bitmap;
+    }
+
     /**
      * TODO
      * @param bill
@@ -509,7 +530,7 @@ public class DBhandler {
         }.start();
     }
 
-    /*
+    /**
      * Method to create a relation between an user and a bill and its value.
      * @param user
      * @param billName
@@ -639,7 +660,7 @@ public class DBhandler {
         }
     }
 
-   /*
+   /**
     * Method to get a group notification. Its ordered by time.
     *
     * @param groupName
@@ -673,7 +694,7 @@ public class DBhandler {
         return result;
     }
 
-    /*
+    /**
      * Method to post a notification on the db.
      *
      * @param notification
