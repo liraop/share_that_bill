@@ -145,7 +145,7 @@ public class DBhandler {
    /** Method to create a group. It uses groupExists method
     * then creates the group or not. Adds the group on the groups table
     *
-    * @param userName
+    * @param
     * @param groupName
     * @return group created (true) or not (false)
     */
@@ -177,7 +177,7 @@ public class DBhandler {
      * Method to add an user to a group.
      * User and group are added on usersAndGroups table.
      *
-     * @param userName
+     * @param 
      * @param groupName
      * @return
      */
@@ -534,7 +534,7 @@ public class DBhandler {
      * Method to create a relation between an user and a bill and its value.
      * @param user
      * @param billName
-     * @param value
+     *
      */
     public void createUserBillRelation(String user, String billName, float valueOwn, float valuePaid){
 
