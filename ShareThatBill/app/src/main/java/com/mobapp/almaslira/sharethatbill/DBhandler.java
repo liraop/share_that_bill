@@ -501,14 +501,15 @@ public class DBhandler {
     }
 
     public void addPictureToBill(final Bill bill){
-
+/*
         new Thread() {
             public void run() {
-
+*/
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 bill.billPicture.compress(Bitmap.CompressFormat.PNG, 13, stream);
                 byte[] byteArray = stream.toByteArray();
 
+                Log.d(TAG, "saving picture");
                 try
                 {
                     connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
@@ -521,16 +522,16 @@ public class DBhandler {
                     connect.close();
 
                     Log.d(TAG, "picture added");
-                } catch (
-                        SQLException e
-                        )
-
+                } catch (SQLException e)
                 {
+                    Log.e(TAG, "error upload picture", e);
                     //do something with exception
                 }
+        /*
             }
 
         }.start();
+        */
     }
 
     /**
@@ -657,8 +658,9 @@ public class DBhandler {
             statement.executeUpdate(query);
             connect.close();
 
-            if (post) {this.postNotification(new Notification(sessionUserName,Notification.BILL_DELETED,billName), groupName);}
+            if (post) {this.postNotification(new Notification(sessionUserName,Notification.BILL_DELETED, billName), groupName);}
         } catch (SQLException e) {
+
             //do something with sql exception
         }
     }
@@ -708,6 +710,8 @@ public class DBhandler {
         boolean result = false;
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         try {
+            Log.d(TAG, "deleting bill" + notification.description);
+
             connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
 
             this.statement = connect.createStatement();
@@ -719,6 +723,7 @@ public class DBhandler {
             result = true;
 
         } catch (SQLException e) {
+            Log.e(TAG, "post delete bill " + notification.description, e);
             //do something with exception
         }
         return result;

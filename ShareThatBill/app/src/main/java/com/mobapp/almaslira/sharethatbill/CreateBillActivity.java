@@ -561,8 +561,10 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
                 else
                     ((ShareThatBillApp) getApplication()).dBhandler.createBill(thisBill, userName);
 
-                ((ShareThatBillApp) getApplication()).dBhandler.addPictureToBill(thisBill);
                 Log.d(TAG, "creating bill");
+
+                if (thisBill.billPicture != null)
+                    ((ShareThatBillApp) getApplication()).dBhandler.addPictureToBill(thisBill);
 
                 for (int i = 0; i < whoPaidTwoStringsList.size(); i++) {
                     if (Float.parseFloat(whoPaidTwoStringsList.get(i).second) > 0 || Float.parseFloat(whoOwesTwoStringsList.get(i).second) > 0) {
@@ -577,8 +579,7 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
                     }
                 }
 
-                Log.d(TAG, "saving picture");
-                ((ShareThatBillApp) getApplication()).dBhandler.addPictureToBill(thisBill);
+
 
                 CreateBillActivity.this.runOnUiThread(new Runnable() {
                     public void run() {

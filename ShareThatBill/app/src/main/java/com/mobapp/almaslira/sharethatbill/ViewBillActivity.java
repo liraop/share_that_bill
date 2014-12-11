@@ -77,10 +77,11 @@ public class ViewBillActivity extends Activity implements View.OnClickListener {
             userName = extras.getString("user_name");
         }
         //TODO
+        /*
         billName = "Bus tickets";
         groupName = "NYC trip";
         userName = "user1@test.com";
-
+*/
         ImageButton mapButton = (ImageButton) findViewById(R.id.imageButtonViewBillMap);
         mapButton.setOnClickListener(this);
 
@@ -143,7 +144,7 @@ public class ViewBillActivity extends Activity implements View.OnClickListener {
                 progressDialog.dismiss();
             }
         }.start();
-
+/*
         // Download billPicture separately
         new Thread() {
             public void run() {
@@ -171,6 +172,7 @@ public class ViewBillActivity extends Activity implements View.OnClickListener {
 
             }
         }.start();
+        */
     }
 
     /**
