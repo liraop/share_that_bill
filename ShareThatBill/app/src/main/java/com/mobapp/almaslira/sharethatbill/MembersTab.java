@@ -46,7 +46,7 @@ public class MembersTab extends Activity implements View.OnClickListener {
     ListView membersList;
 
     CustomTwoItemAdapter arrayAdapter;
-    ArrayList<TwoStringsClass> membersBalanceList;
+    ArrayList<TwoItemsClass> membersBalanceList;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -106,7 +106,7 @@ public class MembersTab extends Activity implements View.OnClickListener {
 
                 Log.d(TAG, "add " + newMember);
 
-                membersBalanceList.add(new TwoStringsClass(newMember, "0.00"));
+                membersBalanceList.add(new TwoItemsClass(newMember, 0.0f));
 
                 addUser(newMember);
             }
@@ -210,8 +210,8 @@ public class MembersTab extends Activity implements View.OnClickListener {
                 runOnUiThread(new Runnable(){
                     public void run() {
 
-                        TwoStringsClass thisUserTemp = removeThisUserFromMembersList();
-                        thisUserTemp.first += " " + getResources().getString(R.string.members_tab_you);
+                        TwoItemsClass thisUserTemp = removeThisUserFromMembersList();
+                        thisUserTemp.string += " " + getResources().getString(R.string.members_tab_you);
                         membersBalanceList.add(0, thisUserTemp);
 
                         arrayAdapter = new CustomTwoItemAdapter(MembersTab.this, membersBalanceList);
@@ -225,12 +225,12 @@ public class MembersTab extends Activity implements View.OnClickListener {
         }.start();
     }
 
-    TwoStringsClass removeThisUserFromMembersList() {
+    TwoItemsClass removeThisUserFromMembersList() {
         Log.d(TAG, "removing user: " + thisUserName +  ",size: " + membersBalanceList.size());
 
         for (int i = 0; i < membersBalanceList.size(); ++i) {
-            if (membersBalanceList.get(i).first.compareTo(thisUserName) == 0) {
-                TwoStringsClass toReturn;
+            if (membersBalanceList.get(i).string.compareTo(thisUserName) == 0) {
+                TwoItemsClass toReturn;
                 toReturn = membersBalanceList.get(i);
                 membersBalanceList.remove(i);
                 return toReturn;

@@ -16,12 +16,12 @@ package com.mobapp.almaslira.sharethatbill;
 /**
  * Class used to fill ListViews.
  */
-public class TwoStringsClass {
-    public String first;
-    public String second;
+public class TwoItemsClass {
+    public String string;
+    public Float floatValue;
 
-    public TwoStringsClass (String first, String second) {
-        this.first = first;
-        this.second = second;
+    public TwoItemsClass(String string, Float floatValue) {
+        this.string = string;
+        this.floatValue = floatValue;
     }
 }

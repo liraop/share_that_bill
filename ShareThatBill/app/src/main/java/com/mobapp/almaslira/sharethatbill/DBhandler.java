@@ -334,10 +334,10 @@ public class DBhandler {
      * Method to get the users from a group and their respective balance.
      *
      * @param groupName
-     * @return ArrayList<TwoStringsClass> first uses second balance
+     * @return ArrayList<TwoStringsClass> string uses floatValue balance
      */
-    public ArrayList<TwoStringsClass> getUserGroupBalance(String groupName){
-        ArrayList<TwoStringsClass> result = new ArrayList<TwoStringsClass>();
+    public ArrayList<TwoItemsClass> getUserGroupBalance(String groupName){
+        ArrayList<TwoItemsClass> result = new ArrayList<TwoItemsClass>();
         ArrayList<String> parcialMem = new ArrayList<String>();
         String query = "";
 
@@ -349,7 +349,7 @@ public class DBhandler {
             this.resultSet = statement.executeQuery(query);
 
             while(resultSet.next()){
-                result.add(new TwoStringsClass(resultSet.getString(1),resultSet.getString(2)));
+                result.add(new TwoItemsClass(resultSet.getString(1),Float.parseFloat(resultSet.getString(2))));
                 parcialMem.add(resultSet.getString(1));
             }
             connect.close();
@@ -362,7 +362,7 @@ public class DBhandler {
 
         for (int i = 0; i < members.size(); i++){
             if (!parcialMem.contains(members.get(i))){
-                result.add(new TwoStringsClass(members.get(i),"0.0"));
+                result.add(new TwoItemsClass(members.get(i),0.0f));
             }
         }
 
@@ -573,9 +573,9 @@ public class DBhandler {
      * @param billName
      * @return ArrayList<TwoStringsClass> paid bills
      */
-    public ArrayList<TwoStringsClass> getWhoPaidBill(String billName){
+    public ArrayList<TwoItemsClass> getWhoPaidBill(String billName){
 
-        ArrayList<TwoStringsClass> result = new ArrayList<TwoStringsClass>();
+        ArrayList<TwoItemsClass> result = new ArrayList<TwoItemsClass>();
 
         try {
             String user;
@@ -588,7 +588,7 @@ public class DBhandler {
 
             while (resultSet.next()) {
                 if(Float.parseFloat(resultSet.getString(2)) != 0) {
-                    result.add(new TwoStringsClass(resultSet.getString(1),resultSet.getString(2)));
+                    result.add(new TwoItemsClass(resultSet.getString(1), Float.parseFloat(resultSet.getString(2))));
                 }
             }
 
@@ -606,9 +606,9 @@ public class DBhandler {
      * @param billName
      * @return ArrayList<TwoStringsClass> owns bill
      */
-    public ArrayList<TwoStringsClass> getWhoOwesBill(String billName){
+    public ArrayList<TwoItemsClass> getWhoOwesBill(String billName){
 
-        ArrayList<TwoStringsClass> result = new ArrayList<TwoStringsClass>();
+        ArrayList<TwoItemsClass> result = new ArrayList<TwoItemsClass>();
 
         try {
             connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
@@ -619,7 +619,7 @@ public class DBhandler {
 
             while (resultSet.next()) {
                 if(Float.parseFloat(resultSet.getString(2)) != 0) {
-                    result.add(new TwoStringsClass(resultSet.getString(1),resultSet.getString(2)));
+                    result.add(new TwoItemsClass(resultSet.getString(1), Float.parseFloat(resultSet.getString(2))));
                 }
             }
 

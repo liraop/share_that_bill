@@ -4,7 +4,6 @@ import android.app.Application;
 import android.test.ApplicationTestCase;
 import android.util.Log;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -20,7 +19,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
     public void testGroupExists(){
         DBhandler dbhandler = new DBhandler();
 
-        ArrayList<TwoStringsClass>membersBalanceList = dbhandler.getUserGroupBalance("group1");
+        ArrayList<TwoItemsClass>membersBalanceList = dbhandler.getUserGroupBalance("group1");
 
         Log.d(TAG, ""+membersBalanceList.size());
 

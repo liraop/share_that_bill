@@ -26,9 +26,9 @@ import java.util.ArrayList;
  * ListView Adapter for the TwoStringsClass class.
  * Adapted based on the code found at https://guides.codepath.com/android/Using-an-ArrayAdapter-with-ListView
  */
-public class CustomTwoItemAdapter extends ArrayAdapter<TwoStringsClass> {
+public class CustomTwoItemAdapter extends ArrayAdapter<TwoItemsClass> {
 
-    public CustomTwoItemAdapter(Context context, ArrayList<TwoStringsClass> items) {
+    public CustomTwoItemAdapter(Context context, ArrayList<TwoItemsClass> items) {
         super(context, 0, items);
     }
 
@@ -36,7 +36,7 @@ public class CustomTwoItemAdapter extends ArrayAdapter<TwoStringsClass> {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         // Get the data item for this position
-        TwoStringsClass item = getItem(position);
+        TwoItemsClass item = getItem(position);
 
         // Check if an existing view is being reused, otherwise inflate the view
         if (convertView == null) {
@@ -47,9 +47,9 @@ public class CustomTwoItemAdapter extends ArrayAdapter<TwoStringsClass> {
         TextView tvHome = (TextView) convertView.findViewById(R.id.textViewTwoItemVIew2);
 
         // Populate the data into the template view using the data object
-        tvName.setText(item.first);
+        tvName.setText(item.string);
 
-        tvHome.setText(String.format("$%.2f", Float.parseFloat(item.second)));
+        tvHome.setText(String.format("$%.2f", item.floatValue));
         // Return the completed view to render on screen
         return convertView;
     }
