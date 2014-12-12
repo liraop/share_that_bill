@@ -517,10 +517,10 @@ public class DBhandler {
                 {
                     connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
 
-                    String query = "INSERT INTO `bills`(`billPicture`) VALUES (?) WHERE '" + bill.billName + "' = bills.id";
+                    String query = "UPDATE bills SET picture = ? WHERE '" + bill.billName + "' = bills.id";
                     PreparedStatement psmtm = connect.prepareStatement(query);
                     psmtm.setBytes(1, byteArray);
-                    psmtm.execute();
+                    psmtm.executeUpdate();
 
                     connect.close();
 
