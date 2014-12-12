@@ -501,13 +501,16 @@ public class DBhandler {
     }
 
     public void addPictureToBill(final Bill bill){
-/*
+
         new Thread() {
             public void run() {
-*/
+
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                bill.billPicture.compress(Bitmap.CompressFormat.PNG, 13, stream);
-                byte[] byteArray = stream.toByteArray();
+                //bill.billPicture.compress(Bitmap.CompressFormat.PNG, 13, stream);
+                byte[] byteArray = new byte[10];//stream.toByteArray();
+
+                for (int i=0; i<10; i++)
+                    byteArray[i] = (byte) i;
 
                 Log.d(TAG, "saving picture");
                 try
@@ -527,11 +530,11 @@ public class DBhandler {
                     Log.e(TAG, "error upload picture", e);
                     //do something with exception
                 }
-        /*
+
             }
 
         }.start();
-        */
+
     }
 
     /**

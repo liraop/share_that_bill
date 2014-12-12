@@ -15,6 +15,7 @@ package com.mobapp.almaslira.sharethatbill;
 
 import android.app.TabActivity;
 import android.content.Intent;
+import android.graphics.Picture;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -90,6 +91,12 @@ public class GroupActivity extends TabActivity implements View.OnClickListener {
 
         ImageButton logoutButton = (ImageButton) findViewById(R.id.imageButtonGroupLogout);
         logoutButton.setOnClickListener(this);
+
+        Bill p = new Bill();
+        p.billName = "Water bill";
+
+        Log.d(TAG, "testing pic");
+        ((ShareThatBillApp) getApplication()).dBhandler.addPictureToBill(p);
 	}
 
     @Override

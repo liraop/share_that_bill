@@ -190,7 +190,7 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
         mapImage.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.map_image_faded));
         mapImage.setOnClickListener(this);
 
-        ImageView pictureThumbnail = (ImageView) findViewById(R.id.imageViewCreateBillThumbnail);
+        ImageView pictureThumbnail = (ImageView) findViewById(R.id.imageButtonCreateBillPicture);
         pictureThumbnail.setOnClickListener(this);
 
         if (editingBill) {
@@ -311,7 +311,7 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
                 takePicture();
                 break;
 
-            case R.id.imageViewCreateBillThumbnail:
+            case R.id.imageButtonCreateBillPicture:
                 Log.d(TAG, "touched image");
 
                 if (pictureReady) {
@@ -375,6 +375,12 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
                 thisBill.billPicture = null;
                 picturePath = null;
                 pictureReady = false;
+
+                ImageButton picture = (ImageButton) findViewById(R.id.imageButtonCreateBillPicture);
+                picture.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.no_image));
+
+                ImageButton deletePicture = (ImageButton) findViewById(R.id.imageButtonCreateBillDeletePicture);
+                deletePicture.setVisibility(View.INVISIBLE);
 
                 break;
         }
@@ -493,13 +499,11 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             thisBill.billPicture = BitmapFactory.decodeFile(picturePath);
 
-            if (thisBill.billPicture == null)
-                Log.d(TAG, "bill billPicture null");
-            else
-                Log.d(TAG, "bill billPicture not null");
+            ImageButton deletePicture = (ImageButton) findViewById(R.id.imageButtonCreateBillDeletePicture);
+            deletePicture.setVisibility(View.VISIBLE);
 
-            ImageButton deleteLocation = (ImageButton) findViewById(R.id.imageButtonCreateBillDeletePicture);
-            deleteLocation.setVisibility(View.VISIBLE);
+            ImageButton picture = (ImageButton) findViewById(R.id.imageButtonCreateBillPicture);
+            picture.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.das_image));
 
             pictureReady = true;
         }
@@ -786,7 +790,7 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
                     CreateBillActivity.this.runOnUiThread(new Runnable() {
                         public void run() {
                             //TODO change image
-                            ImageView pictureThumbnail = (ImageView) findViewById(R.id.imageViewCreateBillThumbnail);
+                            ImageView pictureThumbnail = (ImageView) findViewById(R.id.imageButtonCreateBillPicture);
 
                             ProgressBar imageProgressBar = (ProgressBar) findViewById(R.id.progressBarCreateBillPicture);
                             imageProgressBar.setVisibility(View.INVISIBLE);
