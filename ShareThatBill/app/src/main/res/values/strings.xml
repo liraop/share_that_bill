@@ -9,6 +9,7 @@
     <string name="title_activity_create_account">Create new account</string>
     <string name="login_hint_email">email</string>
     <string name="login_hint_password">password</string>
+    <string name="login_wrong">Incorrect user or password</string>
     <string name="create_account_title">Create new Share that Bill account</string>
     <string name="create_account_email">Your email:</string>
     <string name="create_account_password">Password (minimum of 6 characters):</string>

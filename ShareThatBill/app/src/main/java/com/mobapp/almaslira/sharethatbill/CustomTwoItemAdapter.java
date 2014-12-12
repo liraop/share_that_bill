@@ -2,7 +2,7 @@
  *
  * ShareThatBill
  *
- * CSE444 - Mobile Application Development
+ * CSE444 - Mobile Application Programming
  * Prof. Robert J. Irwin
  *
  * Team:

@@ -130,25 +130,25 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/imageViewViewBillThumbnail"
-                android:layout_alignTop="@+id/textViewViewBillPicture"
-                android:layout_toRightOf="@+id/textViewViewBillLocation"
-                android:layout_toEndOf="@+id/textViewViewBillLocation"
                 android:src="@drawable/no_image"
                 android:background="@android:color/transparent"
                 android:maxHeight="100dp"
                 android:scaleType="fitXY"
                 android:adjustViewBounds="true"
-                android:visibility="invisible" />
+                android:visibility="invisible"
+                android:layout_alignTop="@+id/textViewViewBillPicture"
+                android:layout_alignRight="@+id/imageButtonViewBillMap"
+                android:layout_alignEnd="@+id/imageButtonViewBillMap" />
 
             <ProgressBar
                 android:id="@+id/progressBarViewBillPicture"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:indeterminate="true"
-                android:layout_alignTop="@+id/imageViewViewBillThumbnail"
-                android:layout_alignRight="@+id/imageViewViewBillThumbnail"
-                android:layout_alignEnd="@+id/imageViewViewBillThumbnail"
-                android:layout_marginTop="-5dp" />
+                android:layout_alignBottom="@+id/textViewViewBillPicture"
+                android:layout_alignLeft="@+id/imageButtonViewBillMap"
+                android:layout_alignStart="@+id/imageButtonViewBillMap"
+                android:layout_marginBottom="-10dp" />
 
         </RelativeLayout>
     </ScrollView>
