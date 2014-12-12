@@ -18,9 +18,11 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +36,8 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
@@ -53,6 +57,7 @@ public class ViewBillActivity extends Activity implements View.OnClickListener {
     String userName;
 
     Bill thisBill;
+    String picturePath;
 
     ArrayList<TwoItemsClass> whoPaidTwoStringsList;
     ArrayList<TwoItemsClass> whoOwesTwoStringList;
@@ -178,9 +183,31 @@ public class ViewBillActivity extends Activity implements View.OnClickListener {
                     }
                 });
 
-                // Save downloaded billPicture on card for visualization
+                if (thisBill.billPicture != null)
+                    saveBillPictureToPhone();
             }
         }.start();
+    }
+
+    public void saveBillPictureToPhone() {
+        try {
+            String file_path = Environment.getExternalStorageDirectory().getAbsolutePath() +
+                    "/PhysicsSketchpad";
+            File dir = new File(file_path);
+            if (!dir.exists())
+                dir.mkdirs();
+            File file = new File(dir, "picture" + thisBill.billPicture + ".jpg");
+            picturePath = file.getAbsolutePath();
+            //file.delete();
+            //file.createNewFile();
+            FileOutputStream fOut = new FileOutputStream(file);
+
+            thisBill.billPicture.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
+            fOut.flush();
+            fOut.close();
+        } catch (Exception e) {
+            Log.e(TAG, "saveBillPictureToPhone", e);
+        }
     }
 
     /**
@@ -257,11 +284,11 @@ public class ViewBillActivity extends Activity implements View.OnClickListener {
 
         switch (view.getId()) {
             case R.id.imageViewViewBillThumbnail:
-/*
+
                 intent = new Intent(Intent.ACTION_VIEW);
-                intent.setDataAndType(Uri.parse("file://" + thisBill.billPicturePath),"image/jpg");
+                intent.setDataAndType(Uri.parse("file://" + picturePath),"image/jpg");
                 startActivity(intent);
-*/
+
                 break;
 
             case R.id.imageButtonViewBillMap:

@@ -583,8 +583,6 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
                     }
                 }
 
-
-
                 CreateBillActivity.this.runOnUiThread(new Runnable() {
                     public void run() {
                         Toast.makeText(CreateBillActivity.this, getResources().getText(R.string.create_bill_created), Toast.LENGTH_LONG).show();
@@ -961,10 +959,13 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
                 if (newValue.length() == 0)
                     newValue = "0.00";
 
-                Log.d(TAG, "Ok to edit to " + newValue);
-
-                whoPaidTwoStringsList.get(index).floatValue = Float.parseFloat(newValue);
-                whoPaidArrayAdapter.notifyDataSetChanged();
+                try {
+                    whoPaidTwoStringsList.get(index).floatValue = Float.parseFloat(newValue);
+                    whoPaidArrayAdapter.notifyDataSetChanged();
+                } catch (Exception e) {
+                    Toast.makeText(CreateBillActivity.this,
+                            getResources().getString(R.string.warning_creating_bill_invalid_value), Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -999,8 +1000,13 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
 
                 Log.d(TAG, "Ok to edit to " + newValue);
 
-                whoOwesTwoStringsList.get(index).floatValue = Float.parseFloat(newValue);
-                whoOwesArrayAdapter.notifyDataSetChanged();
+                try {
+                    whoOwesTwoStringsList.get(index).floatValue = Float.parseFloat(newValue);
+                    whoOwesArrayAdapter.notifyDataSetChanged();
+                } catch (Exception e) {
+                    Toast.makeText(CreateBillActivity.this,
+                            getResources().getString(R.string.warning_creating_bill_invalid_value), Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
