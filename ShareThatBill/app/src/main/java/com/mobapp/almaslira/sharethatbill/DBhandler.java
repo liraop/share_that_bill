@@ -21,7 +21,7 @@ public class DBhandler {
     private static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
     private static final String HOST = "jdbc:mysql://sql5.freesqldatabase.com/sql561107";
     private static final String DB_USER = "sql561107";
-    private static final String DB_PW = "jZ5%bW8%";
+    private static final String DB_PW = " jZ5%bW8%";
     private Connection connect;
     private Statement statement;
     private PreparedStatement preparedStatement;
@@ -49,8 +49,6 @@ public class DBhandler {
      */
     public boolean checkLogin(String userEmail, String password) {
         boolean isValid = false;
-
-
         try {
             connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
 
@@ -67,14 +65,10 @@ public class DBhandler {
                     }
                 }
             }
-
             connect.close();
-
         } catch (SQLException e) {
             //do something with exception
         }
-
-
         return isValid;
     }
 
@@ -213,7 +207,6 @@ public class DBhandler {
      */
     private boolean isUserMember(String userName, String groupName) {
         try {
-
             connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
             this.statement = connect.createStatement();
             String query = "SELECT EXISTS(SELECT 1 FROM `usersAndGroups` WHERE uid = '" + userName + "' and gid = '" + groupName + "')";
@@ -225,13 +218,10 @@ public class DBhandler {
                     return true;
                 }
             }
-
             connect.close();
-
         } catch (SQLException e) {
             //do something with sql exception
         }
-
         return false;
     }
 
@@ -375,12 +365,42 @@ public class DBhandler {
      * @param userName
      * @return true if exists, false if not
      */
-    private boolean userExists(String userName) {
+    public boolean userExists(String userName) {
         try {
 
             connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
             this.statement = connect.createStatement();
             String query = "SELECT EXISTS(SELECT 1 FROM `users` WHERE email = '" + userName + "')";
+            this.resultSet = statement.executeQuery(query);
+
+            while (resultSet.next()) {
+                int i = 1;
+                if (Integer.parseInt(resultSet.getString(i++)) == 1) {
+                    return true;
+                }
+            }
+
+            connect.close();
+
+        } catch (SQLException e) {
+            //do something with sql exception
+        }
+
+        return false;
+    }
+
+
+    /**
+     * Method to check if a bill exists
+     * @param bill
+     * @return
+     */
+    public boolean billExists(Bill bill) {
+        try {
+
+            connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
+            this.statement = connect.createStatement();
+            String query = "SELECT EXISTS(SELECT 1 FROM `bills` WHERE id = '" + bill.billName+ "')";
             this.resultSet = statement.executeQuery(query);
 
             while (resultSet.next()) {
