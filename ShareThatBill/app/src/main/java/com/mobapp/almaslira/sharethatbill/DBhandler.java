@@ -21,7 +21,7 @@ public class DBhandler {
     private static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
     private static final String HOST = "jdbc:mysql://sql5.freesqldatabase.com/sql561107";
     private static final String DB_USER = "sql561107";
-    private static final String DB_PW = " jZ5%bW8%";
+    private static final String DB_PW = "jZ5%bW8%";
     private Connection connect;
     private Statement statement;
     private PreparedStatement preparedStatement;
@@ -383,7 +383,7 @@ public class DBhandler {
             connect.close();
 
         } catch (SQLException e) {
-            //do something with sql exception
+            Log.e(TAG, "AAAAA", e);
         }
 
         return false;
@@ -413,7 +413,7 @@ public class DBhandler {
             connect.close();
 
         } catch (SQLException e) {
-            //do something with sql exception
+            Log.e(TAG, "AAAAA", e);
         }
 
         return false;
