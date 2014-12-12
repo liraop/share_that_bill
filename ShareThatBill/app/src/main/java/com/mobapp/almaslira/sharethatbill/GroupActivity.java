@@ -91,12 +91,6 @@ public class GroupActivity extends TabActivity implements View.OnClickListener {
 
         ImageButton logoutButton = (ImageButton) findViewById(R.id.imageButtonGroupLogout);
         logoutButton.setOnClickListener(this);
-
-        Bill p = new Bill();
-        p.billName = "Water bill";
-
-        Log.d(TAG, "testing pic");
-        ((ShareThatBillApp) getApplication()).dBhandler.addPictureToBill(p);
 	}
 
     @Override

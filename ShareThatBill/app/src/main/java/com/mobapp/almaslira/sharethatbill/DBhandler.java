@@ -419,18 +419,18 @@ public class DBhandler {
 
             connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
             this.statement = connect.createStatement();
-            String query = "SELECT * FROM bills WHERE id = '" + billID + "'";
+            String query = "SELECT value,date&time,gid,latitude,longitude FROM bills WHERE id = '" + billID + "'";
             this.resultSet = statement.executeQuery(query);
 
             while (resultSet.next()) {
-                    b.billValue = Float.parseFloat(this.resultSet.getString(2));
+                    b.billValue = Float.parseFloat(this.resultSet.getString(1));
                     try {
-                        b.billDate.setTime(df.parse(this.resultSet.getString(3)));
+                        b.billDate.setTime(df.parse(this.resultSet.getString(2)));
                     } catch (Exception e){
                         //do something with the exception
                     }
-                    b.billLocationLatitute = Float.parseFloat(this.resultSet.getString(6));
-                    b.billLocationLongitude = Float.parseFloat(this.resultSet.getString(7));
+                    b.billLocationLatitute = Float.parseFloat(this.resultSet.getString(4));
+                    b.billLocationLongitude = Float.parseFloat(this.resultSet.getString(5));
             }
             connect.close();
 
@@ -448,7 +448,7 @@ public class DBhandler {
             connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
 
             this.statement = connect.createStatement();
-            String query = "SELECT billPicture FROM bills WHERE bid = '"+bill.billName+"'";
+            String query = "SELECT picture FROM bills WHERE id = '"+bill.billName+"'";
             this.resultSet = statement.executeQuery(query);
 
             while (resultSet.next()) {
@@ -458,7 +458,7 @@ public class DBhandler {
             connect.close();
 
         } catch (SQLException e) {
-            //do something with sql exception
+            Log.e(TAG, "getBillPicture", e);
         }
 
         Bitmap bitmap = BitmapFactory.decodeByteArray(picbytes, 0, picbytes.length);
@@ -501,16 +501,13 @@ public class DBhandler {
     }
 
     public void addPictureToBill(final Bill bill){
-
+/*
         new Thread() {
             public void run() {
-
+*/
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                //bill.billPicture.compress(Bitmap.CompressFormat.PNG, 13, stream);
-                byte[] byteArray = new byte[10];//stream.toByteArray();
-
-                for (int i=0; i<10; i++)
-                    byteArray[i] = (byte) i;
+                bill.billPicture.compress(Bitmap.CompressFormat.PNG, 13, stream);
+                byte[] byteArray = stream.toByteArray();
 
                 Log.d(TAG, "saving picture");
                 try
@@ -530,10 +527,11 @@ public class DBhandler {
                     Log.e(TAG, "error upload picture", e);
                     //do something with exception
                 }
-
+/*
             }
 
         }.start();
+        */
 
     }
 

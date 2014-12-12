@@ -29,6 +29,7 @@ import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -76,11 +77,11 @@ public class ViewBillActivity extends Activity implements View.OnClickListener {
             userName = extras.getString("user_name");
         }
         //TODO
-        /*
-        billName = "Bus tickets";
-        groupName = "NYC trip";
+
+        billName = "noia1";
+        groupName = "House bills";
         userName = "user1@test.com";
-*/
+
         ImageButton mapButton = (ImageButton) findViewById(R.id.imageButtonViewBillMap);
         mapButton.setOnClickListener(this);
 
@@ -140,6 +141,34 @@ public class ViewBillActivity extends Activity implements View.OnClickListener {
                     }
                 });
 
+                // get billPicture
+                Log.d(TAG, "gettin pic of billName " + thisBill.billName);
+                thisBill.billPicture = ((ShareThatBillApp) getApplication()).dBhandler.getBillPicture(thisBill);
+
+                if (thisBill.billPicture != null) {
+                    Log.d(TAG, "pic not null");
+                    // remove progress bar
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBarViewBillPicture);
+                            progressBar.setVisibility(View.INVISIBLE);
+
+                            ImageView viewPicture = (ImageView) findViewById(R.id.imageViewViewBillThumbnail);
+                            viewPicture.setOnClickListener(ViewBillActivity.this);
+                            viewPicture.setVisibility(View.VISIBLE);
+
+                            if (thisBill.billPicture != null) {
+                                viewPicture.setImageBitmap(thisBill.billPicture);
+                            }
+                        }
+                    });
+                }
+                else {
+                    Log.d(TAG, "pic null");
+                }
+
+                // Save downloaded billPicture on card for visualization
+
                 progressDialog.dismiss();
             }
         }.start();
@@ -149,25 +178,7 @@ public class ViewBillActivity extends Activity implements View.OnClickListener {
             public void run() {
                 Log.d(TAG, "in thread fetchBillData - billPicture");
 
-                // get billPicture
 
-                // remove progress bar
-                runOnUiThread(new Runnable() {
-                    public void run() {
-                        ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBarViewBillPicture);
-                        progressBar.setVisibility(View.INVISIBLE);
-
-                        ImageView viewPicture = (ImageView) findViewById(R.id.imageViewViewBillThumbnail);
-                        viewPicture.setOnClickListener(ViewBillActivity.this);
-                        viewPicture.setVisibility(View.VISIBLE);
-
-                        if (thisBill.billPicture != null) {
-                            viewPicture.setImageBitmap(thisBill.billPicture);
-                        }
-                    }
-                });
-
-                // Save downloaded billPicture on card for visualization
 
             }
         }.start();
