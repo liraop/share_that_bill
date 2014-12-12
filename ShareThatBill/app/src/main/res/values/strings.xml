@@ -95,6 +95,7 @@
     <string name="create_bill_warning_location_disabled">Location services are disabled on this device. Do you want to enabled it?</string>
     <string name="create_bill_save">Save</string>
     <string name="create_bill_warning_picture_unavailable">No picture taken yet</string>
+    <string name="create_bill_warning_bill_exists">A bill with this name already exists.</string>
     <string name="view_bill_check_map">Check map</string>
     <string name="view_bill_check_picture">Take a look</string>
     <string name="view_bill_no_picture">No picture attached</string>

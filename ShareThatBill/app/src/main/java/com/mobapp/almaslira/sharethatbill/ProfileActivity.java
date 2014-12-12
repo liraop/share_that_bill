@@ -46,6 +46,7 @@ public class ProfileActivity extends Activity implements View.OnClickListener, A
 	private List<String> groupsNamesList;
 	private String userName;
 
+    boolean logout;
 
     ProgressDialog progressDialog;
 
@@ -58,6 +59,8 @@ public class ProfileActivity extends Activity implements View.OnClickListener, A
 		this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
 		setContentView(R.layout.activity_profile);
+
+        logout = false;
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -168,6 +171,8 @@ public class ProfileActivity extends Activity implements View.OnClickListener, A
 				break;
 
             case R.id.imageButtonProfileLogout:
+                logout = true;
+
                 intent = new Intent(ProfileActivity.this, LoginActivity.class);
                 startActivity(intent);
                 break;
@@ -194,6 +199,8 @@ public class ProfileActivity extends Activity implements View.OnClickListener, A
     protected void onPause() {
         Log.d(TAG, "onPause");
         super.onPause();
-        finish();
+
+        if (logout)
+            finish();
     }
 }

@@ -215,6 +215,8 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
         if (editingBill) {
             if (hasPicture)
                 deletePicture.setVisibility(View.VISIBLE);
+            else
+                deletePicture.setVisibility(View.INVISIBLE);
         }
         else
             deletePicture.setVisibility(View.INVISIBLE);
@@ -288,24 +290,7 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
                 break;
 
             case R.id.buttonCreateBillCreate:
-                EditText billName = (EditText) findViewById(R.id.editTextCreateBillBillName);
-                thisBill.billName = new String(billName.getText().toString());
-
-                thisBill.billValue = totalBillValue();
-
-                thisBill.groupName = new String(groupName);
-
-                if (totalBillValue() == 0)
-                    createWarningAlert(getResources().getString(R.string.warning_error),
-                                        getResources().getString(R.string.warning_creating_bill_fail_total_zero));
-                else if (!billValuesMatch())
-                    createWarningAlert(getResources().getString(R.string.warning_error),
-                            getResources().getString(R.string.warning_creating_bill_fail_total_match));
-                else if (thisBill.billName.length() == 0)
-                    createWarningAlert(getResources().getString(R.string.warning_error),
-                            getResources().getString(R.string.warning_creating_bill_fail_name));
-                else
-                    sendCreateBillRequest();
+                CheckAndCreateBill();
                 break;
 
             case R.id.buttonCreateBillPicture:
@@ -386,6 +371,47 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
 
                 break;
         }
+    }
+
+    /**
+     *
+     */
+    private void CheckAndCreateBill() {
+        progressDialog.show();
+
+        new Thread() {
+            public void run() {
+                EditText billName = (EditText) findViewById(R.id.editTextCreateBillBillName);
+                thisBill.billName = new String(billName.getText().toString());
+
+                if (!((ShareThatBillApp) getApplication()).dBhandler.billExists(thisBill)) {
+                    thisBill.billValue = totalBillValue();
+
+                    thisBill.groupName = new String(groupName);
+
+                    if (totalBillValue() == 0)
+                        createWarningAlert(getResources().getString(R.string.warning_error),
+                                getResources().getString(R.string.warning_creating_bill_fail_total_zero));
+                    else if (!billValuesMatch())
+                        createWarningAlert(getResources().getString(R.string.warning_error),
+                                getResources().getString(R.string.warning_creating_bill_fail_total_match));
+                    else if (thisBill.billName.length() == 0)
+                        createWarningAlert(getResources().getString(R.string.warning_error),
+                                getResources().getString(R.string.warning_creating_bill_fail_name));
+                    else
+                        sendCreateBillRequest();
+                }
+                else {
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            createWarningAlert(getResources().getString(R.string.warning_error),
+                                    getResources().getString(R.string.create_bill_warning_bill_exists));
+                        }
+                    });
+                }
+                progressDialog.dismiss();
+            }
+        }.start();
     }
 
     /**

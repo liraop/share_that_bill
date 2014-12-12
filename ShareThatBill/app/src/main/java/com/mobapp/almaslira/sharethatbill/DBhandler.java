@@ -84,7 +84,10 @@ public class DBhandler {
             this.statement = connect.createStatement();
             String query = "SELECT gid FROM usersAndGroups WHERE uid = '" + userEmail + "'";
             this.resultSet = statement.executeQuery(query);
-            result.add(resultSet.getString(1));
+
+            while (resultSet.next())
+                result.add(resultSet.getString(1));
+
             connect.close();
         } catch (SQLException e) {
             Log.e(TAG,"getUsersGroup",e);
@@ -105,7 +108,8 @@ public class DBhandler {
             this.statement = connect.createStatement();
             String query = "SELECT uid FROM usersAndGroups WHERE gid = '" + groupName + "'";
             this.resultSet = statement.executeQuery(query);
-            result.add(resultSet.getString(1));
+            while (resultSet.next())
+                result.add(resultSet.getString(1));
             connect.close();
         } catch (SQLException e) {
             Log.e(TAG,"getGroupMembers",e);
@@ -156,7 +160,7 @@ public class DBhandler {
                 connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
                 this.statement = connect.createStatement();
                 String query = "INSERT INTO `usersAndGroups`(`uid`, `gid`) VALUES ('" + addedUserName + "','" + groupName + "')";
-                statement.executeUpdate(query);
+                    statement.executeUpdate(query);
                 connect.close();
                 this.postNotification(new Notification(sessionUserName,Notification.USER_ADDED,addedUserName), groupName);
                 return true;
@@ -179,10 +183,12 @@ public class DBhandler {
             connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
             this.statement = connect.createStatement();
             String query = "SELECT EXISTS(SELECT 1 FROM `usersAndGroups` WHERE uid = '" + userName + "' and gid = '" + groupName + "')";
+
             this.resultSet = statement.executeQuery(query);
-            if (Integer.parseInt(resultSet.getString(1)) == 1) {
-                return true;
-            }
+            while (resultSet.next())
+                if (Integer.parseInt(resultSet.getString(1)) == 1) {
+                    return true;
+                }
             connect.close();
         } catch (SQLException e) {
             Log.e(TAG,"isUserMember",e);
@@ -254,7 +260,10 @@ public class DBhandler {
             this.statement = connect.createStatement();
             String query = "SELECT id FROM bills WHERE gid = '" + groupName + "'";
             this.resultSet = statement.executeQuery(query);
-            result.add(resultSet.getString(1));
+
+            while (resultSet.next())
+                result.add(resultSet.getString(1));
+
             connect.close();
 
         } catch (SQLException e) {

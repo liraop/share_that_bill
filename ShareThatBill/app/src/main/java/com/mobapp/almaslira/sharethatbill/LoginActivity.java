@@ -141,6 +141,11 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 		return !TextUtils.isEmpty(target) && android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
 	}
 
+    /**
+     * Create a generic alertDialog with an OK button.
+     * @param title: title of the dialog
+     * @param warning: message of the dialog
+     */
 	private void createWarningAlert (String title, String warning) {
 		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(LoginActivity.this);
 
