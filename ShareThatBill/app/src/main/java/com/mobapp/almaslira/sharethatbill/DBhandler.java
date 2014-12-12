@@ -419,7 +419,7 @@ public class DBhandler {
 
             connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
             this.statement = connect.createStatement();
-            String query = "SELECT value,date&time,gid,latitude,longitude FROM bills WHERE id = '" + billID + "'";
+            String query = "SELECT `value`,`date&time`,`latitude`,`longitude` FROM bills WHERE id = '" + billID + "'";
             this.resultSet = statement.executeQuery(query);
 
             while (resultSet.next()) {
@@ -429,8 +429,8 @@ public class DBhandler {
                     } catch (Exception e){
                         //do something with the exception
                     }
-                    b.billLocationLatitute = Float.parseFloat(this.resultSet.getString(4));
-                    b.billLocationLongitude = Float.parseFloat(this.resultSet.getString(5));
+                    b.billLocationLatitute = Float.parseFloat(this.resultSet.getString(3));
+                    b.billLocationLongitude = Float.parseFloat(this.resultSet.getString(4));
             }
             connect.close();
 
