@@ -101,6 +101,7 @@ public class BillsTab extends Activity implements View.OnClickListener, AdapterV
                 Intent intent = new Intent(BillsTab.this, CreateBillActivity.class);
                 intent.putExtra("group_name", thisGroupName);
                 intent.putExtra("user_name", thisUserName);
+                intent.putExtra("editing", false);
                 startActivity(intent);
 
                 break;

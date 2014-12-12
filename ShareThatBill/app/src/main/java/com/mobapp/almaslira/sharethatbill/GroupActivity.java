@@ -56,8 +56,9 @@ public class GroupActivity extends TabActivity implements View.OnClickListener {
 		}
 
         //TODO
+
         thisUserName = "user1@test.com";
-        thisGroupName = "House bills";
+        thisGroupName = "group1";
 
 		TextView title = (TextView) findViewById(R.id.textViewGroupTitle);
 

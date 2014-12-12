@@ -19,9 +19,9 @@ import java.util.Calendar;
 public class DBhandler {
     private static final String TAG = "DBHANDLER debug";
     private static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-    private static final String HOST = "jdbc:mysql://sql4.freesqldatabase.com/sql457251";
-    private static final String DB_USER = "sql457251";
-    private static final String DB_PW = "wX2*aK7%";
+    private static final String HOST = "jdbc:mysql://sql5.freesqldatabase.com/sql561107";
+    private static final String DB_USER = "sql561107";
+    private static final String DB_PW = "jZ5%bW8%";
     private Connection connect;
     private Statement statement;
     private PreparedStatement preparedStatement;
@@ -427,7 +427,7 @@ public class DBhandler {
                     try {
                         b.billDate.setTime(df.parse(this.resultSet.getString(2)));
                     } catch (Exception e){
-                        //do something with the exception
+                        Log.e(TAG, "getBill", e);
                     }
                     b.billLocationLatitute = Float.parseFloat(this.resultSet.getString(3));
                     b.billLocationLongitude = Float.parseFloat(this.resultSet.getString(4));
@@ -435,7 +435,7 @@ public class DBhandler {
             connect.close();
 
         } catch (SQLException e) {
-            //do something with sql exception
+            Log.e(TAG, "getBill", e);
         }
 
         return b;
@@ -461,7 +461,10 @@ public class DBhandler {
             Log.e(TAG, "getBillPicture", e);
         }
 
-        Bitmap bitmap = BitmapFactory.decodeByteArray(picbytes, 0, picbytes.length);
+        Bitmap bitmap = null;
+
+        if (picbytes != null)
+            bitmap = BitmapFactory.decodeByteArray(picbytes, 0, picbytes.length);
 
         return bitmap;
     }
@@ -496,7 +499,7 @@ public class DBhandler {
             connect.close();
             if (post) {this.postNotification(new Notification(sessionUserName,Notification.BILL_CREATED,bill.billName), bill.groupName);}
         } catch (SQLException e) {
-            //do something with exception
+            Log.e(TAG, "createBill", e);
         }
     }
 
@@ -506,8 +509,11 @@ public class DBhandler {
             public void run() {
 */
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                bill.billPicture.compress(Bitmap.CompressFormat.PNG, 13, stream);
+                bill.billPicture.compress(Bitmap.CompressFormat.JPEG, 5, stream);
                 byte[] byteArray = stream.toByteArray();
+
+                Log.d(TAG, "pic size " + ", array size " + byteArray.length);
+
 
                 Log.d(TAG, "saving picture");
                 try
@@ -527,6 +533,7 @@ public class DBhandler {
                     Log.e(TAG, "error upload picture", e);
                     //do something with exception
                 }
+
 /*
             }
 

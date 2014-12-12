@@ -77,10 +77,11 @@ public class ViewBillActivity extends Activity implements View.OnClickListener {
             userName = extras.getString("user_name");
         }
         //TODO
-
+/*
         billName = "noia1";
         groupName = "House bills";
         userName = "user1@test.com";
+        */
 
         ImageButton mapButton = (ImageButton) findViewById(R.id.imageButtonViewBillMap);
         mapButton.setOnClickListener(this);
@@ -113,6 +114,8 @@ public class ViewBillActivity extends Activity implements View.OnClickListener {
 
                 thisBill = ((ShareThatBillApp) getApplication()).dBhandler.getBill(billName);
 
+                downloadPicture();
+
                 if (thisBill.billLocationLatitute != 0 && thisBill.billLocationLongitude != 0) {
                     Log.d(TAG, "bill location is valid");
                     thisBill.locationIsSet = true;
@@ -123,8 +126,7 @@ public class ViewBillActivity extends Activity implements View.OnClickListener {
                             mapImage.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.map_image));
                         }
                     });
-                }
-                else {
+                } else {
                     Log.d(TAG, "bill location is invalid");
                     thisBill.locationIsSet = false;
                 }
@@ -135,54 +137,50 @@ public class ViewBillActivity extends Activity implements View.OnClickListener {
                 Log.d(TAG, "get who owes");
                 whoOwesTwoStringList = ((ShareThatBillApp) getApplication()).dBhandler.getWhoOwesBill(billName);
 
-                runOnUiThread(new Runnable(){
+                runOnUiThread(new Runnable() {
                     public void run() {
                         setUpTables();
                     }
                 });
 
-                // get billPicture
-                Log.d(TAG, "gettin pic of billName " + thisBill.billName);
-                thisBill.billPicture = ((ShareThatBillApp) getApplication()).dBhandler.getBillPicture(thisBill);
-
-                if (thisBill.billPicture != null) {
-                    Log.d(TAG, "pic not null");
-                    // remove progress bar
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-                            ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBarViewBillPicture);
-                            progressBar.setVisibility(View.INVISIBLE);
-
-                            ImageView viewPicture = (ImageView) findViewById(R.id.imageViewViewBillThumbnail);
-                            viewPicture.setOnClickListener(ViewBillActivity.this);
-                            viewPicture.setVisibility(View.VISIBLE);
-
-                            if (thisBill.billPicture != null) {
-                                viewPicture.setImageBitmap(thisBill.billPicture);
-                            }
-                        }
-                    });
-                }
-                else {
-                    Log.d(TAG, "pic null");
-                }
-
-                // Save downloaded billPicture on card for visualization
-
                 progressDialog.dismiss();
             }
         }.start();
-/*
-        // Download billPicture separately
+    }
+
+    /**
+     * Creates a thread to download the bill's picture.
+     */
+    private void downloadPicture() {
         new Thread() {
             public void run() {
-                Log.d(TAG, "in thread fetchBillData - billPicture");
+                // get billPicture
+                Log.d(TAG, "getting pic of billName " + thisBill.billName);
+                thisBill.billPicture = ((ShareThatBillApp) getApplication()).dBhandler.getBillPicture(thisBill);
 
+                // remove progress bar
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBarViewBillPicture);
+                        progressBar.setVisibility(View.INVISIBLE);
 
+                        ImageView viewPicture = (ImageView) findViewById(R.id.imageViewViewBillThumbnail);
+                        viewPicture.setOnClickListener(ViewBillActivity.this);
+                        viewPicture.setVisibility(View.VISIBLE);
 
+                        if (thisBill.billPicture != null) {
+                            Log.d(TAG, "pic not null");
+                            viewPicture.setImageBitmap(thisBill.billPicture);
+                        } else {
+                            Log.d(TAG, "pic null");
+                            viewPicture.setVisibility(View.VISIBLE);
+                        }
+                    }
+                });
+
+                // Save downloaded billPicture on card for visualization
             }
         }.start();
-        */
     }
 
     /**
