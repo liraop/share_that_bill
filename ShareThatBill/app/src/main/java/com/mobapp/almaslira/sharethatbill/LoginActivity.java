@@ -2,7 +2,7 @@
  *
  * ShareThatBill
  *
- * CSE444 - Mobile Application Development
+ * CSE444 - Mobile Application Programming
  * Prof. Robert J. Irwin
  *
  * Team:
@@ -116,16 +116,23 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 
                 if (!((ShareThatBillApp) getApplication()).dBhandler.checkLogin(userEmail,userPassword)) {
                     Log.d(TAG, "login unsuccessful");
+
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            createWarningAlert(getResources().getString(R.string.warning_error), getResources().getString(R.string.login_wrong));
+                        }
+                    });
                 } else {
                     Log.d(TAG, "login successful");
 
                     Intent intent = new Intent(LoginActivity.this, ProfileActivity.class);
                     intent.putExtra("user_name", userEmail);
                     startActivity(intent);
+                    progressDialog.dismiss();
+                    finish();
                 }
-
                 progressDialog.dismiss();
-                finish();
+
 			}
 		}.start();
 	}

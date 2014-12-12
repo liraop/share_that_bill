@@ -2,7 +2,7 @@
  *
  * ShareThatBill
  *
- * CSE444 - Mobile Application Development
+ * CSE444 - Mobile Application Programming
  * Prof. Robert J. Irwin
  *
  * Team:
@@ -140,16 +140,6 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
                 Log.d(TAG, "editing bill " + billOriginalName + " from group " + groupName);
             }
         }
-/*
-        //TODO
-        groupName ="House bills";
-        editingBill = false;
-        userName = "user1@test.com";
-        hasPicture = true;
-        picturePath = null;//"/storage/emulated/0/Pictures/JPEG__bill_20141210_021949-1430263900.jpg";
-        downloadPicture = true;
-        pictureReady = false;
-        */
 
         progressDialog = new ProgressDialog(CreateBillActivity.this);
         progressDialog.setMessage(getResources().getString(R.string.warning_loading));
@@ -190,7 +180,7 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
         mapImage.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.map_image_faded));
         mapImage.setOnClickListener(this);
 
-        ImageView pictureThumbnail = (ImageView) findViewById(R.id.imageButtonCreateBillPicture);
+        ImageButton pictureThumbnail = (ImageButton) findViewById(R.id.imageButtonCreateBillPicture);
         pictureThumbnail.setOnClickListener(this);
 
         if (editingBill) {
@@ -202,6 +192,13 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
 
             TextView whoOwesText = (TextView) findViewById(R.id.textViewCreateBillHowToSplit);
             whoOwesText.setText(getResources().getString(R.string.view_bill_who_owes));
+
+            if (hasPicture) {
+                pictureThumbnail.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.das_image));
+            }
+            else {
+                pictureThumbnail.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.no_image));
+            }
         }
 
         if (downloadPicture) {
@@ -215,7 +212,12 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
 
         ImageButton deletePicture = (ImageButton) findViewById(R.id.imageButtonCreateBillDeletePicture);
         deletePicture.setOnClickListener(this);
-        deletePicture.setVisibility(View.INVISIBLE);
+        if (editingBill) {
+            if (hasPicture)
+                deletePicture.setVisibility(View.VISIBLE);
+        }
+        else
+            deletePicture.setVisibility(View.INVISIBLE);
 
         getLocation = false;
 
@@ -779,7 +781,7 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
             new Thread() {
                 public void run() {
                     Log.d(TAG, "fetching picture");
-                    //TODO
+
                     thisBill.billPicture = ((ShareThatBillApp) getApplication()).dBhandler.getBillPicture(thisBill);
                     try {
                         Thread.sleep(10000);
@@ -787,8 +789,6 @@ public class CreateBillActivity extends Activity implements RadioGroup.OnChecked
 
                     CreateBillActivity.this.runOnUiThread(new Runnable() {
                         public void run() {
-                            //TODO change image
-                            ImageView pictureThumbnail = (ImageView) findViewById(R.id.imageButtonCreateBillPicture);
 
                             ProgressBar imageProgressBar = (ProgressBar) findViewById(R.id.progressBarCreateBillPicture);
                             imageProgressBar.setVisibility(View.INVISIBLE);

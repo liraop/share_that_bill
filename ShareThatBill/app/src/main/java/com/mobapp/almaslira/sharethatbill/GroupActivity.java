@@ -2,7 +2,7 @@
  *
  * ShareThatBill
  *
- * CSE444 - Mobile Application Development
+ * CSE444 - Mobile Application Programming
  * Prof. Robert J. Irwin
  *
  * Team:
@@ -54,11 +54,6 @@ public class GroupActivity extends TabActivity implements View.OnClickListener {
             thisUserName = extras.getString("user_name");
 			thisGroupName = extras.getString("group_name");
 		}
-
-
-
-  //      thisUserName = "user1@test.com";
-//        thisGroupName = "group1";
 
 		TextView title = (TextView) findViewById(R.id.textViewGroupTitle);
 

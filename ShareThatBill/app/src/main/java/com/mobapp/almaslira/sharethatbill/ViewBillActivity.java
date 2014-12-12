@@ -2,7 +2,7 @@
  *
  * ShareThatBill
  *
- * CSE444 - Mobile Application Development
+ * CSE444 - Mobile Application Programming
  * Prof. Robert J. Irwin
  *
  * Team:
@@ -81,12 +81,6 @@ public class ViewBillActivity extends Activity implements View.OnClickListener {
             groupName = extras.getString("group_name");
             userName = extras.getString("user_name");
         }
-        //TODO
-/*
-        billName = "noia1";
-        groupName = "House bills";
-        userName = "user1@test.com";
-        */
 
         ImageButton mapButton = (ImageButton) findViewById(R.id.imageButtonViewBillMap);
         mapButton.setOnClickListener(this);
@@ -198,8 +192,6 @@ public class ViewBillActivity extends Activity implements View.OnClickListener {
                 dir.mkdirs();
             File file = new File(dir, "picture" + thisBill.billPicture + ".jpg");
             picturePath = file.getAbsolutePath();
-            //file.delete();
-            //file.createNewFile();
             FileOutputStream fOut = new FileOutputStream(file);
 
             thisBill.billPicture.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
@@ -285,9 +277,14 @@ public class ViewBillActivity extends Activity implements View.OnClickListener {
         switch (view.getId()) {
             case R.id.imageViewViewBillThumbnail:
 
-                intent = new Intent(Intent.ACTION_VIEW);
-                intent.setDataAndType(Uri.parse("file://" + picturePath),"image/jpg");
-                startActivity(intent);
+                if (picturePath != null) {
+                    intent = new Intent(Intent.ACTION_VIEW);
+                    intent.setDataAndType(Uri.parse("file://" + picturePath), "image/jpg");
+                    startActivity(intent);
+                }
+                else {
+                    Toast.makeText(this, getResources().getString(R.string.create_bill_warning_picture_unavailable), Toast.LENGTH_SHORT).show();
+                }
 
                 break;
 
@@ -310,8 +307,9 @@ public class ViewBillActivity extends Activity implements View.OnClickListener {
                 intent.putExtra("group_name", groupName);
                 intent.putExtra("bill_name", billName);
                 intent.putExtra("user_name", userName);
-                Log.d(TAG, "sending userName " + userName);
                 intent.putExtra("editing", true);
+                intent.putExtra("has_picture", thisBill.billPicture != null);
+                intent.putExtra("picture_path", picturePath);
                 startActivity(intent);
 
                 finish();
@@ -352,10 +350,8 @@ public class ViewBillActivity extends Activity implements View.OnClickListener {
                         });
 
                         finish();
-
                     }
                 }.start();
-
             }
         });
         alertDialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
