@@ -24,7 +24,6 @@ public class DBhandler {
     private static final String DB_PW = "jZ5%bW8%";
     private Connection connect;
     private Statement statement;
-    private PreparedStatement preparedStatement;
     private ResultSet resultSet;
 
     public DBhandler() {
@@ -42,10 +41,10 @@ public class DBhandler {
      * If there are no match, returns false.
      * If matches, return true.
      *
-     * @param userEmail
-     * @param password
+     * @param userEmail email of an user
+     * @param password password of the user
      * @return login valid (true) or not (false)
-     * @throws SQLException
+     * @throws SQLException connection not made
      */
     public boolean checkLogin(String userEmail, String password) {
         boolean isValid = false;
@@ -67,7 +66,7 @@ public class DBhandler {
             }
             connect.close();
         } catch (SQLException e) {
-            //do something with exception
+            Log.e(TAG,"checkLogin",e);
         }
         return isValid;
     }
@@ -75,73 +74,49 @@ public class DBhandler {
     /**
      * Method to get the groups of an user.
      *
-     * @param userEmail
+     * @param userEmail email of an user
      * @return ArrayList<String> users
      */
     public ArrayList<String> getUserGroups(String userEmail) {
-
         ArrayList<String> result = new ArrayList<String>();
-
         try {
-
             connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
-
             this.statement = connect.createStatement();
             String query = "SELECT gid FROM usersAndGroups WHERE uid = '" + userEmail + "'";
             this.resultSet = statement.executeQuery(query);
-
-            while (resultSet.next()) {
-                int i = 1;
-                result.add(resultSet.getString(i++));
-            }
-
+            result.add(resultSet.getString(1));
             connect.close();
-
         } catch (SQLException e) {
-            //do something with sql exception
+            Log.e(TAG,"getUsersGroup",e);
         }
-
         return result;
     }
 
     /**
      * Method to get the group's members
      *
-     * @param groupName
+     * @param groupName name of the group
      * @return ArrayList<String> members
      */
     public ArrayList<String> getGroupMembers(String groupName) {
-
         ArrayList<String> result = new ArrayList<String>();
-
         try {
-
             connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
-
             this.statement = connect.createStatement();
             String query = "SELECT uid FROM usersAndGroups WHERE gid = '" + groupName + "'";
             this.resultSet = statement.executeQuery(query);
-
-            while (resultSet.next()) {
-                int i = 1;
-                result.add(resultSet.getString(i++));
-            }
-
+            result.add(resultSet.getString(1));
             connect.close();
-
         } catch (SQLException e) {
-            //do something with sql exception
+            Log.e(TAG,"getGroupMembers",e);
         }
-
         return result;
-
     }
 
    /** Method to create a group. It uses groupExists method
     * then creates the group or not. Adds the group on the groups table
     *
-    * @param
-    * @param groupName
+    * @param groupName name of a group
     * @return group created (true) or not (false)
     */
     public boolean createGroup(String groupName) {
@@ -161,7 +136,7 @@ public class DBhandler {
                 return true;
 
             } catch (SQLException e) {
-                //do something with exception
+                Log.e(TAG,"createGroup",e);
             }
         }
 
@@ -169,40 +144,34 @@ public class DBhandler {
     }
 
     /**
-     * Method to add an user to a group.
-     * User and group are added on usersAndGroups table.
-     *
-     * @param
-     * @param groupName
-     * @return
+     * Method to add a user to a group
+     * @param addedUserName user to be added
+     * @param groupName name of the group
+     * @param sessionUserName current username
+     * @return true if the user was addded, false if not
      */
     public boolean addUserToGroup(String addedUserName, String groupName, String sessionUserName) {
         if (!isUserMember(addedUserName, groupName)) {
             try {
                 connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
-
                 this.statement = connect.createStatement();
                 String query = "INSERT INTO `usersAndGroups`(`uid`, `gid`) VALUES ('" + addedUserName + "','" + groupName + "')";
                 statement.executeUpdate(query);
-
                 connect.close();
-
                 this.postNotification(new Notification(sessionUserName,Notification.USER_ADDED,addedUserName), groupName);
                 return true;
             } catch (SQLException e) {
-                //do something with exception
+                Log.e(TAG,"addUserToGroup",e);
             }
-
         }
-
         return false;
     }
 
     /**
      * Method to check if a user is member of a group
      *
-     * @param userName
-     * @param groupName
+     * @param userName id of an user
+     * @param groupName name of the group
      * @return true if it is or false if is not
      */
     private boolean isUserMember(String userName, String groupName) {
@@ -211,16 +180,12 @@ public class DBhandler {
             this.statement = connect.createStatement();
             String query = "SELECT EXISTS(SELECT 1 FROM `usersAndGroups` WHERE uid = '" + userName + "' and gid = '" + groupName + "')";
             this.resultSet = statement.executeQuery(query);
-
-            while (resultSet.next()) {
-                int i = 1;
-                if (Integer.parseInt(resultSet.getString(i++)) == 1) {
-                    return true;
-                }
+            if (Integer.parseInt(resultSet.getString(1)) == 1) {
+                return true;
             }
             connect.close();
         } catch (SQLException e) {
-            //do something with sql exception
+            Log.e(TAG,"isUserMember",e);
         }
         return false;
     }
@@ -228,7 +193,7 @@ public class DBhandler {
     /**
      * Method to check if the group already exists on the db
      *
-     * @param groupName
+     * @param groupName name of the group
      * @return group exists (true) or not (false)
      */
     private boolean groupExists(String groupName) {
@@ -238,18 +203,12 @@ public class DBhandler {
             this.statement = connect.createStatement();
             String query = "SELECT EXISTS(SELECT 1 FROM `groups` WHERE name = '" + groupName + "')";
             this.resultSet = statement.executeQuery(query);
-
-            while (resultSet.next()) {
-                int i = 1;
-                if (Integer.parseInt(resultSet.getString(i++)) == 1) {
-                    return true;
-                }
+            if (Integer.parseInt(resultSet.getString(1)) == 1) {
+                return true;
             }
-
             connect.close();
-
         } catch (SQLException e) {
-            //do something with sql exception
+            Log.e(TAG,"groupExists",e);
         }
 
         return false;
@@ -259,39 +218,30 @@ public class DBhandler {
      * Method to create an user account.
      * Adds the username to users table on db
      *
-     * @param userName
-     * @param userPassword
+     * @param userName id of an user
+     * @param userPassword password of an user
      * @return if creates (true) if not (false)
      */
     public boolean createUserAccount(String userName, String userPassword) {
-
         if (!userExists(userName)) {
-
             try {
                 connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
-
                 this.statement = connect.createStatement();
                 String query = "INSERT INTO `users`(`email`,`password`) VALUES ('" + userName + "','" + userPassword + "')";
                 statement.executeUpdate(query);
-
-
                 connect.close();
-
                 return true;
-
             } catch (SQLException e) {
-                //do something with exception
+                Log.e(TAG,"create user account",e);
             }
         }
-
         return false;
-
     }
 
    /**
     * Method to get all the bills for a group.
     *
-    * @param groupName
+    * @param groupName name of the group
     * @return ArrayList<String> bills ID
     */
     public ArrayList<String> getGroupBills (String groupName){
@@ -301,20 +251,14 @@ public class DBhandler {
         try {
 
             connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
-
             this.statement = connect.createStatement();
             String query = "SELECT id FROM bills WHERE gid = '" + groupName + "'";
             this.resultSet = statement.executeQuery(query);
-
-            while (resultSet.next()) {
-                int i = 1;
-                result.add(resultSet.getString(i++));
-            }
-
+            result.add(resultSet.getString(1));
             connect.close();
 
         } catch (SQLException e) {
-            //do something with sql exception
+            Log.e(TAG,"get group bills",e);
         }
 
         return result;
@@ -323,17 +267,16 @@ public class DBhandler {
     /**
      * Method to get the users from a group and their respective balance.
      *
-     * @param groupName
+     * @param groupName name of the group
      * @return ArrayList<TwoStringsClass> string uses floatValue balance
      */
     public ArrayList<TwoItemsClass> getUserGroupBalance(String groupName){
         ArrayList<TwoItemsClass> result = new ArrayList<TwoItemsClass>();
         ArrayList<String> parcialMem = new ArrayList<String>();
-        String query = "";
+        String query;
 
         try {
             connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
-
             this.statement = connect.createStatement();
             query = "SELECT uid,SUM(valuePaid)-SUM(valueOwn) FROM bills INNER JOIN groups AS billsAndGroups ON bills.gid = billsAndGroups.name AND bills.gid = '"+groupName+"' INNER JOIN usersAndBills ON usersAndBills.bid = bills.id GROUP BY usersAndBills.uid";
             this.resultSet = statement.executeQuery(query);
@@ -345,14 +288,14 @@ public class DBhandler {
             connect.close();
         }
         catch (SQLException e) {
-            //do something with sql exception
+            Log.e(TAG," get user balance",e);
         }
 
         ArrayList<String> members = this.getGroupMembers(groupName);
 
-        for (int i = 0; i < members.size(); i++){
-            if (!parcialMem.contains(members.get(i))){
-                result.add(new TwoItemsClass(members.get(i),0.0f));
+        for (String member : members) {
+            if (!parcialMem.contains(member)) {
+                result.add(new TwoItemsClass(member, 0.0f));
             }
         }
 
@@ -362,77 +305,58 @@ public class DBhandler {
     /**
      * Method to check if a user already exists in db
      *
-     * @param userName
+     * @param userName id of an user
      * @return true if exists, false if not
      */
     public boolean userExists(String userName) {
         try {
-
             connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
             this.statement = connect.createStatement();
             String query = "SELECT EXISTS(SELECT 1 FROM `users` WHERE email = '" + userName + "')";
             this.resultSet = statement.executeQuery(query);
-
-            while (resultSet.next()) {
-                int i = 1;
-                if (Integer.parseInt(resultSet.getString(i++)) == 1) {
+            if (Integer.parseInt(resultSet.getString(1)) == 1) {
                     return true;
                 }
-            }
-
             connect.close();
-
         } catch (SQLException e) {
-            Log.e(TAG, "AAAAA", e);
+            Log.e(TAG,"user exists",e);
         }
-
         return false;
     }
 
 
     /**
      * Method to check if a bill exists
-     * @param bill
-     * @return
+     * @param bill bill to check if exists on database
+     * @return true if exists, false if not
      */
     public boolean billExists(Bill bill) {
         try {
-
             connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
             this.statement = connect.createStatement();
             String query = "SELECT EXISTS(SELECT 1 FROM `bills` WHERE id = '" + bill.billName+ "')";
             this.resultSet = statement.executeQuery(query);
-
-            while (resultSet.next()) {
-                int i = 1;
-                if (Integer.parseInt(resultSet.getString(i++)) == 1) {
+            if (Integer.parseInt(resultSet.getString(1)) == 1) {
                     return true;
-                }
             }
-
             connect.close();
-
         } catch (SQLException e) {
-            Log.e(TAG, "AAAAA", e);
+            Log.e(TAG,"bill exists",e);
         }
-
         return false;
     }
 
 
     /**
      * Method to get a bill from db.
-     * TODO: implement billPicture request
      *
-     * @param billID
+     * @param billID id of the bill
      * @return the Bill
      */
     public Bill getBill(String billID){
 
         Bill b = new Bill();
         b.billName = billID;
-        String groupName = null;
-        Float billValue = null;
         b.billDate = Calendar.getInstance();
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         try {
@@ -461,6 +385,11 @@ public class DBhandler {
         return b;
     }
 
+    /**
+     * Method to get a picture of a bill
+     * @param bill bill name
+     * @return bitmap picture
+     */
     public Bitmap getBillPicture(Bill bill){
         byte[] picbytes = null;
 
@@ -490,19 +419,19 @@ public class DBhandler {
     }
 
     /**
-     * TODO
-     * @param bill
-     * @param sessionUserName
+     * Public method to call create bill
+     * @param bill bill to be created
+     * @param sessionUserName current username
      */
     public void createBill(Bill bill, String sessionUserName){
         this.createBill(bill,sessionUserName, true);
     }
 
     /**
-     * TODO
-     * @param bill
-     * @param sessionUserName
-     * @param post
+     * Method to create a bill
+     * @param bill bill name
+     * @param sessionUserName current username
+     * @param post to post a notification
      */
     private void createBill(Bill bill, String sessionUserName, boolean post){
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -523,6 +452,10 @@ public class DBhandler {
         }
     }
 
+    /**
+     * Method to add a picture to a bill
+     * @param bill bill
+     */
     public void addPictureToBill(final Bill bill){
 /*
         new Thread() {
@@ -564,8 +497,8 @@ public class DBhandler {
 
     /**
      * Method to create a relation between an user and a bill and its value.
-     * @param user
-     * @param billName
+     * @param user user to be created a relation
+     * @param billName name of the bill
      *
      */
     public void createUserBillRelation(String user, String billName, float valueOwn, float valuePaid){
@@ -584,9 +517,9 @@ public class DBhandler {
     }
 
     /**
-     *
-     * @param sessionUserName
-     * @param bill
+     * Edit a bill
+     * @param sessionUserName current username
+     * @param bill bill to be edit
      */
     public void editBill(Bill bill, String oldBillName, String sessionUserName){
 
@@ -598,7 +531,7 @@ public class DBhandler {
 
     /**
      * Method to get who not paid the bill
-     * @param billName
+     * @param billName name of the bill
      * @return ArrayList<TwoStringsClass> paid bills
      */
     public ArrayList<TwoItemsClass> getWhoPaidBill(String billName){
@@ -606,10 +539,7 @@ public class DBhandler {
         ArrayList<TwoItemsClass> result = new ArrayList<TwoItemsClass>();
 
         try {
-            String user;
-
             connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
-
             this.statement = connect.createStatement();
             String query = "SELECT uid,valuePaid FROM usersAndBills WHERE bid = '" + billName + "'";
             this.resultSet = statement.executeQuery(query);
@@ -619,9 +549,7 @@ public class DBhandler {
                     result.add(new TwoItemsClass(resultSet.getString(1), Float.parseFloat(resultSet.getString(2))));
                 }
             }
-
             connect.close();
-
         } catch (SQLException e) {
             //do something with sql exception
         }
@@ -631,7 +559,7 @@ public class DBhandler {
 
     /**
      * Method to get users that have not paid the bill
-     * @param billName
+     * @param billName name of the bill
      * @return ArrayList<TwoStringsClass> owns bill
      */
     public ArrayList<TwoItemsClass> getWhoOwesBill(String billName){
@@ -660,21 +588,21 @@ public class DBhandler {
     }
 
     /**
-     * TODO
-     * @param billName
-     * @param sessionUserName
-     * @param groupName
+     * public call to the delete bill method
+     * @param billName name of a bill
+     * @param sessionUserName current username
+     * @param groupName name of the group
      */
     public void deleteBill(String billName, String sessionUserName, String groupName){
         this.deleteBill(billName, sessionUserName,groupName, true);
     }
 
     /**
-     * TODO
-     * @param billName
-     * @param sessionUserName
-     * @param groupName
-     * @param post
+     * Method to delete a bill
+     * @param billName bill name
+     * @param sessionUserName current username
+     * @param groupName name of the group
+     * @param post to post a notification
      */
     private void deleteBill(String billName, String sessionUserName, String groupName, boolean post){
         try {
@@ -696,7 +624,7 @@ public class DBhandler {
    /**
     * Method to get a group notification. Its ordered by time.
     *
-    * @param groupName
+    * @param groupName name of the group
     * @return ArrayList<Notification>
     */
     public ArrayList<Notification> getGroupNotifications(String groupName){
@@ -715,7 +643,7 @@ public class DBhandler {
                try {
                    n.date.setTime(df.parse(resultSet.getString(6)));
                } catch (Exception e){
-
+                       Log.e(TAG,"exception",e);
                }
                result.add(n);
             }
@@ -730,8 +658,8 @@ public class DBhandler {
     /**
      * Method to post a notification on the db.
      *
-     * @param notification
-     * @param groupName
+     * @param notification object notification created
+     * @param groupName name of a group
      * @return true if posted, false if not
      */
     private boolean postNotification(Notification notification, String groupName) {
